@@ -59,7 +59,8 @@ gdt.salesui.util.Controller
                     	  return tmpResult;
                     	};
                     	
-                	
+// ISS53 Change   
+// HotFix Change                    	
                     	
                 		view.setModel(currentState,'currentState');
                 		view.setModel(core.getModel('device'),'device');
