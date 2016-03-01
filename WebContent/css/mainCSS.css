@@ -1,0 +1,134 @@
+::-webkit-scrollbar {
+		 width: .7em !important;
+		 height: .7em !important;
+	}
+	
+::-webkit-scrollbar-thumb {
+          background-color: darkgrey !important;
+	}
+
+.sapUiFup {
+	display: none !important;
+}
+
+.sapMBusyDialog .sapMDialogTitle {
+	background-color: white;
+	font-family: Arial,Helvetica,sans-serif;
+}
+
+.sapUiRespGrid.sapUiRespGridHSpace1  {
+	padding: 0 !important;
+}
+
+.sapUiTable>.sapUiTableFtr {
+	padding: 0 !important;
+}
+
+.sapUiRespGrid.sapUiRespGridVSpace1>div {
+	margin: 0 !important;
+}
+	
+.sapUiTableColCell, .sapUiTableCell {
+	padding: 0 0.1rem 0 0.1rem !important;
+}
+
+.sapUiTableCell .sapMInputBaseInner {
+	padding: 0 0.2rem 0 0.2rem !important;
+}
+
+.sapMPanelContent {
+	padding: .3rem;
+}	
+
+.sapUiTheme-z_gdt_theme {
+	font-size: 14px;
+}
+
+.negativeGP input, tr:nth-child(even).negativeGP input {
+	color: red !important;
+}
+
+.rejected, tr:nth-child(even).rejected, .sapUiTable tr.rejected.sapUiTableRowHvr>td  {
+	background-color: yellow !important;
+}
+
+.markedAsDeleted input, tr:nth-child(even).markedAsDeleted input {
+	color: gray !important;
+	text-decoration: line-through;
+}
+
+.submitted, tr:nth-child(even).submitted  {
+	background-color: lightgreen !important;
+}
+
+.submitted hover, .sapUiTable tr.submitted.sapUiTableRowHvr>td   {
+	background-color: #00cc00 !important;
+}
+
+.transparent {
+	background-color: transparent;
+}
+
+.sapUiTheme-sap_bluecrystal {
+	font-size: 14px;
+}
+
+.extHidePanel {
+  width: 0px !important;
+}
+
+.sapMListTblCell {
+	padding: 0 0.1rem 0 0.1rem;
+}
+
+
+#__item12-__table0-0_cell0   {
+	text-align: left !important;
+}
+
+
+.sapMITBContent {
+	padding: 0;
+}
+
+.halfSizeText {
+	font-size: .5rem
+}
+
+.hasNotes {
+	color: yellow
+}
+
+
+.customerBalancesPanel .sapMPanelContent {
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid #e5e5e5;
+
+}
+
+tr:nth-child(even)  {
+	background-color: #f7f7f7 !important;
+} 
+
+.documentName {
+	font-family: Verdana;
+	font-size: medium;
+}
+
+.warning{
+
+font-size: small;	
+color: #9F6000;
+background-color: #FEEFB3;
+}
+
+/*  DocFlow CSS*/
+.salesUIiconText {
+	padding: 0.75rem;
+}
+ 
+.salesUIiconText .sapMRI {
+	vertical-align: initial;
+}

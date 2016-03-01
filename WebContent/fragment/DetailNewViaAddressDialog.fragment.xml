@@ -1,0 +1,41 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+  <Dialog title="Ship To Via : Enter Address Information" id="NewViaAddress">
+   
+    <Label text="Name" />
+    <Input id="OTSTName" value="{currentVia>/Name}" editable="true"/>
+    
+    <Label text="Street" />
+    <Input id="OTSTStreet" value="{path: 'currentVia>/Street', constraints: {minimum: 0, maximum: 60}}" editable="true"/>
+
+    <Label text="Street2" />
+    <Input value="{ path: 'currentVia>/Street2', constraints: {minimum: 0, maximum: 40}}" editable="true"/>
+
+    <Label text="Street3" />
+    <Input value="{path: 'currentVia>/Street3', constraints: {minimum: 0, maximum: 40}}" editable="true"/>
+    
+    <Label text="City" />
+    <Input id="OTSTCity" value="{path: 'currentVia>/City'}" editable="true"/>
+    
+    <Label text="State" />
+    <Input id="OTSTState" value="{path: 'currentVia>/State'}" editable="true"/>
+    
+    <Label text="Zip" />
+    <Input id="OTSTZip" value="{path: 'currentVia>/Zip'}" editable="true"/>
+
+    <Label text="Country" />
+    <Input value="{path: 'currentVia>/Country', constraints: {minimum: 0, maximum: 3}}" editable="true"/>
+    
+    <Label text="Telephone" />
+    <Input value="{path: 'currentVia>/Phone'}" editable="true"/>
+    
+    <beginButton>
+      <Button text="Ok" app:dialogType="Msg" press="handleCloseViaDialog" />
+   </beginButton>
+    <endButton>
+       <Button text="Cancel" app:dialogType="Msg" press="handleCloseViaDialog" />
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

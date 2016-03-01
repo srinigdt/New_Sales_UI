@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:l="sap.ui.layout"
+  xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+  <Dialog title="Detail Line Notes" id="detailLineNotesDialog">
+   
+	<Panel>
+		<l:VerticalLayout width='100%'>
+			<Label text="Delivery Notes for Vendor" />
+			<TextArea width='100%' value="{currentLine>/VendorDeliveryNotes}" rows="5"  editable="{currentState>/isEditMode}" />
+			
+			<Label text="Customer Line Level Notes" />
+			<TextArea width='100%' value="{currentLine>/BillingNotes}" rows="5"  editable="{currentState>/isEditMode}" />
+    
+		</l:VerticalLayout>
+	</Panel>
+  </Dialog>
+</core:FragmentDefinition>

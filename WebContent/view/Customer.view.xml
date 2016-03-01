@@ -1,0 +1,95 @@
+<mvc:View controllerName="gdt.salesui.controller.Customer"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:control="control"
+	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<Page
+		id="page"
+		title="{= ((( '' + ${systemInfo>/Sysid}).substring(2) === 'P') ? 'Prod' : ((( '' + ${systemInfo>/Sysid}).substring(2) === 'Q') ? 'QA' : 'Dev')) + ':' + ${systemInfo>/ClientID} + ' - ' + ${i18n>CUSTOMER_TITLE} }"
+		showFooter="{device>/isNoPhone}" >
+		<headerContent>
+		</headerContent>
+		<subHeader>
+			<Toolbar id="searchBar">
+				<SearchField
+					id="searchField"
+					showRefreshButton="false"
+					placeholder="{i18n>CUSTOMER_SEARCH_PLACEHOLDER}"
+					liveChange="handleSearch" 
+					search="handleSearch"
+					tooltip="{i18n>CUSTOMER_SEARCH_TOOLTIP}"
+					width="100%">
+				</SearchField>
+			</Toolbar>
+		</subHeader>
+		<content>
+			<Bar>
+				<contentLeft><Label text='My Customers' /></contentLeft>
+				<contentRight><Button id="myCustomersToggle" icon='sap-icon://collapse-group' press='handleToggleMyCustomersCollapse'/></contentRight>
+			</Bar>
+			<List
+				id="myCustomerList"
+				noDataText="{i18n>CUSTOMER_NO_DATA}"
+				items="{
+					path : '/',
+					sorter : {
+						path : 'CustomerName',
+						descending : false
+					}
+				}">
+				<items>
+					<ObjectListItem
+						press="handleSelectCustomer"
+						type="Active"				
+						title="{CustomerName}" >
+						<attributes>
+							<ObjectAttribute text="{Street}, {State}, {Zip}"/>
+							<ObjectAttribute text="CustomerID: { path: 'CustomerID', type: 'string' }"/>
+						</attributes>
+					</ObjectListItem>
+				</items>
+			</List>
+			<Bar>
+			<contentLeft><Label text='All Customers' /></contentLeft>
+			<contentRight><Button id="allCustomersToggle" icon='sap-icon://collapse-group' press='handleToggleAllCustomersCollapse'/></contentRight>
+			</Bar>
+			<List visible='true'
+				id="allCustomerList"
+				growing='true'
+				growingThreshold='100'
+				growingScrollToLoad='true'
+				noDataText="{i18n>CUSTOMER_NO_DATA}"
+				items="{
+					path : '/',
+					sorter : {
+						path : 'CustomerName',
+						descending : false
+					}
+				}">
+				<items>
+					<ObjectListItem
+							press="handleSelectCustomer"
+							type="Active"
+							title="{CustomerName}" >
+						<attributes>
+							<ObjectAttribute text="{Street}, {State}, {Zip}"/>
+							<ObjectAttribute text="CustomerID: { path: 'CustomerID', type: 'string' }"/>
+						</attributes>
+					</ObjectListItem>
+				</items>
+			</List>
+			<Panel visible="false">
+				<core:Fragment fragmentName="gdt.salesui.fragment.CustomerSearchByDocIDDialog" type="XML" />
+			</Panel>
+		</content>
+		<footer>
+			<Bar>
+				<contentRight>
+       					<Button icon="sap-icon://search" text="Find by Document ID" press="handleFindByDocumentID" enabled="{currentState>/isNotEditMode}"/>
+        		</contentRight>
+ 			</Bar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <Dialog
+  	id='customerSearchByDocIDDialog'
+    title="Please enter the Sales Document ID"
+    class="sapUiPopupWithPadding" >
+    <content>
+    <Label text="SAP Document #" />
+    <Input id='SalesDocID' maxLength='10' value="" change="handleFindByDocumentID" editable="true"/>
+	<Label id='Msg' width ='100%' textAlign="Center" text=" " editable="false"/>
+    </content>
+  </Dialog>
+</core:FragmentDefinition>

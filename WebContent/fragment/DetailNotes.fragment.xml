@@ -1,0 +1,37 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:form="sap.ui.layout.form"
+	xmlns:core="sap.ui.core" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:commons="sap.ui.commons" 
+	xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:t="sap.ui.table" 
+	xmlns:ui="sap.ca.ui" xmlns:chart="sap.ca.ui.charts">
+	
+	<Panel>
+		<headerToolbar>
+			<Toolbar  height="2rem" />
+		</headerToolbar>
+		<l:VerticalLayout width='100%'>
+			<Label text="External Notes to Customer (Header)" design="Bold" />
+			<TextArea width='100%' value="{path: 'currentSalesDocument>/ExtendedPONum'}" placeholder="{i18n>EXTPONUM_FIELD_PLACEHOLDER}" rows="1" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="Carton Notes" design="Bold" />
+			<TextArea width='100%' value="{path: 'currentSalesDocument>/CartonNotes', type : 'sap.ui.model.type.String', constraints: {minLength: 0, maxLength: 80} }" placeholder="{i18n>CARTONNOTES_FIELD_PLACEHOLDER}" maxLength="80" rows="1" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="Internal Sales Notes" design="Bold" />
+			<TextArea width='100%' value="{currentSalesDocument>/Notes}" placeholder="{i18n>NOTES_FIELD_PLACEHOLDER}" rows="5" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="Internal Purchasing Notes" design="Bold" />
+			<TextArea width='100%' value="{currentSalesDocument>/PurchasingNotes}" placeholder="{i18n>PURCHASINGNOTES_FIELD_PLACEHOLDER}" rows="5" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="Delivery Notes for Vendor" design="Bold" />
+			<TextArea width='100%' value="{currentSalesDocument>/BOLNotes}" placeholder="{i18n>BOLNOTES_FIELD_PLACEHOLDER}" rows="5" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="Internal Warehouse Notes" design="Bold" />
+			<TextArea width='100%' value="{currentSalesDocument>/WarehouseNotes}" placeholder="{i18n>WAREHOUSENOTES_FIELD_PLACEHOLDER}" rows="5" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="Internal Billing Notes" design="Bold" />
+			<TextArea width='100%' value="{currentSalesDocument>/BillingNotes}" placeholder="{i18n>BILLINGNOTES_FIELD_PLACEHOLDER}" rows="5" editable="{currentState>/isEditMode}" />
+		</l:VerticalLayout>
+	</Panel>
+</core:FragmentDefinition>

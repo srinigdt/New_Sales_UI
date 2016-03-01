@@ -1,0 +1,388 @@
+@media print {
+
+        * {
+        /*color:#000!important;*/
+        /*page-break-inside:avoid;*/
+        /*background:transparent!important;*/
+        box-shadow:none!important;
+        }
+ 
+        /***********************Print Page Setup**********************/
+	    #Header{
+	    display: none !important;
+	    } 
+	    
+	    #Footer { 
+	    display: none !important; 
+	    }
+		     
+	    @page {
+  		/*size: potrait;*/
+  		size: landscape;
+  		/*size: A3;*/
+  		
+  		/*margin: 300px !important;*/
+  		/*margin-left: -25px;*/
+		}
+		/************************************************************/
+		
+		
+		
+		
+		
+
+	   /***Main Shell hidden from Print View ~ Only Dialog Visible***/
+		#__shell0 {
+			/*display: none;*/
+		     } 
+	   /************************************************************/
+		 
+		 
+		 
+		 
+		 
+	   /***************Budget Sheet Header Padding******************/     
+	   #__header0 {
+	       padding:0;
+	       margin:0;
+       } 
+       
+       
+       #__header0-titlediv {
+          padding-top:10px;
+          padding-left:20px;
+       }
+       /************************************************************/
+	   
+	   
+	   #__attribute2 {
+	      padding-left:20px;
+	   }
+	   
+	   #__attribute3 {
+	      padding-left:20px;
+	   }
+	   
+	   
+	   /************Budget Sheet Container Very IMP****************/
+	   #__xmlview1--BudgetSheet-cont {
+	       overflow: visible !important; 
+	       max-height: 100% !important;
+	       border: solid 2px black !important;
+	       font-size: 12pt;
+	       font-family: Georgia, ‘Times New Roman’, serif;
+	   }
+	   
+	   #__xmlview2--BudgetSheet-cont {
+	       overflow: visible !important; 
+	       max-height: 100% !important;
+	       border: solid 2px black !important;
+	       font-style: italic;
+	       font-size: 12pt;
+	       font-family: Georgia, ‘Times New Roman’, serif;
+	   }
+	   
+	   div#__xmlview1--BudgetSheet-scrollCont {
+          border-style: none;
+          padding-top: 5px;
+       }
+       div#__xmlview2--BudgetSheet-scrollCont {
+          border-style: none;
+          padding-top: 5px;
+       }
+       /*********End of Budget Sheet Container Very IMP*************/
+       
+       
+       
+       
+       
+	   
+	  /**********Three Top Bars*************************************/
+	  #__bar7 {
+	    /*border: none !important;*/
+	    border: solid 1px #717171;
+	    font-size: 8pt;
+	    margin-top:-5px;
+	    padding:0 !important;
+	    margin-left: 0 !important;
+	    margin-right: 0 !important;
+	    margin-bottom: 0 !important;
+	  }
+	  
+	   #__bar8 {
+	    /*border: none !important;*/
+	    border-top: solid 1px #717171;
+	    border-left: solid 1px #717171;
+	    border-right: solid 1px #717171;
+	    border-bottom: solid 1px #717171;
+	    font-size: 8pt;
+	    margin-top:-5px;
+	    padding: 0 !important;
+	    margin-left: 0 !important;
+	    margin-right: 0 !important;
+	    margin-bottom: 0 !important;
+	    
+	  }
+	  
+	   #__bar6 {
+	    /*border: none !important;*/
+	    border: solid 1px #717171 !important;
+	    font-size: 8pt;
+	    padding:0 !important;
+	    margin:0 !important;
+	    /* border-spacing: 0px !important;
+        border-collapse: collapse !important; */
+	  }
+	  /************************************************************/
+	
+	  /********VVIMP- Line Item (default overflow block- here to remove overflow and make it inline) *********/
+    
+	    div#__container3-scroll {
+	      display: inline !important; 
+	    }
+	    
+	    div#__container3 {
+	      overflow: visible !important;
+	    }
+	 /************************************************************/
+	
+	
+	
+	 /*******************Budget Sheet Line Items Padding**********/
+     #__container3-scroll {
+       /*padding-top: -335px;*/
+     }
+
+     #__input50-inner {
+       padding: 0px !important;
+     }
+     
+     #__label86 {
+       padding: 0px !important;
+     }
+     /************************************************************/
+     
+     
+     
+     
+     
+     
+	 /************Budget Sheet Footer not visible in print view***/
+	#__xmlview1--BudgetSheet-footer {
+	  display: none;
+	}
+	
+	#__xmlview2--BudgetSheet-footer {
+	  display: none;
+	}
+	
+	#__xmlview1--BudgetSheet-header {
+	  display: none;
+	}
+	
+	#__xmlview2--BudgetSheet-header {
+	  display: none;
+	}
+	
+	/************************************************************/
+	
+	
+	/* Not used*/
+	
+	/* .sapMDialog {
+	   overflow: visible !important;
+	   border: solid 1px #717171 !important;
+	   } */
+	
+	
+		
+	  /* #__panel15 {
+	    page-break-before: always;
+	    page-break-after: always;
+	  
+	  } */
+	
+	/* Not used*/
+	
+	/* Padding 0*/
+	
+	
+	
+	
+	
+	
+	/*Padding 0 Ends*/
+	
+	#__layout5 {
+	 border-bottom: 1px solid #cccccc !important;
+	}
+	
+	#__header0.sapMDialog, #__header0.sapMOH {
+	  padding:0;
+	  margin:0;
+	}
+	
+	#__toolbar8.sapMTB-Transparent-CTX, #__toolbar8.sapMTB {
+	  padding:0;
+	  margin:0;
+	}
+
+    .sapMPanelContent {
+		padding-bottom: 1rem !important;
+	}
+	
+	div#__toolbar9 {
+	    height: 20px;
+	}
+	
+	#__xmlview1---tblBody {
+	   padding:0rem !important;
+	}
+	
+	#__xmlview2---tblBody {
+	   padding:0rem !important;
+	}
+
+    tbody#__xmlview1---tblBody {
+	   height: 10px !important;
+	}
+	
+	tbody#__xmlview2---tblBody {
+	   height: 10px !important;
+	}
+	
+	.sapMListTblCell {
+	   padding: 10px !important;
+	}
+	
+	#__toolbar10 {
+	   border-right: 0px solid #cccccc !important;
+	}
+	
+	
+	.sapMPanelBG {
+       /*border: solid 1px red !important;*/
+       background-color: transparent !important; 
+    } 
+    
+    .sapMListTbl th {
+		background: transparent !important; 
+	}
+    
+    
+    
+    /* th#__xmlview1---tblHeadNav {
+       background-color: transparent !important; 
+    } */
+    
+    /*
+    .sapMLIB.sapMListTblRow {
+      background-color: transparent !important; 
+    } */
+    
+    
+   /*  #__xmlview1---tblHeader {
+      background-color: transparent !important; 
+    }
+    
+    .sapMListTblRow .sapMListTblHeader {
+      background-color: transparent !important; 
+    }
+     */
+   /*  #__xmlview1---tblHeader {
+      background-color: transparent !important; 
+      border: solid 2px red !important;
+      -webkit-tap-highlight-color: none !important;
+    } */
+ 
+    
+    /* #__xmlview1---tblHeader {
+       background-color: transparent !important; 
+    }
+    
+    #__xmlview2---tblHeader {
+       background-color: transparent !important; 
+    } */
+    
+    
+
+	
+	/* #__toolbar10 {
+	   height: 35px;
+	}
+	
+	#__table2-tblHeader {
+	   height: 35px;
+	}
+	
+	
+	#__toolbar11 {
+	   border-top: 1px solid #cccccc;
+	   border-bottom: 1px solid #cccccc;
+	   height: 35px;
+	}
+	
+	#__table3-tblHeader {
+	   height: 35px;
+	}
+	
+	#__toolbar12 {
+	   border-top: 1px solid #cccccc;
+	   border-bottom: 1px solid #cccccc;
+	   height: 35px;
+	}
+	
+	#__table4-tblHeader {
+	   height: 35px;
+	}
+	 */
+	
+	/* #__table2 {
+	   height: 200px;
+	} */
+    
+    /* To See Later*/
+   /*  .sapMPanelContent {
+		padding-top: 10 !important;
+		padding-right:0 !important;
+		padding-bottom:0 !important;
+		
+		padding-left:0 !important;
+		margin:0 !important;
+		
+    }
+    
+    .sapMTB-Transparent-CTX {
+		padding:0 !important;
+		margin:0 !important;
+     }
+    
+    .sapMTB {
+		padding:0 !important;
+     }
+     
+     #__layout6 {
+		border-spacing: 0px !important;
+        border-collapse: collapse !important;
+        padding:0 !important;
+		margin:0 !important;
+        
+     }
+     
+     .sapMSlt>.sapMSltLabel, .sapMSltNative {
+        padding: 0 !important;
+      }
+	 */
+	 /* To See Later*/
+	
+	.sapUiRrFtr {
+	   height: 0 !important;
+	}
+	
+	
+    
+    
+	
+}
+
+}

@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <Dialog
+  	id='createSalesOrderDialog'
+    title="Please enter the customer purchase order number"
+    class="sapUiPopupWithPadding" >
+    <content>
+    <Label text="Customer PO #" />
+    <Input id='createSalesOrderCPOID' maxLength='35' value="{path: 'currentSalesDocument>/CustomerPOID'}" liveChange='handleCreateSalesOrderCPOIDChange' editable="true"/> 
+    <Text id="Warning" maxLength='35'/>
+    </content>
+    <beginButton>
+      <Button id='createSalesOrderOK' text="Ok" press="handleConfirmCreateSalesOrder"/>
+    </beginButton>
+    <endButton>
+      <Button text="Cancel" press="handleCancelCreateSalesOrder" />
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

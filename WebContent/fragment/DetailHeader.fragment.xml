@@ -1,0 +1,349 @@
+<core:FragmentDefinition xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m"
+	xmlns:suite="sap.suite.ui.commons" xmlns:m="sap.m" xmlns:fb="sap.ui.comp.filterbar">
+
+
+
+	<Panel id='detailQuotePageHeader' class="sapUiSizeCompact" expandable="false" expanded="true" visible="{currentState>/isQuote}">
+				<Toolbar>
+						<ToolbarSpacer/>
+				</Toolbar>
+		<content>
+			<l:Grid class="gridMarginTop" vSpacing="1rem"  hSpacing="0rem" defaultSpan="L6 M6 S12">
+				<l:content>
+                    <Input editable="false" value="Created By">
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <Input value="{currentSalesDocument>/CreatedBy}" editable="false">
+                        <layoutData>
+                            <l:GridData span="L3 M3 S3" />
+                        </layoutData>
+                    </Input>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+                    <Input editable="false" value="Created On">
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <DateTimeInput type="Date"
+                            dateValue="{path:'currentSalesDocument>/CreatedOn'}" displayFormat="MM/dd/yy" editable="false">
+                        <layoutData>
+                            <l:GridData span="L3 M3 S3" />
+                        </layoutData>
+                    </DateTimeInput>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+                    <Input editable="false" value="Valid From">
+				        <layoutData>
+				          <l:GridData
+				            span="L2 M2 S2" />
+				        </layoutData>
+					</Input>
+					<DateTimeInput id='fromDate' type="Date" dateValue="{path: 'currentSalesDocument>/ValidFrom'}" displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}">
+				        <layoutData>
+				          <l:GridData
+				            span="L3 M3 S3"/>
+				        </layoutData>
+					</DateTimeInput>
+					<ToolbarSpacer>
+				        <layoutData>
+				          <l:GridData
+				            span="L1 M1 S1" />
+				        </layoutData>
+					</ToolbarSpacer>
+					<Input editable="false" value="To">
+				        <layoutData>
+				          <l:GridData
+				            span="L2 M2 S2" />
+				        </layoutData>
+					</Input>
+					<DateTimeInput type="Date" dateValue="{path: 'currentSalesDocument>/ValidTo'}" displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}">
+				        <layoutData>
+				          <l:GridData
+				            span="L3 M3 S3"/>
+				        </layoutData>
+					</DateTimeInput>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+					<Input editable="false" value="Description:">
+				        <layoutData>
+				          <l:GridData
+				            span="L2 M2 S2" />
+				        </layoutData>
+					</Input>
+					<Input placeholder="Enter short description here..." maxLength='40' value="{currentSalesDocument>/HeaderText}" editable="{currentState>/isEditMode}">
+				        <layoutData>
+				          <l:GridData
+				            span="L10 M10 S10" />
+				        </layoutData>
+					</Input>
+					<Input editable="false" value="Requested By" >
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input placeholder="Enter contact that requested quote..." maxLength='30' value="{path:'currentSalesDocument>/RequestedBy'}" editable="{currentState>/isEditMode}" >
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="Ship To" > 
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input tooltip="SAP ShipTo ID: {path: 'currentSalesDocument>/ShipToID'}" value="{path: 'currentSalesDocument>/ShipToID', formatter: 'gdt.salesui.util.Formatter.shipTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Ship To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderShipTo">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="End Customer" visible="{currentState>/hasEndCustomers}">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input tooltip="SAP End Customer ID: {path: 'currentSalesDocument>/EndCustomerID'}" value="{path: 'currentSalesDocument>/EndCustomerID', formatter: 'gdt.salesui.util.Formatter.endCustomer'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter End Customer..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderEndCustomer"  visible="{currentState>/hasEndCustomers}">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="Shipping Charges">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/DeliveryAmt}" editable="{currentState>/isEditMode}">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+				</l:content>
+			</l:Grid>
+		</content>
+	</Panel>
+	<Panel id='detailSalesOrderPageHeader' class="sapUiSizeCompact" expandable="false" expanded="true" visible="{currentState>/isSalesOrder}">
+        <Toolbar>
+                <ToolbarSpacer/>
+        </Toolbar>
+		<content>
+			<l:Grid class="gridMarginTop" vSpacing="1rem"  hSpacing="0rem" defaultSpan="L6 M6 S12">
+				<l:content>
+					<Input editable="false" value="Quote ID:">
+				        <layoutData>
+				          <l:GridData
+				            span="L2 M2 S2" />
+				        </layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/ReferencedBy}" editable="false">
+				        <layoutData>
+				          <l:GridData
+				            span="L3 M3 S3"/>
+				        </layoutData>
+					</Input>
+					<ToolbarSpacer>
+				        <layoutData>
+				          <l:GridData
+				            span="L1 M1 S1" />
+				        </layoutData>
+					</ToolbarSpacer>
+					<Input editable="false" value="Customer PO:">
+				        <layoutData>
+				          <l:GridData
+				            span="L2 M2 S2" />
+				        </layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/CustomerPOID}"   maxLength='35' editable="{currentState>/isEditMode}" change='handleChangeHeaderCustomerPOID'>
+				        <layoutData>
+				          <l:GridData
+				            span="L3 M3 S3"/>
+				        </layoutData>
+					</Input>
+<!--
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+-->
+					<Button text="Billing {path: 'currentSalesDocument>/BillingBlock', formatter: 'gdt.salesui.util.Formatter.blockText'}" enabled="{currentState>/isSubmittedSalesOrder}" visible="{currentState>/isSubmittedSalesOrder}" press="handlePressBillingBlock" type="{path: 'currentSalesDocument>/BillingBlock', formatter: 'gdt.salesui.util.Formatter.blockButtonType'}">
+				        <layoutData>
+				          <l:GridData
+				            span="L1 M1 S1"/>
+				        </layoutData>
+					</Button>
+					
+					<Input editable="false" value="Description:">
+				        <layoutData>
+				          <l:GridData
+				            span="L2 M2 S2" />
+				        </layoutData>
+					</Input>
+					<Input placeholder="Enter short description here..." maxLength='40' value="{currentSalesDocument>/HeaderText}" editable="{currentState>/isEditMode}">
+				        <layoutData>
+				          <l:GridData
+				            span="L10 M10 S10" />
+				        </layoutData>
+					</Input>
+                    <Input editable="false" value="Created By">
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <Input value="{currentSalesDocument>/CreatedBy}" editable="false">
+                        <layoutData>
+                            <l:GridData span="L3 M3 S3" />
+                        </layoutData>
+                    </Input>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+                    <Input editable="false" value="Created On">
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <DateTimeInput type="Date"
+                            dateValue="{path:'currentSalesDocument>/CreatedOn'}" displayFormat="MM/dd/yy" editable="false">
+                        <layoutData>
+                            <l:GridData span="L3 M3 S3" />
+                        </layoutData>
+                    </DateTimeInput>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+                    <Input editable="false" value="Requested By" >
+                            <layoutData>
+                                <l:GridData span="L2 M2 S2" />
+                            </layoutData>
+                    </Input>
+                    <Input placeholder="Enter contact that issued the PO..." maxLength='30' value="{path:'currentSalesDocument>/RequestedBy'}" editable="{currentState>/isEditMode}" >
+                        <layoutData>
+                            <l:GridData span="L3 M3 S3" />
+                        </layoutData>
+                    </Input>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+                    <Input editable="false" value="ATTN" >
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <Input placeholder="Enter to attention of..." maxLength='30' value="{currentSalesDocument>/Attention}" editable="{currentState>/isEditMode}" >
+                        <layoutData>
+                            <l:GridData span="L3 M3 S3" />
+                        </layoutData>
+                    </Input>
+                    <ToolbarSpacer>
+                        <layoutData>
+                            <l:GridData span="L1 M1 S1" />
+                        </layoutData>
+                    </ToolbarSpacer>
+                    <Input editable="false" value="Req. Del. Date" >
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <DateTimeInput type="Date"
+                                dateValue="{path:'currentSalesDocument>/RequestedDeliveryDate'}"  displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}"  change='handleChangeHeaderReqDate'>
+                        <layoutData>
+                            <l:GridData span="L10 M10 S10" />
+                        </layoutData>
+                    </DateTimeInput>
+                    <Input editable="false" value="Shipping Charges">
+                        <layoutData>
+                            <l:GridData span="L2 M2 S2" />
+                        </layoutData>
+                    </Input>
+                    <Input value="{currentSalesDocument>/DeliveryAmt}" editable="{currentState>/isEditMode}">
+                        <layoutData>
+                            <l:GridData span="L10 M10 S10" />
+                        </layoutData>
+                    </Input>
+					<Input editable="false" value="End Customer" visible="{currentState>/hasEndCustomers}">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+                    <Input tooltip="SAP End Customer ID: {path: 'currentSalesDocument>/EndCustomerID'}" value="{path: 'currentSalesDocument>/EndCustomerID', formatter: 'gdt.salesui.util.Formatter.endCustomer'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter End Customer..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderEndCustomer"  visible="{currentState>/hasEndCustomers}">
+                        <layoutData>
+                            <l:GridData span="L10 M10 S10" />
+                        </layoutData>
+                    </Input>
+					<Input editable="false" value="Payer" >
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+      							<Input tooltip="SAP Payer ID: {path: 'currentSalesDocument>/PayerID'}" value="{path: 'currentSalesDocument>/PayerID', formatter: 'gdt.salesui.util.Formatter.payer'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Payer..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderPayer">
+									<layoutData>
+										<l:GridData span="L10 M10 S10" />
+									</layoutData>
+      							</Input>
+					
+					<Input editable="false" value="Bill To" >
+									<layoutData>
+										<l:GridData span="L2 M2 S2" />
+									</layoutData>
+					</Input>
+      							<Input tooltip="SAP Bill To ID: {path: 'currentSalesDocument>/BillToID'}" value="{path: 'currentSalesDocument>/BillToID', formatter: 'gdt.salesui.util.Formatter.billTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Bill To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderBillTo">
+									<layoutData>
+										<l:GridData span="L10 M10 S10" />
+									</layoutData>
+      							</Input>
+					<Input editable="false" value="Ship To" > 
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+      							<Input tooltip="SAP ShipTo ID: {path: 'currentSalesDocument>/ShipToID'}" value="{path: 'currentSalesDocument>/ShipToID', formatter: 'gdt.salesui.util.Formatter.shipTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Ship To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderShipTo">
+									<layoutData>
+										<l:GridData span="L10 M10 S10" />
+									</layoutData>
+      							</Input>
+					<Input editable="false" value="Via">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+   					<Button text="{path: 'currentSalesDocument>/', formatter: 'gdt.salesui.util.Formatter.via'}"  press="handleViaHeaderPress" enabled="{currentState>/isEditMode}" width="100%">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+   					</Button>
+
+						<Input editable="false" value="Shipping Method">
+							<layoutData>
+								<l:GridData span="L2 M2 S2" />
+							</layoutData>
+						</Input>
+						<Select items="{globalSelectItems>/ShippingConditions}" selectedKey="{currentSalesDocument>/ShippingConditionID}" width="100%" enabled="{currentState>/isEditMode}">
+							<layoutData>
+								<l:GridData span="L10 M10 S10" />
+							</layoutData>
+							<core:Item text="{globalSelectItems>Text}" key="{globalSelectItems>ShippingConditionID}" />
+						</Select>
+				</l:content>
+			</l:Grid>
+		</content>
+	</Panel>
+
+</core:FragmentDefinition>

@@ -1,0 +1,29 @@
+<core:FragmentDefinition xmlns:l="sap.ui.layout" xmlns:cl="sap.ui.commons.layout" xmlns:c="sap.ui.commons" 
+	xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Dialog id='detailLineItemsAddressErrorsDialog' title="Import Failed - Unrecognised Addresses" state="Error">
+		<FlexBox alignItems="Center" justifyContent="Center">
+          <items>
+			<Text width="1000px" textAlign="Center" text="Errors were detected when importing line item data and the import was aborted.  The following addresses were not found in SAP.  Please email the import file, with a note identifying the customer for whom these addresses should be valid, to Master Data." />
+          </items>
+        </FlexBox>
+        <Panel />
+		<ScrollContainer id='addressErrorsContainer' height="260px" vertical="true" horizontal="true">
+			<Table items="{addressErrors>/}" width="100%" id="addressTable" fixedLayout="true">
+			    <columns>
+				    <Column><Text text="Address" width="100%" wrapping="false" /></Column>
+			    </columns>
+			    <items>
+		      		<ColumnListItem vAlign="Middle" class="oddLine">
+		        		<cells>
+					    	<Input width="100%" value="{path: 'addressErrors>', type : 'sap.ui.model.type.String'}" editable="false" />
+			        	</cells>
+		    		</ColumnListItem>
+		    	</items>
+		  	</Table>
+		</ScrollContainer>
+	    <Toolbar>
+			<ToolbarSpacer/>
+			<Button icon="sap-icon://system-exit" type="Reject"  text="Cancel" press="handleCancelAddressErrorDialog" />
+	    </Toolbar>
+   	</Dialog>
+</core:FragmentDefinition>

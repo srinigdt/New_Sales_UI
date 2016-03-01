@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <ActionSheet
+  	id='outputActionSheet'
+    title="Choose Output Type"
+    afterOpen="handleOutputTypeSelectDefault" 
+    placement="Top">
+    <buttons>
+      <Button press='handleBudgetSheetPDFRequest' text="Budget Sheet" icon="sap-icon://pdf-attachment" />
+      <Button press='handleDetailedEngineeringQuoteSummaryPDFRequest' visible="{currentState>/isQuote}" text="Detailed Engineering Quote (Summary Pricing)" icon="sap-icon://pdf-attachment" />
+      <Button press='handleEngineeringQuoteSummaryPDFRequest' visible="{currentState>/isQuote}" text="Engineering Quote (Summary Pricing)" icon="sap-icon://pdf-attachment" />
+      <Button press='handleDetailedEngineeringQuotePDFRequest' visible="{currentState>/isQuote}" text="Detailed Engineering Quote (Component Pricing)" icon="sap-icon://pdf-attachment" />
+      <Button press='handleEngineeringQuotePDFRequest' visible="{currentState>/isQuote}" text="Engineering Quote (Component Pricing)" icon="sap-icon://pdf-attachment" />
+      <Button press='handleDetailedQuotePDFRequest' visible="{currentState>/isQuote}" text="Detailed {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" icon="sap-icon://pdf-attachment" />
+      <Button id='defaultOutputTypeQ' visible="{currentState>/isQuote}" press='handleStdQuotePDFRequest' text="Standard {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" icon="sap-icon://pdf-attachment" />
+      <Button press='handleDetailedSOConfirmationPDFRequest' visible="{= !${currentState>/isQuote} }" text="Order Confirmation (Component Pricing)" icon="sap-icon://pdf-attachment" />
+      <Button press='handleSummarySOConfirmationPDFRequest' id='defaultOutputTypeSO' visible="{= !${currentState>/isQuote} }" text="Order Confirmation (Summary Pricing)" icon="sap-icon://pdf-attachment" />
+      <Button press='handleEDIOutputRequest' visible="{= !${currentState>/isQuote} &amp;&amp; ${currentSalesDocument>/DocumentType} === 'ZOR2' }" text="Order Confirmation (EDI)" icon="sap-icon://pdf-attachment" />
+    </buttons>
+  </ActionSheet>
+</core:FragmentDefinition>

@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns:l="sap.ui.layout"
+						 xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m" >
+	<Toolbar>
+		<Label text="   " />
+		<ToolbarSpacer></ToolbarSpacer>
+		<Button icon="sap-icon://share" text="Sharepoint Library" press="handleOpenSharepointLibrary" />
+	</Toolbar>
+	<UploadCollection
+			id="UploadCollection"
+			maximumFilenameLength="55"
+			multiple="true"
+			items="{currentAttachments>/}"
+			showSeparators="All"
+			uploadEnabled="false">
+		<UploadCollectionItem
+				contributor=""
+				documentId=""
+				fileName="{= (${currentAttachments>Name}) + ((!!${currentAttachments>isRelated}) ? ' (from Quote ' + ${currentSalesDocument>/ReferencedBy} + ')' : '')}"
+				fileSize="100"
+				mimeType=""
+				thumbnailUrl=""
+				uploadedDate="{currentAttachments>TimeCreated}"
+				url="{path:'currentAttachments>ServerRelativeUrl', formatter:'gdt.salesui.util.Sharepoint.fullyReferenceRelativeUrl'}?web=1"
+				enableEdit="false"
+				visibleEdit="false"
+				enableDelete="false"
+				visibleDelete="false">
+		</UploadCollectionItem>
+	</UploadCollection>
+</core:FragmentDefinition>

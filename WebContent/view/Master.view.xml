@@ -1,0 +1,251 @@
+<core:View
+	controllerName="gdt.salesui.controller.Master"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core" 
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" >
+	
+	<Page 
+		title="{= ((( '' + ${systemInfo>/Sysid}).substring(2) === 'P') ? 'Prod' : ((( '' + ${systemInfo>/Sysid}).substring(2) === 'Q') ? 'QA' : 'Dev')) + ':' + ${systemInfo>/ClientID} + ' - ' + ${/CustomerName} }"
+		showNavButton="true"
+		navButtonPress="handleNavButtonPress"		 
+		id="masterpage">
+				
+		
+		<subHeader>
+			<Bar>
+				<contentLeft>
+					<SearchField
+          					id="searchField" 
+          					showRefreshButton="true"
+							placeholder="{i18n>MASTER_SEARCH_PLACEHOLDER}"
+							liveChange="handleSearch" 
+							search="handleSearch"
+							tooltip="{i18n>MASTER_SEARCH_TOOLTIP}" 
+							width="100%" />
+				</contentLeft>
+				
+			</Bar> 
+			
+		</subHeader>
+		<Panel id="customerBalancesPanel" class="customerBalancesPanel">	   
+	   <l:Grid class="gridMarginTop" vSpacing="0rem">
+			<l:content>
+	      		<List items="{customerSelectItems>/AccountManagers}" showNoData="false"  showSeparators="None">
+	        		<layoutData><l:GridData span="L12 M12 S12"/></layoutData>
+	    			<CustomListItem type="Inactive">
+	 					<Label text="Acct Mgr {customerSelectItems>PartnerName}"></Label>
+	 				</CustomListItem>
+			    </List>
+	      		<List items="{customerSelectItems>/SalesAdmins}" showNoData="false"  showSeparators="None">
+	        		<layoutData><l:GridData span="L12 M12 S12"/></layoutData>
+	    			<CustomListItem type="Inactive">
+	 					<Label text="Sales Admin {customerSelectItems>PartnerName}"></Label>
+	 				</CustomListItem>
+			    </List>
+				<Label text=" "><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text="CustomerID: {/CustomerID}"><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text=" "><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text="{/ContactFullName}"><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text="{/ContactPhone}"><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text="{/Street}, {/City}, {/Zip}" tooltip="{/Street}, {/City}, {/Zip}"><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text=" "><layoutData><l:GridData span="L12 M12 S12"/></layoutData></Label>
+				<Label text="Bal."><layoutData><l:GridData span="L2 M2 S2"/></layoutData></Label>
+				<Label text="{path: 'currentCustomerBalances>/Balance', formatter:'gdt.salesui.util.Formatter.moneyNoDecimals'}"><layoutData><l:GridData span="L4 M4 S4"/></layoutData></Label>
+				<Label text="Ovd."><layoutData><l:GridData span="L2 M2 S2"/></layoutData></Label>
+				<Label text="{path: 'currentCustomerBalances>/OverdueAmt', formatter:'gdt.salesui.util.Formatter.moneyNoDecimals'}"><layoutData><l:GridData span="L4 M4 S4"/></layoutData></Label>
+				<Label text="Crdt."><layoutData><l:GridData span="L2 M2 S2"/></layoutData></Label>
+				<Label text="{path: 'currentCustomerBalances>/CreditLimit', formatter:'gdt.salesui.util.Formatter.moneyNoDecimals'}"><layoutData><l:GridData span="L4 M4 S4"/></layoutData></Label>
+				<Label text="Avl."><layoutData><l:GridData span="L2 M2 S2"/></layoutData></Label>
+				<Label text="{path: 'currentCustomerBalances>/AvailableCredit', formatter:'gdt.salesui.util.Formatter.moneyNoDecimals'}"><layoutData><l:GridData span="L4 M4 S4"/></layoutData></Label>
+				<Label text="YTD"><layoutData><l:GridData span="L2 M2 S2"/></layoutData></Label>
+				<Label text="{path: 'currentCustomerBalances>/YTDSales', formatter:'gdt.salesui.util.Formatter.moneyNoDecimals'}"><layoutData><l:GridData span="L4 M4 S4"/></layoutData></Label>
+			</l:content>
+		</l:Grid>
+</Panel>
+
+		<Bar>
+			<contentLeft><Label text='Expired Quotes' /></contentLeft>
+			<contentRight><Button id="closedQuotesToggle" icon='sap-icon://expand-group' press='handleToggleClosedQuotesCollapse'/></contentRight>
+		</Bar>
+		<List id="closedQuotesList"
+		    items="{ path: 'closedQuotes>/' }" 
+		    visible='false'
+			growing="true"
+			growingThreshold='100' 
+			growingScrollToLoad="true"
+			>
+       		<items>
+					<ObjectListItem 
+						press="handleSelect"
+						type="Active"
+						title="{closedQuotes>SalesDocumentID}"
+						>
+						<attributes>
+							<ObjectAttribute text="Net Value {path:'closedQuotes>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+							<ObjectAttribute text="{closedQuotes>HeaderText}" />
+						</attributes>
+					</ObjectListItem>
+			</items>
+		</List>
+
+		<Bar>
+			<contentLeft><Label text='Open Quotes' /></contentLeft>
+			<contentRight><Button id="openQuotesToggle" icon='sap-icon://collapse-group' press='handleToggleOpenQuotesCollapse'/></contentRight>
+		</Bar>
+		<List id="openQuotesList"
+			  items="{ path: 'openQuotes>/' }"
+			  growing="true"
+			  growingThreshold='100'
+			  growingScrollToLoad="true"
+				>
+			<items>
+				<ObjectListItem
+						press="handleSelect"
+						type="Active"
+						title="{openQuotes>SalesDocumentID}"
+						>
+					<attributes>
+						<ObjectAttribute text="Net Value {path:'openQuotes>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+						<ObjectAttribute text="{openQuotes>HeaderText}" />
+					</attributes>
+				</ObjectListItem>
+			</items>
+		</List>
+
+		<Bar>
+			<contentLeft><Label text='Completed Quotes' /></contentLeft>
+			<contentRight><Button id="completedQuotesToggle" icon='sap-icon://collapse-group' press='handleToggleCompletedQuotesCollapse'/></contentRight>
+		</Bar>
+		<List id="completedQuotesList"
+			  items="{ path: 'completedQuotes>/' }"
+			  growing="true"
+			  growingThreshold='100'
+			  growingScrollToLoad="true"
+				>
+			<items>
+				<ObjectListItem
+						press="handleSelect"
+						type="Active"
+						title="{completedQuotes>SalesDocumentID}"
+						>
+					<attributes>
+						<ObjectAttribute text="Net Value {path:'completedQuotes>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+						<ObjectAttribute text="{completedQuotes>HeaderText}" />
+					</attributes>
+				</ObjectListItem>
+			</items>
+		</List>
+
+		<Bar>
+			<contentLeft><Label text='Rejected Sales Orders' /></contentLeft>
+			<contentRight><Button id="rejectedSalesOrdersToggle" icon='sap-icon://collapse-group' press='handleToggleRejectedSalesOrdersCollapse'/></contentRight>
+		</Bar>
+		<List id="rejectedSalesOrdersList"
+			  items="{ path: 'rejectedSalesOrders>/' }"
+			  growing="true"
+			  growingThreshold='100'
+			  growingScrollToLoad="true"
+				>
+			<items>
+				<ObjectListItem
+						press="handleSelect"
+						type="Active"
+						title="{rejectedSalesOrders>SalesDocumentID}"
+						>
+					<attributes>
+						<ObjectAttribute text="Net Value {path:'rejectedSalesOrders>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+						<ObjectAttribute text="{rejectedSalesOrders>HeaderText}" />
+					</attributes>
+				</ObjectListItem>
+			</items>
+		</List>
+
+		<Bar>
+			<contentLeft><Label text='Pending Sales Orders' /></contentLeft>
+			<contentRight><Button id="pendingSalesOrdersToggle" icon='sap-icon://collapse-group' press='handleTogglePendingSalesOrdersCollapse'/></contentRight>
+		</Bar>
+		<List id="pendingSalesOrdersList"
+		    items="{ path: 'pendingSalesOrders>/' }" 
+			growing="true"
+			growingThreshold='100' 
+			growingScrollToLoad="true"
+			>
+       		<items>
+					<ObjectListItem 
+						press="handleSelect"
+						type="Active"
+						title="{pendingSalesOrders>SalesDocumentID}"
+						>
+						<attributes>
+							<ObjectAttribute text="Net Value {path:'pendingSalesOrders>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+							<ObjectAttribute text="{pendingSalesOrders>HeaderText}" />
+						</attributes>
+					</ObjectListItem>
+			</items>
+		</List>
+
+		<Bar>
+			<contentLeft><Label text='Open Sales Orders' /></contentLeft>
+			<contentRight><Button id="openSalesOrdersToggle" icon='sap-icon://collapse-group' press='handleToggleOpenSalesOrdersCollapse'/></contentRight>
+		</Bar>
+		<List id="openSalesOrdersList"
+		    items="{ path: 'openSalesOrders>/' }" 
+			growing="true"
+			growingThreshold='100' 
+			growingScrollToLoad="true"
+			>
+       		<items>
+					<ObjectListItem 
+						press="handleSelect"
+						type="Active"
+						title="{openSalesOrders>SalesDocumentID}"
+						>
+						<attributes>
+							<ObjectAttribute text="Net Value {path:'openSalesOrders>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+							<ObjectAttribute text="{openSalesOrders>HeaderText}" />
+						</attributes>
+					</ObjectListItem>
+			</items>
+		</List>
+
+		<Bar>
+			<contentLeft><Label text='Closed Sales Orders' /></contentLeft>
+			<contentRight><Button id="closedSalesOrdersToggle" icon='sap-icon://expand-group' press='handleToggleClosedSalesOrdersCollapse'/></contentRight>
+		</Bar>
+		<List id="closedSalesOrdersList"
+		    items="{ path: 'closedSalesOrders>/' }" 
+		    visible='false'
+			growing="true"
+			growingThreshold='100' 
+			growingScrollToLoad="true"
+			>
+       		<items>
+					<ObjectListItem 
+						press="handleSelect"
+						type="Active"
+						title="{closedSalesOrders>SalesDocumentID}"
+						>
+						<attributes>
+							<ObjectAttribute text="Net Value {path:'closedSalesOrders>NetValue', formatter:'gdt.salesui.util.Formatter.money'}" />
+							<ObjectAttribute text="{closedSalesOrders>HeaderText}" />
+						</attributes>
+					</ObjectListItem>
+			</items>
+		</List>
+		<Panel visible="false">
+			<core:Fragment fragmentName="gdt.salesui.fragment.CustomerSearchByDocIDDialog" type="XML" />
+		</Panel>
+		<footer>
+			<Bar>
+				<contentLeft>
+					<Button icon="sap-icon://search" text="Find by Document ID" press="handleFindByDocumentID" enabled="{currentState>/isNotEditMode}"/>
+				</contentLeft>
+				<contentRight>
+					<Button icon="sap-icon://create" text="Create New Quote" press="handleCreateNewQuote" enabled="{currentState>/isNotEditMode}"/>
+        		</contentRight>
+ 			</Bar>
+		</footer>
+	</Page>
+</core:View>

@@ -1,0 +1,52 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+   <TableSelectDialog
+   	id='detailLinePartSearchDialog'
+   	noDataText ="Loading...."
+    title="Part Number Search"
+    class="partHelp"
+    items="{globalSelectItems>/MaterialsSet}">
+       <columns>
+           <Column hAlign="Left"
+                   width="12em">
+               <Text text="SAP Part#" />
+           </Column>
+           <Column  width="260px">
+               <Text text="Mfr" />
+           </Column>
+           <Column  width="260px">
+               <Text text="Mfr Part #" />
+           </Column>
+           <Column>
+               <Text text="Description#" />
+           </Column>
+           <Column width="120px"
+                   hAlign="Right">
+               <Text text="List Price" />
+           </Column>
+       </columns>
+       <items>
+           <ColumnListItem>
+               <cells>
+                   <ObjectIdentifier
+                           text="{globalSelectItems>MaterialId}"/>
+                   <Text
+                           text="{path: 'globalSelectItems>ManufacturerNo', formatter: 'gdt.salesui.util.Formatter.mfrName'}" />
+                   <Text
+                           text="{globalSelectItems>ManufacturerPartId}" />
+                   <Text
+                           text="{globalSelectItems>Description}" />
+                   <ObjectNumber
+                           number="{globalSelectItems>ListPrice}"
+                           unit="{CurrencyCode}" />
+               </cells>
+           </ColumnListItem>
+       </items>
+       <!--<ColumnListItem-->
+    	<!--description="{globalSelectItems>ManufacturerPartId}" -->
+    	<!--title="{globalSelectItems>Description}" -->
+    	<!--info="{path: 'globalSelectItems>ManufacturerNo', formatter: 'gdt.salesui.util.Formatter.mfrName'}" />-->
+  </TableSelectDialog>
+  <BusyDialog id='partSearchBusy' text="Searching..." showCancelButton="false"/>
+</core:FragmentDefinition>

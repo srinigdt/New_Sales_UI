@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <SelectDialog
+    title="Manufacturers"
+    class="sapUiPopupWithPadding"
+    items="{globalSelectItems>/Manufacturers}"
+    search="handleMfrHelpSearch"
+    confirm="handleMfrHelpClose"
+    cancel="handleMfrHelpClose">
+    <StandardListItem description="{globalSelectItems>ManufacturerID}" title="{globalSelectItems>ManufacturerName}" />
+  </SelectDialog>
+</core:FragmentDefinition>

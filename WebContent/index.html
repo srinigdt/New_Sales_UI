@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta charset="UTF-8">
+
+		<title>GDT Sales Test</title>
+
+		<script
+			id="sap-ui-bootstrap"
+			src="resources/sap-ui-core.js"
+			data-sap-ui-theme="sap_bluecrystal"
+			data-sap-ui-libs="sap.m, sap.ui.layout, sap.ui.commons"
+			data-sap-ui-xx-bindingSyntax="complex"
+			data-sap-ui-modules="sap.ui.core.plugin.DeclarativeSupport"
+			data-sap-ui-resourceroots='{
+				"gdt.salesui": "./"
+			}' >
+			 
+
+			
+		</script>
+
+		<script>
+		new sap.m.Shell({
+				app: new sap.ui.core.ComponentContainer({
+					name : "gdt.salesui"
+				})
+			}).placeAt("content");
+		</script>
+		
+		<style>
+	   .sap-desktop .sapMShellAppWidthLimited .sapMShellCentralBox {
+			    background-color: rgba(255,255,255,0.3); 
+				} 
+		
+		</style>
+		
+	</head>
+	<body id="content" >
+	</body>
+</html>

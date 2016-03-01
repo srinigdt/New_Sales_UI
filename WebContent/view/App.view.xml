@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mvc:View 
+    controllerName="gdt.salesui.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <SplitApp id="fioriContent" mode="HideMode" >
+        <masterPages>
+        </masterPages>
+        <detailPages>
+			<Page id='intialDetail' title="No Sales Order Selected"/>
+        </detailPages>
+    </SplitApp>
+
+</mvc:View>

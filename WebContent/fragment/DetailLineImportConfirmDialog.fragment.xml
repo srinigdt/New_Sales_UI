@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:l="sap.ui.layout"
+  xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+  <Dialog title="Append or Replace?" id="detailLineImportConfirmDialog">
+   
+	<Panel>
+		<l:VerticalLayout width='100%'>
+			<Label text="This document already has detail lines, do you intend to Replace all existing detail lines or do you wish to Append this file to the end of the current document?" />
+		</l:VerticalLayout>
+	</Panel>
+  </Dialog>
+</core:FragmentDefinition>
