@@ -140,12 +140,12 @@ gdt.salesui.util.Controller
 					                                    	});
 					                                    } 
 					                                  //Begin of Change:Added by SXVASAMSETTI		                         
-					                                    else if(currentTab == 'docflow'){
-
-					                                    	_getDocumentFlowFromSAP(salesDocumentID).always(function(){
+					                                    else if(currentTab == 'docflow' && parseInt(salesDocumentID) != 0 ){
+                                                           
+					                                    	_getDocumentFlowFromSAP(core.getModel('currentSalesDocument').getProperty('/ReferencedBy') ||salesDocumentID,true).always(function(){
 					                                    		busyDlg.close();
 					                                    		});				                                  
-					                                  
+					                                 
 					                                    }
 					                                  //End of Change:SXVASAMSETTI
 					                                    else {
@@ -200,6 +200,13 @@ gdt.salesui.util.Controller
                     },
                     
 //Begin of Change for DocumentFlow Section:SXVASAMSETTI   
+                    
+                    _refreshDocumentFlowFromServer=function(salesDocumentID,refresh){
+                    	_getDocumentFlowFromSAP(salesDocumentID,refresh).always(function(){
+                    		busyDlg.close();
+                    		});		
+                    }                       
+                    
                     _doExpandAll = function() {
                     	var treeTable = view.byId('docflowTreeTable');
                         for (var i=0; i<treeTable.getRows().length; i++) {
@@ -213,13 +220,13 @@ gdt.salesui.util.Controller
                         } },
 
                        
-                    _getDocumentFlowFromSAP = function(documentID){
+                    _getDocumentFlowFromSAP = function(documentID,refresh){
                     	var deferred =  $.Deferred(function(defer) {
                         	busyDlg.setText('Fetching related documents to document(' + documentID + ') from SAP.');
                         	busyDlg.open();		
-                    	datacontext.documentFlow.get(documentID).done( function(data){
+                    	datacontext.documentFlow.get(documentID,refresh).done( function(data){
                         busyDlg.open();	
-                        core.getModel('documentFlow').setData(data);
+//                        core.getModel('documentFlow').setData(data);
                    		var treeTable = view.byId('docflowTreeTable');
                    		var treeTableModel = new sap.ui.model.json.JSONModel();
                    		treeTableModel.setData({modelData: data});
@@ -3700,7 +3707,9 @@ gdt.salesui.util.Controller
 			 }
 
 			_refreshSalesDocumentFromServer(core.getModel('currentSalesDocument').getProperty('/SalesDocumentID'), true);
-
+			var iconTabBar = view.byId("iconTabBar");
+			 if (iconTabBar && (iconTabBar.getSelectedKey() == 'docflow'))
+			 _refreshDocumentFlowFromServer(core.getModel('currentSalesDocument').getProperty('/ReferencedBy') || core.getModel('currentSalesDocument').getProperty('/SalesDocumentID') ,true);
          },
 
 		handlePaste = function(event) {

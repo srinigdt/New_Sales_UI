@@ -173,7 +173,7 @@ gdt.salesui.data.DataLoader = (function($, core, _, datacontext, helper) {
 	
 				salesDocumentDetailsDfr = $.Deferred(function(defer) {
 					datacontext.salesdocumentlines.getByForeignKey(salesDocumentId, forceRefresh).done(function () {
-	                	var salesDocumentDetails = core.getModel('currentSalesDocumentLines'),
+	                	var salesDocumentDetails = core.getModel('currentSalesDocumentLines')
 	                		results = datacontext.salesdocumentlines.getLocalByForeignKey(salesDocumentId);
 
 						if (results.length > 100) {
@@ -208,8 +208,21 @@ gdt.salesui.data.DataLoader = (function($, core, _, datacontext, helper) {
 	                	defer.reject(response);
 	                });
 				});
-					
-			return $.when(salesDocumentHeaderDfr, salesDocumentDetailsDfr, salesDocumentAttachmentsDfr).promise();
+				
+			salesDocumentFlowDfr = $.Deferred(function(defer) {
+				datacontext.documentFlow.getByForeignKey(salesDocumentId, forceRefresh).done(function () {
+                	var salesDocumentFlow = core.getModel('documentFlow');
+                	var	results = datacontext.documentFlow.getLocalByForeignKey(salesDocumentId);
+                	
+                	salesDocumentFlow.setData(results);
+            		defer.resolve();
+                }).fail(function (response) {
+                	defer.reject(response);
+                });
+			});			
+			
+			
+			return $.when(salesDocumentHeaderDfr, salesDocumentDetailsDfr, salesDocumentAttachmentsDfr,salesDocumentFlowDfr).promise();
 			
 		};
 	

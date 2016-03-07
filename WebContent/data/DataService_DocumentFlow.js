@@ -9,6 +9,7 @@ gdt.salesui.data.DataService_DocumentFlow = (function($, core, _, helper) {
 				var model = core.getModel();
 	        	model.read("/DocumentSet(DocumentID='" + DocumentId + "')?$expand=DocumentFlow", {
 		            	success: function(data, response) {
+	                        core.getModel('documentFlow').setData(data);
 							var results = _dataDownFix(data);
 							defer.resolve(results);
 		            	},
@@ -18,6 +19,23 @@ gdt.salesui.data.DataService_DocumentFlow = (function($, core, _, helper) {
 		            });
 			}).promise();		
 		},
+
+		getByForeignKey = function(DocumentId) {
+			return $.Deferred(function(defer) {
+				var model = core.getModel();
+	        	model.read("/DocumentSet(DocumentID='" + DocumentId + "')?$expand=DocumentFlow", {
+		            	success: function(data, response) {
+	                        core.getModel('documentFlow').setData(data);
+							var results = _dataDownFix(data);
+							defer.resolve(results);
+		            	},
+						error: function(response) {
+							defer.reject(helper.ParseError(response, "SalesUI Could not fetch the DocumentFlow."));
+						}
+		            });
+			}).promise();		
+		},		
+		
 		
 _dataDownFix = function(data) {
            rows = data.DocumentFlow.results;
@@ -47,7 +65,8 @@ _getFillChildren = function(childNodes,rows){
 	
 };		
 	return {
-	    get: get
+	    get: get,
+	    getByForeignKey:getByForeignKey
 	};
 	
 })($,sap.ui.getCore(),_, gdt.salesui.util.SAPGatewayHelper);

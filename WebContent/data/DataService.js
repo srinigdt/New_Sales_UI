@@ -33,7 +33,7 @@ gdt.salesui.data.DataService = (function(customers, customerbalances, customersh
 		salesdocumentattachments: salesdocumentattachments,
 		rejectionreasons: rejectionreasons,
 		userprefs: userprefs,
-		documentflow:documentflow,
+		documentflow:documentflow
 	};
 	
 	return dataservice;

@@ -21,11 +21,28 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 	},
 
 	docFlowVisibility = function(value) {
-		if( parseInt(value) == 0 ){
+		if( parseInt(value) == 0 && core.getModel('currentSalesDocument').getProperty('/ReferencedBy') == "" ){
 			return false;
 			}else{
 				return true;
 				}
+	},
+	
+	POlinkVisibility = function(value) {
+	
+		if (value =='V'){
+			return false;
+		}else{
+			return true;
+		}
+		
+	},
+	
+	lineCount = function(value){
+		if ( value.length != 0){
+	return value.length;
+		}
+
 	},
 	
     statusText = function(value) {
@@ -358,6 +375,8 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 			statusText : statusText,
 			stripZeros : stripZeros,
 			docFlowVisibility:docFlowVisibility,
+			POlinkVisibility:POlinkVisibility,
+			lineCount:lineCount
 		};
 
 

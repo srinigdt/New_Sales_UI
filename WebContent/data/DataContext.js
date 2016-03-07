@@ -331,7 +331,7 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 //The below is added to fetch Customers PO Existance :SXVASAMSETTI	
 		customersPO = new entitySet('CustomerPOID', null, null, dataservice.customers.getPO,null, null, null, null, null),
 //The below line is added to fetch document flow lines: SXVASAMSETTI
-		documentFlow = new entitySet('DocumentID', null, null, dataservice.documentflow.get,null, null, null, null, null),		
+		documentFlow = new entitySet('DocumentID', 'DocumentID', null, dataservice.documentflow.get,null, dataservice.documentflow.getByForeignKey, null, null, null),		
 		
 		
 		datacontext = {

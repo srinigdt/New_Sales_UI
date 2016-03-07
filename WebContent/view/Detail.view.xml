@@ -20,7 +20,10 @@
 				<IconTabBar id="iconTabBar" select="handleDetailSelect"
 					expanded="{device>/isNoPhone}">
 					<items>
-						<IconTabFilter icon="sap-icon://header" key="header"
+						<IconTabFilter 
+						    icon="sap-icon://header"
+						    iconColor="Positive" 
+						    key="header"
 							text="{i18n>ICONTABFILTER_HEADER}" >
 							<content>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailHeader"
@@ -28,7 +31,11 @@
 							</content>
 
 						</IconTabFilter>
-						<IconTabFilter icon="sap-icon://list" key="lineItems"
+						<IconTabFilter 
+						    icon="sap-icon://list"
+						    iconColor="Neutral" 
+						    key="lineItems"
+						    count="{path:'currentSalesDocumentLines>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
 							text="{i18n>ICONTABFILTER_LINEITEMS}" >
 							<content>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailLineItemsTab"
@@ -36,27 +43,42 @@
 							</content>
 
 						</IconTabFilter>
-						<IconTabFilter icon="sap-icon://notes" key="notes"
-							text="{i18n>ICONTABFILTER_NOTES}">
-							<content>
-								<core:Fragment fragmentName="gdt.salesui.fragment.DetailNotes"
-									type="XML" />
-							</content>
-						</IconTabFilter>
-						<IconTabFilter icon="sap-icon://attachment" key="attachments"
-							text="{i18n>ICONTABFILTER_ATTACHMENTS}" >
-							<content visible='false'>
-								<core:Fragment fragmentName="gdt.salesui.fragment.DetailAttachments"
-									type="XML" />
-							</content>
-						</IconTabFilter>
-						<IconTabFilter icon="sap-icon://documents" key="docflow"
+						<IconTabSeparator id='is' icon="sap-icon://open-command-field" visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}" />
+					    <IconTabFilter 
+						    icon="sap-icon://documents" 
+						    iconColor=" "
+						     count="{path:'documentFlow>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"  
+						    key="docflow"
 							text="{i18n>ICONTABFILTER_DOCFLOW}" visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}">
 							<content>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailDocFlowTab"
 									type="XML" />
 							</content>
 						</IconTabFilter>
+						<IconTabSeparator icon=""/>
+						<IconTabFilter 
+						    icon="sap-icon://notes"
+						    iconColor="Critical" 
+						    key="notes"
+							text="{i18n>ICONTABFILTER_NOTES}">
+							<content>
+								<core:Fragment fragmentName="gdt.salesui.fragment.DetailNotes"
+									type="XML" />
+							</content>
+						</IconTabFilter>
+						<IconTabFilter  
+						    icon="sap-icon://attachment"
+						    iconColor="Negative" 
+						    count="{path:'currentAttachments>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
+						    key="attachments"
+							text="{i18n>ICONTABFILTER_ATTACHMENTS}" >
+							<content visible='false'>
+								<core:Fragment fragmentName="gdt.salesui.fragment.DetailAttachments"
+									type="XML" />
+							</content>
+						</IconTabFilter>
+						
+
 					</items>
 				</IconTabBar>
 			</Panel>
