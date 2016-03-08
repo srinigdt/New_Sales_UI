@@ -12,21 +12,24 @@
 			data-sap-ui-theme="sap_bluecrystal"
 			data-sap-ui-libs="sap.m, sap.ui.layout, sap.ui.commons"
 			data-sap-ui-xx-bindingSyntax="complex"
+			data-sap-ui-compatVersion="edge"
 			data-sap-ui-modules="sap.ui.core.plugin.DeclarativeSupport"
 			data-sap-ui-resourceroots='{
 				"gdt.salesui": "./"
 			}' >
-			 
+ 
 
 			
 		</script>
 
 		<script>
+	sap.ui.getCore().attachInit(function() {
 		new sap.m.Shell({
 				app: new sap.ui.core.ComponentContainer({
 					name : "gdt.salesui"
 				})
 			}).placeAt("content");
+	});			
 		</script>
 		
 		<style>
