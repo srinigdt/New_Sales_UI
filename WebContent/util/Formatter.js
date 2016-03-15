@@ -28,7 +28,7 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 				}
 	},
 	
-	POlinkVisibility = function(value) {
+	POpdfButtonVisibility = function(value) {
 	
 		if (value =='V'){
 			return false;
@@ -375,7 +375,7 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 			statusText : statusText,
 			stripZeros : stripZeros,
 			docFlowVisibility:docFlowVisibility,
-			POlinkVisibility:POlinkVisibility,
+			POpdfButtonVisibility:POpdfButtonVisibility,
 			lineCount:lineCount
 		};
 

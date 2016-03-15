@@ -136,3 +136,13 @@ padding: 0.75rem;
 .salesUIiconText .sapMRI {
 	vertical-align: initial;
 }
+
+.salesUITextButton{
+display: inline-block;
+font-size: medium;	
+color: black;
+vertical-align: middle;
+margin-top: 4px;
+margin-left: 2px;
+padding-right:10px;
+}

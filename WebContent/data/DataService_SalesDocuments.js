@@ -54,6 +54,18 @@ gdt.salesui.data.DataService_SalesDocuments = (function($, core, _, helper) {
 					line.GDTDiscountPercent      = line.GDTDiscountPercent.toString();
 					line.CustomerDiscountPercent = line.CustomerDiscountPercent.toString();
 					line.GrossProfitPercentage   = line.GrossProfitPercentage.toString();
+					
+					// Due to XML Parse Error at the backend, convert raw numbers to strings: 03/15/16
+					line.ListPrice       = line.ListPrice.toString();
+					line.UnitCost        = line.UnitCost.toString();
+					line.UnitPrice       = line.UnitPrice.toString();
+					line.QTY             = line.QTY.toString();
+					line.QtyBilled       = line.QtyBilled.toString();
+					line.ExtendedPrice   = line.ExtendedPrice.toString();
+					line.ExtendedCost    = line.ExtendedCost.toString();					
+
+					
+					
 					if ($.type(line.VendorID) !== "string") {
 						if (!line.VendorID || parseInt(line.VendorID) == 0) {
 							line.VendorID = '';

@@ -1,8 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/Control",
-	"sap/m/Link",
+	"sap/ui/core/Icon",
 	"sap/m/Text"
-], function (Control,Link,Text) {
+], function (Control,Icon,Text) {
 	"use strict";
 	return Control.extend("gdt.salesui.control.IconText", {
 		metadata : {
@@ -12,13 +12,13 @@ sap.ui.define([
 				visible:{type:"boolean",defaultValue:false}
 			},
 			aggregations : {
-				_link : {type : "sap.m.Link", multiple: false, visibility : "hidden"},
+				_icon : {type : "sap.ui.core.Icon", multiple: false, visibility : "hidden"},
 				_text : {type : "sap.m.Text", multiple: false, visibility : "hidden"}	
 				           }			
 		},
 		init : function () {
-			    this.setAggregation("_link",
-			    	new Link({
+			    this.setAggregation("_Icon",
+			    	new Icon({
 			    		text : this.getlinkText(),
 			    		visible:this.getvisible(),
 			    		press:this._handlePOpdf.bind(this)
@@ -49,7 +49,7 @@ sap.ui.define([
 		setVisible: function (iValue) {
 			this.setProperty("visible", iValue, true);
 			this.getAggregation("_text").setVisible(iValue);
-			this.getAggregation("_link").setVisible(iValue);
+			this.getAggregation("_Icon").setVisible(iValue);
 		},			
 		
 		_handlePOpdf:function(event){
@@ -62,7 +62,7 @@ sap.ui.define([
 			oRM.addClass("salesUIiconText");
 			oRM.writeClasses();
 			oRM.write(">");
-			oRM.renderControl(oControl.getAggregation("_link"));
+			oRM.renderControl(oControl.getAggregation("_Icon"));
 			oRM.renderControl(oControl.getAggregation("_text"));
 			oRM.write("</div>");			
 		}
