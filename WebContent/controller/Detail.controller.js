@@ -2104,7 +2104,7 @@ gdt.salesui.util.Controller
 
 					setTimeout(function() {
 						//_deleteDetailLines()
-						_checkSelectedLines.done(function() {
+						_checkSelectedLines().done(function() {
 							_doSave().done(function(id) {
 								sap.m.MessageToast.show("Sales Document " + id + " has been saved.");
 								_doSubmitSalesOrder();
@@ -2642,9 +2642,12 @@ gdt.salesui.util.Controller
 		handleToggleSelection=function(event){
 			salesDocumentLines = view.getModel('currentSalesDocumentLines');
 			lines = salesDocumentLines.getData();	
-			lines.forEach(function (line){if(line.ItemCategory.substring(0,1) != 'Y'){ 
-				if(event.mParameters.pressed){line.Selected = true;}
-				else{line.Selected = false}}} );
+			lines.forEach(function (line){
+				if((line.ItemCategory.substring(0,1) == 'Z') || !!line.ReasonForRejection ){ 
+				   if(event.mParameters.pressed){line.Selected = true;}
+				   else{line.Selected = false}
+				   }
+				  } );
 			salesDocumentLines.setData(lines);
 		},
 		
@@ -2688,7 +2691,7 @@ gdt.salesui.util.Controller
 					rows = currentDocumentLines.getData();
 			 if(action == 'DELETE_LINES')
 				{
-					var	selectedLines = _.filter(rows, function(row){return (row.Selected) });
+					var	selectedLines = _.filter(rows, function(row){return (row.Selected &&  (row.ItemCategory.substring(0,1) == 'Z') || ( !!row.ReasonForRejection && !row.MarkedAsDeleted )) });
 						l = (!!selectedLines) ? selectedLines.length : 0;
 						msg = "Are you sure you wish to delete these " + l + " line items?";
 						rejmsg = 'Deletion of lines are canceled' ;
@@ -2697,7 +2700,7 @@ gdt.salesui.util.Controller
 					// For save, all lines to be selected by default
 					_.each(rows,function(row){row.Selected = true});
 				    var	unSelectedLines = _.filter(rows, function(row){ 
-						return (row.Selected == false && row.ItemCategory.substring(0,1) == 'Z' ) });
+						return (row.Selected == false &&  row.ItemCategory.substring(0,1) == 'Z'  ) });
 						l = (!!unSelectedLines) ? unSelectedLines.length : 0;	
 						msg = "Some Line Items(~ " + l + ") are not selected which will not be saved.Do you still want to continue?";
 						rejmsg = 'Saving lines are canceled';
@@ -2717,7 +2720,7 @@ gdt.salesui.util.Controller
 									}
 								});
 								currentDocumentLines.setData(_.reject(rows, function (row) {
-									return row.Selected;
+									return (row.Selected && ( (row.ItemCategory.substring(0,1) == 'Z') || !!row.ReasonForRejection ));
 								}));
 								
 								}else{

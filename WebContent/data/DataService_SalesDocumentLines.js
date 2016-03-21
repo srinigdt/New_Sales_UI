@@ -19,6 +19,7 @@ gdt.salesui.data.DataService_SalesDocumentLines = (function($, core, _, helper) 
 	        } else {
 	        	row.LastUpdatedOn = new Date(row.LastUpdatedOn.getTime() + (row.LastUpdatedOn.getTimezoneOffset() * 60 * 1000));
 	        }
+	        if((row.ItemCategory.substring(0,1) == 'Z') || ( !!row.ReasonForRejection && !row.MarkedAsDeleted ) )
 			row.Selected = true;
 			return row;
 		},
