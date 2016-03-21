@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+   <Dialog id='deleteDialogID'
+      title="Deletion Confirmation"
+       class="sapUiPopupWithPadding" >
+    <content>
+    <Text id='dilogTextID' />
+    <Text id='delcheck' visible='false' />
+     </content>
+      <beginButton>
+         <Button
+            text="{i18n>dialogYesButtonText}"
+            press="handleYesDeleteDialog"/>
+     </beginButton>   
+     <endButton>
+         <Button
+            text="{i18n>dialogCancelButtonText}"
+            press="handleCancelDeleteDialog"/>
+     </endButton>     
+   </Dialog>
+</core:FragmentDefinition>

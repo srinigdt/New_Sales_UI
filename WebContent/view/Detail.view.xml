@@ -84,9 +84,11 @@
 			</Panel>
 		<Panel  class="sapUiSizeCompact" id="detailDialogs" visible="false">
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailOutputActionSheet" type="XML" />
+			<core:Fragment fragmentName="gdt.salesui.fragment.DetailDeleteActionSheet" type="XML" />
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailNewViaAddressDialog" type="XML" />
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailCreateSalesOrderDialog" type="XML"/>
 			<core:Fragment fragmentName="gdt.salesui.fragment.BusyDialog" type="XML"/>
+			<core:Fragment fragmentName="gdt.salesui.fragment.DetailLineItemDeleteDialogConfirm" type="XML"/>
 		</Panel>
 		
 		</content>
@@ -100,7 +102,8 @@
 				<Button icon="sap-icon://print" text="Print {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{currentState>/isNotEditMode}" press="handleOutputRequest" />
 				<Button icon="sap-icon://sys-cancel" type="Reject" text="{i18n>CancelButtonText}" visible="{currentState>/isEditMode}" press="handleEditCancelButtonPress" />
 				<Button icon="sap-icon://system-exit" type="Reject" text="{i18n>ExitButtonText}" visible="{currentState>/isNotEditMode}" press="handleExitButtonPress" />
-				<Button icon="sap-icon://delete" type="Emphasized" text="Delete {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{= (!!${currentState>/isEditMode} &amp;&amp; !!${currentState>/canDelete}) }" enabled="{currentState>/canDelete}"  press="handleDeleteButtonPress" />
+				<Button icon="sap-icon://delete" class="buttondelete" text="{i18n>Delete}" visible="{= (!!${currentState>/isEditMode}) }" enabled="{currentState>/isEditMode}"  press="handleDeleteRequest" />
+				<!-- <Button icon="sap-icon://delete" type="Emphasized" text="Delete {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{= (!!${currentState>/isEditMode} &amp;&amp; !!${currentState>/canDelete}) }" enabled="{currentState>/canDelete}"  press="handleDeleteButtonPress" /> -->
 				<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveButtonText}" visible="{currentState>/isEditMode}" press="handleSaveButtonPress" />
 				<!--<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveAndExitButtonText}" visible="{currentState>/isEditMode}" press="handleSaveAndExitButtonPress" />-->
 				<Button icon="sap-icon://edit" type="Emphasized" text="{i18n>EditButtonText}" visible="{currentState>/canEdit}" press="handleEditCancelButtonPress" />

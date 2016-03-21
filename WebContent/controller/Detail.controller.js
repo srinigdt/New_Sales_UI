@@ -1312,8 +1312,9 @@ gdt.salesui.util.Controller
 
 			for (key in detailsArray) {
 				var lineNum = (!!detailsArray[key].SalesDocumentLineID) ? parseInt(detailsArray[key].SalesDocumentLineID) : 0,
-					structuredLineNum = (!!detailsArray[key].StructuredLineID) ? parseInt(detailsArray[key].StructuredLineID.substring(0,detailsArray[key].StructuredLineID.indexOf('.'))) : 0;
-				if (lineNum > maxLineNum) {
+					//structuredLineNum = (!!detailsArray[key].StructuredLineID) ? parseInt(detailsArray[key].StructuredLineID.substring(0,detailsArray[key].StructuredLineID.indexOf('.'))) : 0;
+						structuredLineNum = (!!detailsArray[key].StructuredLineID) ? parseInt(detailsArray[key].StructuredLineID) : 0;
+						if (lineNum > maxLineNum) {
 					maxLineNum = lineNum;
 				}
 				if (structuredLineNum > maxStructuredLineNum) {
@@ -1345,6 +1346,7 @@ gdt.salesui.util.Controller
 			newLine.CreatedOn = today;
 			newLine.UpdatedBy = userid;
 			newLine.LastUpdatedOn = today;
+			newLine.Selected = true;
 
 			return newLine;
 		},
@@ -1357,11 +1359,25 @@ gdt.salesui.util.Controller
 					(currentState.getProperty('/isQuote') ? "Quote?" : "Sales Order?") +
 					".  This operation cannot be undone!", function (confirmation) {
 				if (confirmation != 'CANCEL') {
-					datacontext.salesdocuments.remove(currentDocument.getProperty('/SalesDocumentID'));
+					datacontext.salesdocuments.remove(currentDocument.getProperty('/SalesDocumentID')).done(function(){
 					core.getModel("currentState").setProperty('/isEditMode', false);
 					core.getModel("currentState").setProperty('/isNotEditMode', true);
 					eventBus.publish("master","salesDocAltered", currentDocument.getData());
 					_exit();
+				}).fail(function(err){
+					var uniqueList=err.split('\n').filter(function(item,i,allItems){
+					    return i==allItems.indexOf(item);
+					}).join(',');
+					var msg;
+					if(uniqueList){
+						msg = uniqueList;
+					}
+					sap.m.MessageBox.show((msg) ? msg : "SalesUI Could not delete this Document from SAP.", {
+						icon: sap.m.MessageBox.Icon.ERROR,
+						title: "SAP Error",
+						actions: sap.m.MessageBox.Action.OK,
+						onClose: null});	
+				});
 				}
 			}, "Confirm Delete Document");
 		},
@@ -1400,6 +1416,8 @@ gdt.salesui.util.Controller
 
 			return deferred.promise();
 		},
+		
+		
 
 		handlePartIDHelp = function (event) {
 			var dialog = view.byId('detailLinePartSearchDialog'),
@@ -2085,7 +2103,8 @@ gdt.salesui.util.Controller
 					busyDlg.open();
 
 					setTimeout(function() {
-						_deleteDetailLines().done(function() {
+						//_deleteDetailLines()
+						_checkSelectedLines.done(function() {
 							_doSave().done(function(id) {
 								sap.m.MessageToast.show("Sales Document " + id + " has been saved.");
 								_doSubmitSalesOrder();
@@ -2193,7 +2212,7 @@ gdt.salesui.util.Controller
 			for (key in rows) {
 				materialSeries = _determineMaterialSeries(rows[key]);
 
-                if (!rows[key].ReasonForRejection && !rows[key].MarkedForDeletion && !rows[key].DeletedFlag) {
+                if (!rows[key].ReasonForRejection && !rows[key].MarkedForDeletion && rows[key].Selected) {
                     if (materialSeries == materialSeries_ProfessionalServices) {
                         totalOtherPrice += Math.round(parseFloat(rows[key].ExtendedPrice) * 100.0) / 100.0; // Round to pennies
                         totalOtherCost += Math.round(parseFloat(rows[key].ExtendedCost) * 100.0) / 100.0; // Round to pennies
@@ -2252,7 +2271,8 @@ gdt.salesui.util.Controller
 					busyDlg.open();
 
 					setTimeout(function() {
-						_deleteDetailLines().done(function() {
+						 //_deleteDetailLines
+						_checkSelectedLines().done(function() {
 							_doSave().done(function(id) {
 								sap.m.MessageToast.show("Sales Document " + id + " has been saved.");
 								view.byId('createSalesOrderDialog').open();
@@ -2607,6 +2627,123 @@ gdt.salesui.util.Controller
 			}
 		},
 
+// Begin of changes:SXVASAMSETTI; Partial Submission changes
+		//Display Delete Options
+		handleDeleteRequest = function(event) {
+			var actionSheet = view.byId('deleteActionSheet');
+
+			if (actionSheet.isOpen()) {
+				actionSheet.close();
+			} else {
+				actionSheet.openBy(event.getSource());
+			}
+		},
+		
+		handleToggleSelection=function(event){
+			salesDocumentLines = view.getModel('currentSalesDocumentLines');
+			lines = salesDocumentLines.getData();	
+			lines.forEach(function (line){if(line.ItemCategory.substring(0,1) != 'Y'){ 
+				if(event.mParameters.pressed){line.Selected = true;}
+				else{line.Selected = false}}} );
+			salesDocumentLines.setData(lines);
+		},
+		
+		handleSelectColumn=function(event){
+		var source = event.getSource( );
+		source.setShowColumnVisibilityMenu(true);
+		source.setEnableColumnFreeze(true);
+		if(event.mParameters.column.sId.indexOf('selectionID') >= 0){
+			source.setShowColumnVisibilityMenu(false);
+			source.setEnableColumnFreeze(false);		
+		}
+		
+		},
+		
+      
+	      handleOpenDeleteDialog=function(event){
+	    	  if( event.oSource.sId.indexOf('DeleteLineItems') >= 0){
+	    		  if(_checkIsLinesAreSelected())
+	    		  handleSaveButtonPress('DELETE_LINES');
+	    	  }else{
+	    		  handleDeleteButtonPress( );
+	    	  }	    	 
+	      },		
+		
+	      handleCancelDeleteDialog=function(){
+	    	 
+	    	  view.byId('deleteDialogID').close();
+	    	  sap.m.MessageToast.show('Deletion Cancelled');
+	      },
+		
+      
+	      _checkIsLinesAreSelected = function(){
+	    	  if(_.findWhere(core.getModel('currentSalesDocumentLines').getData(), {Selected:true})) return true; 
+	    	  sap.m.MessageToast.show("Please Select lines");
+	    	  return false;
+	      }
+
+	      _checkSelectedLines = function(action) {
+				var deferred,l,msg ,rejmsg,popupmsg,
+					currentDocumentLines = core.getModel('currentSalesDocumentLines'),
+					rows = currentDocumentLines.getData();
+			 if(action == 'DELETE_LINES')
+				{
+					var	selectedLines = _.filter(rows, function(row){return (row.Selected) });
+						l = (!!selectedLines) ? selectedLines.length : 0;
+						msg = "Are you sure you wish to delete these " + l + " line items?";
+						rejmsg = 'Deletion of lines are canceled' ;
+						popupmsgTitle = 'Confirm Deletion';
+				}else{
+					// For save, all lines to be selected by default
+					_.each(rows,function(row){row.Selected = true});
+				    var	unSelectedLines = _.filter(rows, function(row){ 
+						return (row.Selected == false && row.ItemCategory.substring(0,1) == 'Z' ) });
+						l = (!!unSelectedLines) ? unSelectedLines.length : 0;	
+						msg = "Some Line Items(~ " + l + ") are not selected which will not be saved.Do you still want to continue?";
+						rejmsg = 'Saving lines are canceled';
+						popupmsgTitle  = 'Confirm Save Document';
+				}
+
+				deferred = $.Deferred(function (def) {
+					if (l > 0) {
+						
+						sap.m.MessageBox.confirm(msg, function (confirmation) {
+							if (confirmation != 'CANCEL') {
+								if(action == 'DELETE_LINES'){
+								_.each(rows, function (row) {
+									if (!!row.Selected && !!row.ReasonForRejection) {
+										row.MarkedAsDeleted = true;
+										row.Selected = false;
+									}
+								});
+								currentDocumentLines.setData(_.reject(rows, function (row) {
+									return row.Selected;
+								}));
+								
+								}else{
+									currentDocumentLines.setData(_.filter(rows, function (row) {
+										return row.Selected;
+									}));	
+									
+								}
+								
+								view.setModel(core.getModel('currentSalesDocumentLines'), 'currentSalesDocumentLines');
+								_calculateTotals();
+								def.resolve();
+							} else {
+								def.reject(rejmsg);
+							}
+						}, popupmsgTitle);
+					} else {
+						def.resolve();
+					}
+				});
+
+				return deferred.promise();
+			},
+				      
+		// End of change: SXVASAMSETTI, Partial Submission Changes
+		
 		handleDetailedSOConfirmationPDFRequest = function(event) {
 			_doOutput('ZBA5','P');
 		},
@@ -2814,7 +2951,7 @@ gdt.salesui.util.Controller
 			for (i = 0; i < l; i++) {
 				idx = _.indexOf(rowsArray,children[i]);
 				if (idx != -1) {
-					children[i].DeletedFlag = row.DeletedFlag;
+					children[i].Selected = row.Selected;
 					rows.setProperty('/'+idx,children[i]);
 				}
 			}
@@ -3191,13 +3328,19 @@ gdt.salesui.util.Controller
 			var msg = '',
 				canSave = _canSave();
 
-			if (_isDirty() && canSave) {
-
+			if (function(){if(event != 'DELETE_LINES') return (_isDirty() && canSave) ; return true; }()) {
+               
+				if(event == 'DELETE_LINES')
+					{
+					busyDlg.setText('Deleting Document Line Items in SAP');
+					}else{
 				busyDlg.setText('Saving document in SAP.');
+					}
 				busyDlg.open();
 
 				setTimeout(function() {
-					_deleteDetailLines().done(function() {
+					//  _deleteDetailLines
+					_checkSelectedLines(event).done(function() {
 						_doSave().done(function(id) {
 							sap.m.MessageToast.show("Sales Document " + id + " has been saved.");
 						}).fail(function(msg) {
@@ -4027,6 +4170,7 @@ gdt.salesui.util.Controller
 			handleEDIOutputRequest : handleEDIOutputRequest,
 			handleDetailedEngineeringQuoteSummaryPDFRequest : handleDetailedEngineeringQuoteSummaryPDFRequest,
 			handleEngineeringQuoteSummaryPDFRequest : handleEngineeringQuoteSummaryPDFRequest,
+			handleOpenDeleteDialog:handleOpenDeleteDialog,
 		};
 
 

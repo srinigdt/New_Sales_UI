@@ -19,7 +19,7 @@ gdt.salesui.data.DataService_SalesDocumentLines = (function($, core, _, helper) 
 	        } else {
 	        	row.LastUpdatedOn = new Date(row.LastUpdatedOn.getTime() + (row.LastUpdatedOn.getTimezoneOffset() * 60 * 1000));
 	        }
-			
+			row.Selected = true;
 			return row;
 		},
 		getByForeignKey = function(salesDocumentId) {

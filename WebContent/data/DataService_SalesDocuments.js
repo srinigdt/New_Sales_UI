@@ -40,7 +40,6 @@ gdt.salesui.data.DataService_SalesDocuments = (function($, core, _, helper) {
             } else {
                 data.LastChangedOn = new Date(data.LastChangedOn.getTime() + (data.LastChangedOn.getTimezoneOffset() * 60 * 1000));
             }		                	
-			
 			return data;
 		},
 		fixDataUp = function(data) {

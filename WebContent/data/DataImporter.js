@@ -408,6 +408,7 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 								if (!!newline.CustomerDiscount && (!newline.CustomerDiscountPercent || (parseFloat(newline.CustomerDiscount) != 0 && parseFloat(newline.CustomerDiscountPercent) == 0))) {
 									newline.CustomerDiscountPercent = Math.round((newline.CustomerDiscount / newline.ListPrice) * -100000.0) / 1000.0;  // Discounts to 3 DP
 								}
+								newline.Selected = true;
 								newRows.push(newline)
 							}
 						}

@@ -1,0 +1,15 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <ActionSheet
+  	id='deleteActionSheet'
+    title="{i18n>DeleteOptions}"
+    afterOpen="handleDelectionSelectedDefault" 
+    placement="Top">
+    <buttons>
+      <Button id='DeleteLineItems' press='handleOpenDeleteDialog' text="{i18n>DeleteLineItems}" icon="sap-icon://sales-order-item" />
+      <Button id='DeleteDocument'  press='handleOpenDeleteDialog'  text="{i18n>DeleteDocument}" icon="sap-icon://sales-order" />
+<!-- visible="{= (!!${currentState>/isEditMode} &amp;&amp; !!${currentState>/canDelete}) }" -->
+    </buttons>
+  </ActionSheet>
+</core:FragmentDefinition>
