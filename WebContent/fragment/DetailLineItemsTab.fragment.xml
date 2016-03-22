@@ -22,7 +22,7 @@
  			    <t:Column id='selectionID' width="40px" visible="{currentState>/isEditMode}">
  			    <ToggleButton icon="sap-icon://multi-select" width="15px" class="size1" press="handleToggleSelection"></ToggleButton>
 			   <!--  <core:Icon  src="sap-icon://multi-select"  width="15px" class="size1" /> --> 			    	
-				   	<t:template><CheckBox select="handleDetailDeleteSelect" selected="{path: 'currentSalesDocumentLines>Selected'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}))  }"  /></t:template>
+				   	<t:template><CheckBox select="handleDetailOnSelectLines" selected="{path: 'currentSalesDocumentLines>Selected'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}))  }"  /></t:template>
 			    </t:Column>
 				<t:Column width="50px" visible="{= (${currentState>/isSalesOrder})}">
 					<Text text="Status"/>

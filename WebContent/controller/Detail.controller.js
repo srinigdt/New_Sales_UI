@@ -2212,7 +2212,7 @@ gdt.salesui.util.Controller
 			for (key in rows) {
 				materialSeries = _determineMaterialSeries(rows[key]);
 
-                if (!rows[key].ReasonForRejection && !rows[key].MarkedForDeletion && rows[key].Selected) {
+                if (!rows[key].ReasonForRejection && !rows[key].MarkedForDeletion) {
                     if (materialSeries == materialSeries_ProfessionalServices) {
                         totalOtherPrice += Math.round(parseFloat(rows[key].ExtendedPrice) * 100.0) / 100.0; // Round to pennies
                         totalOtherCost += Math.round(parseFloat(rows[key].ExtendedCost) * 100.0) / 100.0; // Round to pennies
@@ -2691,7 +2691,7 @@ gdt.salesui.util.Controller
 					rows = currentDocumentLines.getData();
 			 if(action == 'DELETE_LINES')
 				{
-					var	selectedLines = _.filter(rows, function(row){return (row.Selected &&  (row.ItemCategory.substring(0,1) == 'Z') || ( !!row.ReasonForRejection && !row.MarkedAsDeleted )) });
+					var	selectedLines = _.filter(rows, function(row){return (row.Selected &&  (row.ItemCategory.substring(0,1) == 'Z') || (row.Selected && !!row.ReasonForRejection && !row.MarkedAsDeleted )) });
 						l = (!!selectedLines) ? selectedLines.length : 0;
 						msg = "Are you sure you wish to delete these " + l + " line items?";
 						rejmsg = 'Deletion of lines are canceled' ;
@@ -2931,7 +2931,7 @@ gdt.salesui.util.Controller
 			});
 		},
 
-		handleDetailDeleteSelect = function(event) {
+		handleDetailOnSelectLines = function(event) {
 			var source = event.getSource(),
 			binding = source.getBinding('selected'),
 			context = binding.getContext(),
@@ -2958,7 +2958,7 @@ gdt.salesui.util.Controller
 					rows.setProperty('/'+idx,children[i]);
 				}
 			}
-            _calculateTotals();
+          //  _calculateTotals();
 		},
 
 		handleDropShipSelect = function (event) {
@@ -4072,6 +4072,7 @@ gdt.salesui.util.Controller
 			sap.m.MessageBox.confirm("Clearing the reason for rejection will resubmit this line to Procurement when you hit 'Save'.  Are you sure you wish to clear the reason for rejection?", function (confirmation) {
 				if (confirmation != 'CANCEL') {
 					model.setProperty(context.getPath() + '/ReasonForRejection', '');
+					model.setProperty(context.getPath() + '/Selected', false);
                     row = model.getProperty(context.getPath());
                     _makeChildItemsLikeThis(row, model, 'ReasonForRejection');
 					_calculateTotals();
