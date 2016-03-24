@@ -3,7 +3,7 @@
 		<t:Table  class="sapUiSizeCompact" 
 		         rows="{currentSalesDocumentLines>/}" 
 		         id="lineItemsTable"
-				visibleRowCount='5' 
+				visibleRowCount='5'				
 				showColumnVisibilityMenu='true' 
 				selectionMode='None'
 				enableColumnReordering='true' 
@@ -11,6 +11,7 @@
 				enableCellFilter='true'
 				columnSelect="handleSelectColumn"
 				>
+
 				<t:toolbar>
 				<Toolbar>				
 				 <ToolbarSpacer/>

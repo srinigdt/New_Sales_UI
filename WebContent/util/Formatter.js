@@ -45,6 +45,12 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 
 	},
 	
+	islineSelected = function(value){
+		 if(_.findWhere(value, {Selected:true}))
+			 return true; 
+		     return false;
+			},
+	
     statusText = function(value) {
 	    var core = sap.ui.getCore(),
 	    	bundle = core.getModel("i18n").getResourceBundle();
@@ -376,7 +382,8 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 			stripZeros : stripZeros,
 			docFlowVisibility:docFlowVisibility,
 			POpdfButtonVisibility:POpdfButtonVisibility,
-			lineCount:lineCount
+			lineCount:lineCount,
+			islineSelected:islineSelected
 		};
 
 

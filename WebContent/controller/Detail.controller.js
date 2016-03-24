@@ -42,6 +42,7 @@ gdt.salesui.util.Controller
                     		currentState = core.getModel('currentState');
                     	
                     	view = this.getView();
+                    	view.setModel(core.getModel('currentCopySalesDocumentLines'), "currentCopySalesDocumentLines" )
 						busyDlg = view.byId('busyDlg');
 						componentId = sap.ui.core.Component.getOwnerIdFor(view),
 	                    eventBus = sap.ui.component(componentId).getEventBus(), 
@@ -2462,77 +2463,7 @@ gdt.salesui.util.Controller
 			sap.m.MessageToast.show("Edit new quote and Save or Cancel when done");
 		},
 
-// Begin of Change: Copy of Selected SO Items and append to the list :SXVASAMSETTI		
-		handleCopySOLines = function(event) {
-			var today    = new Date(Date.now()),
-			today_plus30 = new Date(Date.now()),
-			lines = [],
-			itemIDs = [],
-			checkID = '',
-			copyLines = [],
-		    selectedLines = [],
-			maxLine,		
-			salesDocumentLines = view.getModel('currentSalesDocumentLines');
-		    today_plus30.setDate(today_plus30.getDate() + 30);
-         
-		lines = salesDocumentLines.getData();		
-		selectedLines = _.filter(lines, function (line) { return !!line.DeletedFlag; });
-		if(selectedLines.length == 0){sap.m.MessageToast.show("Please select line items"); return;}
-	    copyLines = (JSON.parse(JSON.stringify(selectedLines))); //Cloning the data ie,,copy of data
-		maxLine   = _.max(lines, function (line) { return line.ZZLineID; });
-		var maxLineID   = Math.trunc( maxLine.ZZLineID);
-		var maxSDLineID =	parseInt(maxLine.SalesDocumentLineID);
-		var parentLineID;
-		var decimalVal = 0;
-		var userid = core.getModel('systemInfo').getProperty('/Uname');
-		selectedLines.forEach(function (line) {line.DeletedFlag = false;} );
-		copyLines.forEach(function (line) {
-/*			line.SalesDocumentID = '0000000000';
-			line.ShipToID = header.CustomerID;
-			line.VendorDeliveryNotes = '';
-			line.BillingNotes = '';
-			line.HasNotesFlag = false;
-			line.DealID = ''; */
 
-			maxSDLineID = parseInt(maxSDLineID) ;
-			line.CustomerPOLineID = (maxSDLineID + 10).toString();
-			line.SalesDocumentLineID = maxSDLineID = _pad(maxSDLineID + 10,6);
-			line.DeletedFlag = false;
-//* Forming structure Line ID
-			itemIDs = line.ZZLineID.split('.');
-			if(checkID != itemIDs[0] ){ 
-				maxLineID++ ; 
-				checkID = itemIDs[0]; 
-				parentLineID = maxSDLineID
-			    line.ParentLineID = '000000';
-				decimalVal = 0;
-			}
-			else{
-		    line.ParentLineID = parentLineID;	
-			};
-/*			if(itemIDs.length > 2){
-				line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1] + '.' + itemIDs[2];
-			}
-			else{
-			line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1];
-			};	*/		
-//*******************
-			line.StructuredLineID = line.ZZLineID = maxLineID + '.' + decimalVal ; decimalVal++;
-			line.DeliveryDate  = new Date( line.DeliveryDate );
-			line.CreatedBy     = userid;
-			line.CreatedOn     = today;
-			line.CreatedBy     = userid;
-			line.LastUpdatedOn = today;
-			line.UpdatedBy     = userid;
-           // _determineItemCategoryForDropShip(line);
-			lines.push(line);
-		});
-
-		salesDocumentLines.setData(lines);
-		_calculateTotals();
-		sap.m.MessageToast.show("Line Items are copied and appended to the List");
-	},
-//End of Change: SXVASAMSETTI	
 	
 		_toggleEdit = function (confirmation) {
 			var currentState  = view.getModel('currentState'),
@@ -2626,7 +2557,130 @@ gdt.salesui.util.Controller
 				actionSheet.openBy(event.getSource());
 			}
 		},
+		
+//Begin of Change:SXVASAMSETTI:Copy SO Selection
+// Begin of Change: Copy of Selected SO Items and append to the list :SXVASAMSETTI			
+		handleCopyPopupToggleSelection=function(event){
+			var salesDocumentLines = view.getModel('currentCopySalesDocumentLines');
+			lines = salesDocumentLines.getData();	
+			lines.forEach(function (line){		
+				   if(event.mParameters.pressed){line.Selected = true;}
+				   else{line.Selected = false}
+				   }
+				  ) ;
+			salesDocumentLines.setData(lines);
+		},		
+		
+		handleCopySOLines = function(event) {
 
+			var copyLines = (JSON.parse(JSON.stringify(view.getModel('currentSalesDocumentLines').getData()))) ;
+			view.getModel('currentCopySalesDocumentLines').setData(copyLines);
+			
+				this._oDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemsCopyDialog", this);
+				this.getView().addDependent(this._oDialog);	
+
+			ofooter = this._oDialog._oDialog._oToolbar ;
+		     if(ofooter.getContent( ).length == 2){
+			 oConfirmBtn = new sap.m.Button({
+				 id:"copyConfirmBtn",
+				 press: this.handleConfirmCopySOLines.bind(this),
+				 text:"Confirm",
+				 type:"Accept"
+			 })	;
+			 ofooter.addContent(oConfirmBtn);
+		     }			 
+		     this._oDialog.open( );
+		},		
+		handleCopyClose=function(){
+			this._oDialog.destroy( );	
+		},
+		handleSearchPartID=function(oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilter = new sap.ui.model.Filter("CustomerPartID", sap.ui.model.FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter([oFilter]);
+		},		
+				
+		handleConfirmCopySOLines = function(event) {
+
+				var today    = new Date(Date.now()),
+				today_plus30 = new Date(Date.now()),
+				lines = [],
+				itemIDs = [],
+				checkID = '',
+				copyLines = [],
+			    selectedLines = [],
+				maxLine;		
+			    today_plus30.setDate(today_plus30.getDate() + 30);
+	         
+			lines = view.getModel('currentSalesDocumentLines').getData();		
+			selectedLines = _.filter(view.getModel('currentCopySalesDocumentLines').getData(), function (line) { return line.Selected; });
+			if(selectedLines.length == 0){sap.m.MessageToast.show("Please select line items"); return;}
+//		    copyLines = (JSON.parse(JSON.stringify(selectedLines))); //Cloning the data ie,,copy of data
+			maxLine   = _.max(lines, function (line) { return line.ZZLineID; });
+			var maxLineID   = Math.trunc( maxLine.ZZLineID);
+			var maxSDLineID =	parseInt(maxLine.SalesDocumentLineID);
+			var parentLineID;
+			var decimalVal = 0;
+			var userid = core.getModel('systemInfo').getProperty('/Uname');
+			selectedLines.forEach(function (line) {
+	/*			line.SalesDocumentID = '0000000000';
+				line.ShipToID = header.CustomerID;
+				line.VendorDeliveryNotes = '';
+				line.BillingNotes = '';
+				line.HasNotesFlag = false;
+				line.DealID = ''; */
+
+				maxSDLineID = parseInt(maxSDLineID) ;
+				line.CustomerPOLineID = (maxSDLineID + 10).toString();
+				line.SalesDocumentLineID = maxSDLineID = _pad(maxSDLineID + 10,6);
+				line.DeletedFlag = false;
+	//* Forming structure Line ID
+				itemIDs = line.ZZLineID.split('.');
+				if(checkID != itemIDs[0] ){ 
+					maxLineID++ ; 
+					checkID = itemIDs[0]; 
+					parentLineID = maxSDLineID
+				    line.ParentLineID = '000000';
+					decimalVal = 0;
+				}
+				else{
+			    line.ParentLineID = parentLineID;	
+				};
+	/*			if(itemIDs.length > 3){
+					line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1] + '.' + itemIDs[2] + '.' + itemIDs[3];
+				}
+				else if (itemIDs.length > 2){
+				line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1] + '.' + itemIDs[2] ;
+				}
+				else{
+				line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1];
+				};	*/		
+	//*******************
+				line.StructuredLineID = line.ZZLineID = maxLineID + '.' + decimalVal ; decimalVal++;
+				line.DeliveryDate  = new Date( line.DeliveryDate );
+				line.CreatedBy     = userid;
+				line.CreatedOn     = today;
+				line.CreatedBy     = userid;
+				line.LastUpdatedOn = today;
+				line.UpdatedBy     = userid;
+				if(line.SmartNetEndDate) line.SmartNetEndDate = new Date(line.SmartNetEndDate);
+				if(line.SmartNetBeginDate) line.SmartNetBeginDate = new Date(line.SmartNetBeginDate);
+	           // _determineItemCategoryForDropShip(line);
+				lines.push(line);
+			});
+
+			view.getModel('currentSalesDocumentLines').setData(lines);
+			_calculateTotals();
+			//view.byId('detailLineItemSelectDialog').exit();
+			this._oDialog.destroy();
+			sap.m.MessageToast.show("Line Items are copied and appended to the List");
+		},
+	//End of Change: Copy SO: SXVASAMSETTI			
+		
+		
+
+		
 // Begin of changes:SXVASAMSETTI; Partial Submission changes
 		//Display Delete Options
 		handleDeleteRequest = function(event) {
@@ -2643,7 +2697,7 @@ gdt.salesui.util.Controller
 			salesDocumentLines = view.getModel('currentSalesDocumentLines');
 			lines = salesDocumentLines.getData();	
 			lines.forEach(function (line){
-				if((line.ItemCategory.substring(0,1) == 'Z') || !!line.ReasonForRejection ){ 
+				if((line.ItemCategory.substring(0,1) == 'Z') || ( !!line.ReasonForRejection && !line.MarkedAsDeleted ) ){
 				   if(event.mParameters.pressed){line.Selected = true;}
 				   else{line.Selected = false}
 				   }
@@ -4106,7 +4160,7 @@ gdt.salesui.util.Controller
 			onInit : onInit,
 			onBeforeRendering : onBeforeRendering,
 			onAfterRendering : onAfterRendering,
-			handleDetailDeleteSelect : handleDetailDeleteSelect,
+			handleDetailOnSelectLines : handleDetailOnSelectLines,
 			handleDragOver : handleDragOver,
 			handleDropFile : handleDropFile,
 			handleChangeHeaderCustomerPOID : handleChangeHeaderCustomerPOID,
@@ -4175,6 +4229,9 @@ gdt.salesui.util.Controller
 			handleDetailedEngineeringQuoteSummaryPDFRequest : handleDetailedEngineeringQuoteSummaryPDFRequest,
 			handleEngineeringQuoteSummaryPDFRequest : handleEngineeringQuoteSummaryPDFRequest,
 			handleOpenDeleteDialog:handleOpenDeleteDialog,
+			handleSearchPartID:handleSearchPartID,
+			handleConfirmCopySOLines:handleConfirmCopySOLines,
+			handleCopyClose:handleCopyClose
 		};
 
 

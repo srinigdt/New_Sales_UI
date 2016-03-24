@@ -176,6 +176,7 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 				l = 0,
 				l2 = 0,
 				l3 = Defaults.length;
+				this.append = append;
 
         	def = $.Deferred(function(defer) {
 				var searchAddress = '',
@@ -314,7 +315,19 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 													//	}
 													//	newline.StructuredLineID = parentNode.toString() + childNode;
 													//}
+											
+													if(salesOrderDetailsArray.length == 0){
 													newline.StructuredLineID = line[j];
+													}else{
+													if(parseInt((parsed.data[i-1])[j]) == parseInt(line[j])){
+														newline.StructuredLineID = newline.StructuredLineID - 1;
+													lineLevels = line[j].split('.');
+													for(n = 1;n < lineLevels.length; n++){
+														newline.StructuredLineID = newline.StructuredLineID + '.' + lineLevels[n]	;
+													}
+													}
+													newline.StructuredLineID = newline.StructuredLineID.toString( );
+													}
 													break;
 												case 'SmartNetBeginDate' :
 													try {

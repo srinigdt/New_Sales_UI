@@ -137,6 +137,8 @@ sap.ui.core.UIComponent
 	                    currentSalesDocument = new sap.ui.model.json.JSONModel({}),
 
 	                    currentSalesDocumentLines = new sap.ui.model.json.JSONModel([]),
+	                    
+	                    currentCopySalesDocumentLines = new sap.ui.model.json.JSONModel([]),
 
 	                    currentAttachments = new sap.ui.model.json.JSONModel([]),
 
@@ -268,6 +270,7 @@ sap.ui.core.UIComponent
 	                    core.setModel(currentVia, "currentVia");
 	                    core.setModel(currentSalesDocument,"currentSalesDocument");
 	                    core.setModel(currentSalesDocumentLines,"currentSalesDocumentLines");
+	                    core.setModel(currentCopySalesDocumentLines,"currentCopySalesDocumentLines");
 	                    core.setModel(currentAttachments, "currentAttachments");
 	                    core.setModel(copies, "copies");
 	                    core.setModel(currentState, "currentState");

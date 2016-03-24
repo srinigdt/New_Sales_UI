@@ -51,8 +51,7 @@
 						    key="docflow"
 							text="{i18n>ICONTABFILTER_DOCFLOW}" visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}">
 							<content>
-								<core:Fragment fragmentName="gdt.salesui.fragment.DetailDocFlowTab"
-									type="XML" />
+								<core:Fragment fragmentName="gdt.salesui.fragment.DetailDocFlowTab"  type="XML" />
 							</content>
 						</IconTabFilter>
 						<IconTabSeparator icon=""/>
@@ -82,7 +81,8 @@
 					</items>
 				</IconTabBar>
 			</Panel>
-		<Panel  class="sapUiSizeCompact" id="detailDialogs" visible="false">
+		<Panel  class="sapUiSizeCompact" id="detailDialogs" visible="false">		
+		<!--     <core:Fragment fragmentName="gdt.salesui.fragment.DetailLineItemsCopyDialog" type="XML" /> -->
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailOutputActionSheet" type="XML" />
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailDeleteActionSheet" type="XML" />
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailNewViaAddressDialog" type="XML" />
@@ -95,14 +95,16 @@
 		<footer>
 			<Toolbar class="sapUiSizeCompact">
 				<Button icon="sap-icon://add-activity-2" text="Copy Quote" enabled="{currentState>/isNotEditMode}"  visible="{currentState>/isQuote}" press="handleCopyQuote" />
-                <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopySOLines" />
+               <!--  <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopySOLines" /> --> 
+				 <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopySOLines" />
+				
 				<ToolbarSpacer />
 
 				<Button icon="sap-icon://excel-attachment" text="Export {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{currentState>/isNotEditMode}" press="handleExportToExcelRequest" />
 				<Button icon="sap-icon://print" text="Print {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{currentState>/isNotEditMode}" press="handleOutputRequest" />
 				<Button icon="sap-icon://sys-cancel" type="Reject" text="{i18n>CancelButtonText}" visible="{currentState>/isEditMode}" press="handleEditCancelButtonPress" />
 				<Button icon="sap-icon://system-exit" type="Reject" text="{i18n>ExitButtonText}" visible="{currentState>/isNotEditMode}" press="handleExitButtonPress" />
-				<Button icon="sap-icon://delete" class="buttondelete" text="{i18n>Delete}" visible="{= (!!${currentState>/isEditMode}) }" enabled="{currentState>/isEditMode}"  press="handleDeleteRequest" />
+				<Button icon="sap-icon://delete" class="buttondelete" text="{i18n>Delete}" visible="{= (!!${currentState>/isEditMode} &amp;&amp; ( !!${currentState>/isPendingSalesOrder} || !!${currentState>/isQuote} )  )}" enabled="{currentState>/isEditMode}"  press="handleDeleteRequest" />
 				<!-- <Button icon="sap-icon://delete" type="Emphasized" text="Delete {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{= (!!${currentState>/isEditMode} &amp;&amp; !!${currentState>/canDelete}) }" enabled="{currentState>/canDelete}"  press="handleDeleteButtonPress" /> -->
 				<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveButtonText}" visible="{currentState>/isEditMode}" press="handleSaveButtonPress" />
 				<!--<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveAndExitButtonText}" visible="{currentState>/isEditMode}" press="handleSaveAndExitButtonPress" />-->

@@ -1,0 +1,61 @@
+<core:FragmentDefinition 
+    xmlns:l="sap.ui.layout"
+    xmlns:cl="sap.ui.commons.layout" 
+    xmlns:c="sap.ui.commons" 
+    xmlns:t="sap.ui.table"
+	xmlns:f="sap.ui.layout.form" 
+    xmlns="sap.m" 
+    xmlns:core="sap.ui.core">
+   <TableSelectDialog
+   	id='detailLineItemSelectDialog'
+   	noDataText ="No Data"
+    title="Please select Line Items to be Copied"
+    search="handleSearchPartID"
+    confirm="handleCopyClose"
+    close="handleCopyClose"
+    cancel="handleCopyClose"
+    class="sapUiSizeCompact"
+    contentWidth = "800px"
+    multiSelect="false"
+    items="{currentCopySalesDocumentLines>/}">
+       <columns>
+           <Column hAlign="Left"
+                   width="15px">
+              <ToggleButton icon="sap-icon://multi-select" width="15px" class="size1" press="handleCopyPopupToggleSelection" />
+           </Column>
+           <Column  width="40px">
+              <Text text="Line"  wrapping="false" />
+           </Column>
+           <Column width="40px">
+              <Text text="PO Ln" tooltip="Line number from Customer Purchase Order" />
+           </Column>
+           <Column width="30px">
+              <Text text="Qty" />
+           </Column>
+           <Column width="120px">
+  	          <Text text="Manufacturer" />
+           </Column>              
+           <Column width="100px">
+              <Text text="Part # Requested" />
+           </Column>           
+           <Column width="120px">
+              <Text text="Description" />
+           </Column>  
+                       
+       </columns>
+       <items>
+           <ColumnListItem>
+               <cells>
+                   <CheckBox  selected="{path: 'currentCopySalesDocumentLines>Selected'}" enabled="true"  />
+                   <Input value="{path: 'currentCopySalesDocumentLines>StructuredLineID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 12} }" editable="false" />
+                   <Input value="{path: 'currentCopySalesDocumentLines>CustomerPOLineID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 6} }" editable="false" />
+                   <Input value="{path: 'currentCopySalesDocumentLines>QTY', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" />
+                   <Input value="{path: 'currentCopySalesDocumentLines>ManufacturerID', formatter: 'gdt.salesui.util.Formatter.mfrName'}" type="Text"   editable="false" />
+                   <Input value="{path: 'currentCopySalesDocumentLines>CustomerPartID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 40} }"  editable="false"/>
+                   <Input value="{path: 'currentCopySalesDocumentLines>Description'}"  editable="false" />
+               </cells>
+           </ColumnListItem>
+       </items>
+  </TableSelectDialog>
+</core:FragmentDefinition>	
+		    			
