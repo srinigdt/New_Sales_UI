@@ -315,10 +315,12 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 													//	}
 													//	newline.StructuredLineID = parentNode.toString() + childNode;
 													//}
-											
-													if(salesOrderDetailsArray.length == 0){
+											// Begin of Change : Line Numbering and Assigning proper Parent ID : SXVASAMSETTI
+													if(salesOrderDetailsArray.length == 0)  // Checking whether it is not in append Mode
+													{
 													newline.StructuredLineID = line[j];
-													}else{
+													}
+													else{ //Append Mode
 													if(parseInt((parsed.data[i-1])[j]) == parseInt(line[j])){
 														newline.StructuredLineID = newline.StructuredLineID - 1;
 													lineLevels = line[j].split('.');
@@ -328,6 +330,7 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 													}
 													newline.StructuredLineID = newline.StructuredLineID.toString( );
 													}
+										  // End of Change:			
 													break;
 												case 'SmartNetBeginDate' :
 													try {

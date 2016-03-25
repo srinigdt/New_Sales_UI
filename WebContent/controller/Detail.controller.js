@@ -1313,8 +1313,10 @@ gdt.salesui.util.Controller
 
 			for (key in detailsArray) {
 				var lineNum = (!!detailsArray[key].SalesDocumentLineID) ? parseInt(detailsArray[key].SalesDocumentLineID) : 0,
+				    // Begin of Change : SXVASAMSETTI : Number of Line Items
 					//structuredLineNum = (!!detailsArray[key].StructuredLineID) ? parseInt(detailsArray[key].StructuredLineID.substring(0,detailsArray[key].StructuredLineID.indexOf('.'))) : 0;
 						structuredLineNum = (!!detailsArray[key].StructuredLineID) ? parseInt(detailsArray[key].StructuredLineID) : 0;
+					// End of Change : SXVASAMSETTI
 						if (lineNum > maxLineNum) {
 					maxLineNum = lineNum;
 				}
@@ -1928,6 +1930,8 @@ gdt.salesui.util.Controller
 			}
 		},
 		_repointLines = function (rows) {
+			 // This method returns Re-ordering of line Items which causing wrong Parent ID: added below line to return without executing the statment
+			return rows; // Added by SXVASAMSETTI :03/25/16
 			var lineNoLookup = [],
 				newLineNo = '',
 				oldLineNo = '',
@@ -2574,6 +2578,7 @@ gdt.salesui.util.Controller
 		handleCopySOLines = function(event) {
 
 			var copyLines = (JSON.parse(JSON.stringify(view.getModel('currentSalesDocumentLines').getData()))) ;
+			copyLines.forEach(function(line){line.Selected = false});
 			view.getModel('currentCopySalesDocumentLines').setData(copyLines);
 			
 				this._oDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemsCopyDialog", this);
@@ -2600,7 +2605,9 @@ gdt.salesui.util.Controller
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},		
-				
+		handleCopyPopupToggleSelection=function(){
+			
+		},		
 		handleConfirmCopySOLines = function(event) {
 
 				var today    = new Date(Date.now()),
@@ -4231,7 +4238,8 @@ gdt.salesui.util.Controller
 			handleOpenDeleteDialog:handleOpenDeleteDialog,
 			handleSearchPartID:handleSearchPartID,
 			handleConfirmCopySOLines:handleConfirmCopySOLines,
-			handleCopyClose:handleCopyClose
+			handleCopyClose:handleCopyClose,
+			handleCopyPopupToggleSelection:handleCopyPopupToggleSelection
 		};
 
 
