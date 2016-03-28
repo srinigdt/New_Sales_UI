@@ -43,8 +43,8 @@ gdt.salesui.data.DataLoader = (function($, core, _, datacontext, helper) {
 	        				results = _.sortBy(datacontext.salesdocuments.getLocalByForeignKey(customerId), function (line) { return parseInt(line.SalesDocumentID) * -1;});
 	                	
 	                	closedQuotes.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'B' && sd.ValidTo < new Date() && sd.Status != 'C');}));
-						openQuotes.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'B' && sd.ValidTo >= new Date() && sd.Status != 'C');}));
-						completedQuotes.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'B' && sd.Status == 'C');}));
+						openQuotes.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'B' && sd.ValidTo >= new Date() && sd.Status == 'A');}));
+						completedQuotes.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'B' && ( sd.Status == 'C' || sd.Status == 'B' ));}));
 						rejectedSalesOrders.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'C' && sd.RejectionStatus != 'A' && sd.SalesOrderStatus != 'E0002');}));
 						pendingSalesOrders.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'C' && sd.SalesOrderStatus != 'E0002' && sd.RejectionStatus == 'A');}));
 						openSalesOrders.setData(_.filter(results,function (sd) {return (sd.DocumentCategory == 'C' && sd.SalesOrderStatus == 'E0002' && sd.Status != 'C' && sd.RejectionStatus !='C');}));

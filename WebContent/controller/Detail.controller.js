@@ -633,7 +633,7 @@ gdt.salesui.util.Controller
                     },
 
 					_canEdit = function() {
-						return 	!(core.getModel('currentState').getProperty('/isQuote') && core.getModel('currentSalesDocument').getProperty('/Status') == 'C');
+						return 	!(core.getModel('currentState').getProperty('/isQuote') && ( core.getModel('currentSalesDocument').getProperty('/Status') == 'C') || core.getModel('currentSalesDocument').getProperty('/Status') == 'B') ;
 					},
                     
                     _setCurrentDocumentStates = function() {

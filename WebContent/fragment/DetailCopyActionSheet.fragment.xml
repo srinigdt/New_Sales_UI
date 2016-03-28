@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <ActionSheet
+  	id='copyActionSheet'
+    title="{i18n>DeleteOptions}"
+    afterOpen="handleCopySelectedDefault" 
+    placement="Top">
+    <buttons>
+      <Button id='copySOLineItems' press='handleCopySOLineItemsDialog' text="{i18n>DeleteLineItems}" icon="sap-icon://sales-order-item" />
+      <Button id='copySO'  press='handleCopySODialog'  text="{i18n>DeleteDocument}" icon="sap-icon://sales-order" />
+    </buttons>
+  </ActionSheet>
+</core:FragmentDefinition>
