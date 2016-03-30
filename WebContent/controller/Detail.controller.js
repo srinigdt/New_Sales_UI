@@ -2380,7 +2380,7 @@ gdt.salesui.util.Controller
 			currentState.setProperty('/isSalesOrder',true);
 			currentState.setProperty('/isPendingSalesOrder',true);
 			currentState.setProperty('/isSubmittedSalesOrder',false);
-
+			currentState.setProperty('/isAttachmentsNeedSave',true);
 			lines = salesDocumentLines.getData();
 
 			_.each(lines, function (line) {
@@ -2483,7 +2483,7 @@ gdt.salesui.util.Controller
 				currentCustomerID;
 
 			if (!confirmation || confirmation == 'CANCEL') return;
-
+			currentState.setProperty('/isAttachmentsNeedSave', false);
 			currentState.setProperty('/isEditMode', isEditMode);
 			currentState.setProperty('/isNotEditMode', !isEditMode);
 			currentState.setProperty('/canEdit', (isEditMode == false) && _canEdit());
@@ -3407,6 +3407,10 @@ gdt.salesui.util.Controller
 					_checkSelectedLines(event).done(function() {
 						_doSave().done(function(id) {
 							sap.m.MessageToast.show("Sales Document " + id + " has been saved.");
+							if(sap.ui.getCore( ).getModel('currentState').getProperty('/isSalesOrder') && sap.ui.getCore( ).getModel('currentState').getProperty('/isAttachmentsNeedSave') ){
+								_refreshAttachments( );
+								sap.ui.getCore( ).getModel('currentState').setProperty('/isAttachmentsNeedSave',false)	;							
+							}
 						}).fail(function(msg) {
 							sap.m.MessageBox.show((msg) ? msg : "SalesUI Could not save this record to SAP.", {
 								icon: sap.m.MessageBox.Icon.ERROR,

@@ -153,6 +153,7 @@ sap.ui.core.UIComponent
 	                        isSalesOrder : false,
 	                        isPendingSalesOrder : false,
 	                        isSubmittedSalesOrder : false,
+	                        isAttachmentsNeedSave:false,
 	                        canDelete : false,
 	                        canEdit : true
 	                    }),
