@@ -20,8 +20,8 @@
     items="{currentCopySalesDocumentLines>/}">
        <columns>
            <Column hAlign="Left"
-                   width="15px">
-              <ToggleButton icon="sap-icon://multi-select" width="15px" class="size1" press="handleCopyPopupToggleSelection" />
+                   width="20px">
+              <ToggleButton icon="sap-icon://multi-select" width="25px" class="size1" press="handleCopyPopupToggleSelection" />
            </Column>
            <Column  width="40px">
               <Text text="Line"  wrapping="false" />

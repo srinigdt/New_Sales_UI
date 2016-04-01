@@ -7,8 +7,8 @@
     afterOpen="handleCopySelectedDefault" 
     placement="Top">
     <buttons>
-      <Button id='copySOLineItems' press='handleCopySOLineItemsDialog' text="{i18n>DeleteLineItems}" icon="sap-icon://sales-order-item" />
-      <Button id='copySO'  press='handleCopySODialog'  text="{i18n>DeleteDocument}" icon="sap-icon://sales-order" />
+      <Button id='copySOLineItems' press='handleCopySOLineItemsDialog' text="{i18n>CopySoLineItems}" icon="sap-icon://sales-order-item" />
+      <Button id='copySO'  press='handleCopySODialog'  text="{i18n>CopySoDocument}" icon="sap-icon://sales-order" />
     </buttons>
   </ActionSheet>
 </core:FragmentDefinition>

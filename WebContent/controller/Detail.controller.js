@@ -2575,7 +2575,17 @@ gdt.salesui.util.Controller
 			salesDocumentLines.setData(lines);
 		},		
 		
-		handleCopySOLines = function(event) {
+		handleCopy = function(event){
+			var actionSheet = view.byId('copyActionSheet');
+
+			if (actionSheet.isOpen()) {
+				actionSheet.close();
+			} else {
+				actionSheet.openBy(event.getSource());
+			}	
+		},
+		
+		handleCopySOLineItemsDialog = function(event) {
 
 			var copyLines = (JSON.parse(JSON.stringify(view.getModel('currentSalesDocumentLines').getData()))) ;
 			copyLines.forEach(function(line){line.Selected = false});
@@ -4191,7 +4201,7 @@ gdt.salesui.util.Controller
 			handleConfirmCreateSalesOrder : handleConfirmCreateSalesOrder,
 			handleCancelCreateSalesOrder : handleCancelCreateSalesOrder,
 			handleCopyQuote : handleCopyQuote,
-			handleCopySOLines:handleCopySOLines,
+			handleCopySOLineItemsDialog:handleCopySOLineItemsDialog,
 			handleOutputRequest : handleOutputRequest,
 			handleExportToExcelRequest : handleExportToExcelRequest,
 			handlePrintRequest : handlePrintRequest,

@@ -1,12 +1,14 @@
+
 ::-webkit-scrollbar {
-		 width: .7em !important;
-		 height: .7em !important;
+		 width: 1em !important;
+		 height: 1em !important;
 	}
-	
+
+/*	
 ::-webkit-scrollbar-thumb {
           background-color: darkgrey !important;
 	}
-
+"*/
 .sapUiFup {
 	display: none !important;
 }
@@ -152,4 +154,26 @@ background-color: blue !important;
 height:24px !important;
 vertical-align: middle !important;
 
+}
+
+.buttoncopy1{
+background-color: #00FF00 !important;
+height:24px !important;
+vertical-align: middle !important;
+
+}
+.sap-desktop .sapMActionSheetPopover.sapMPopover {
+    background-color: rgba(1, 36, 58, 0.96);
+}
+
+.sap-desktop .sapMIBar.sapMFooter-CTX {
+    background-color: rgba(1, 36, 58, 0.96);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color:#036DA9 !important;
+}
+
+.sapUiTable>.sapUiTableTbr.sapUiTableMTbr {
+    height:2rem !important;
 }

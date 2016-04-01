@@ -2,7 +2,7 @@
   xmlns="sap.m"
   xmlns:core="sap.ui.core"
   xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
-  <Dialog title="Ship To Via : Enter Address Information" id="NewViaAddress">
+  <Dialog title="Ship To Via : Enter Address Information" id="NewViaAddress" contentWidth="500px">
    
     <Label text="Name" />
     <Input id="OTSTName" value="{currentVia>/Name}" editable="true"/>

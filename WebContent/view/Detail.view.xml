@@ -82,7 +82,7 @@
 				</IconTabBar>
 			</Panel>
 		<Panel  class="sapUiSizeCompact" id="detailDialogs" visible="false">		
-		<!--     <core:Fragment fragmentName="gdt.salesui.fragment.DetailLineItemsCopyDialog" type="XML" /> -->
+	        <core:Fragment fragmentName="gdt.salesui.fragment.DetailCopyActionSheet" type="XML" /> 
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailOutputActionSheet" type="XML" />
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailDeleteActionSheet" type="XML" />
 			<core:Fragment fragmentName="gdt.salesui.fragment.DetailNewViaAddressDialog" type="XML" />
@@ -96,7 +96,7 @@
 			<Toolbar class="sapUiSizeCompact">
 				<Button icon="sap-icon://add-activity-2" text="Copy Quote" enabled="{currentState>/isNotEditMode}"  visible="{currentState>/isQuote}" press="handleCopyQuote" />
                <!--  <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopySOLines" /> --> 
-				 <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopySOLines" />
+				 <Button icon="sap-icon://add-activity-2" class="buttoncopy" text="Copy" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopy" />
 				
 				<ToolbarSpacer />
 
