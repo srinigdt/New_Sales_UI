@@ -30,7 +30,7 @@ sap.ui.define([
 				    		visible:!this.getVisible() ,
 				    		press:this._handlePOpdf.bind(this),
 				    		type:"Reject",
-				    		tooltip:'Click to view Purchase Order Document'
+				    		tooltip:'Click to view/Print Document'
 
 				    	})
 				    		
@@ -47,7 +47,7 @@ sap.ui.define([
 
 		setVendorName: function (iValue) {
 			this.setProperty("vendorName", iValue, true);
-			if(iValue != " - "){
+			if(iValue.split('-')[1] != " "){
 				var text =	this.getText() + ' ( ' + iValue  + ' )' ;	
 				this.getAggregation("_text").setText( text);
 			} 
@@ -68,17 +68,21 @@ sap.ui.define([
 	
 		_handlePOpdf:function(event){
 		var contextPropertyVal = this.getText( ).split(' ');
-		var POno = contextPropertyVal[3];
-		this._doOutput('NEU','P',POno);
+		var docNo =  contextPropertyVal[3] || contextPropertyVal[2] ;
+		var rows  =  sap.ui.getCore().getModel('documentFlow').getData( ).DocumentFlow.results;
+		var selectedRow  = _.filter(rows, function(row) { return row.Docnum == docNo ; });
+		var pernr = selectedRow[0].Vendor;
+		if( selectedRow[0].Doctype == 'V'){
+		this._doOutput('NEU','P',docNo,pernr);
+		}else if(selectedRow[0].Doctype == 'M'){
+		this._doOutput('ZRD1','P',docNo,pernr);	
+		}
 		},
 		
-		_doOutput: function(outputType, fileType,salesDocumentID) {
-			var salesDocument = sap.ui.getCore().getModel('currentSalesDocument'),
-			    docCat        = salesDocument.getProperty('/DocumentCategory');
-			var rows          =  sap.ui.getCore().getModel('documentFlow').getData( ).DocumentFlow.results;
-			var poRow  = _.filter(rows, function(row) { return row.Docnum == salesDocumentID ; });
-			var customerID = poRow[0].Vendor;
-		var	sRead = "/PrintDocumentSet(CustomerID='"+customerID+"',DocumentNo='" + salesDocumentID + "',DocCat='" + docCat + "',FileType='"+fileType+"',OutputType='"+outputType+"')/$value";
+		_doOutput: function(outputType, fileType,salesDocumentID,customerID) {
+			var docCat = sap.ui.getCore().getModel('currentSalesDocument').getProperty('/DocumentCategory');
+			var rows   =  sap.ui.getCore().getModel('documentFlow').getData( ).DocumentFlow.results;
+		    var	sRead  = "/PrintDocumentSet(CustomerID='"+customerID+"',DocumentNo='" + salesDocumentID + "',DocCat='" + docCat + "',FileType='"+fileType+"',OutputType='"+outputType+"')/$value";
 			 window.open(model.sServiceUrl + sRead );
 
 			},		

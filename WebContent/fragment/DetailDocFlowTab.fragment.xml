@@ -26,7 +26,7 @@
    	<Text text="{i18n>DF_DOCUMENT}" wrapping="false" />
    	
 	<!-- <t:template> <Text text=" {Description} - {Docnum}  "/></t:template>  -->
-	<t:template> <cc:TextButton  text="{Description} - {Docnum}" vendorName="{Vendor} - {VendorName}" visible="{path:'Doctype',formatter:'gdt.salesui.util.Formatter.POpdfButtonVisibility'}"	/></t:template> 
+	<t:template> <cc:TextButton  text="{Description} - {Docnum}" vendorName="{Vendor} - {VendorName}" visible="{path:'Doctype',formatter:'gdt.salesui.util.Formatter.pdfButtonVisibility'}"	/></t:template> 
 	<!-- <t:template> <cc:LinkText  text="{Description} - {Docnum}" visible="{path:'Doctype',formatter:'gdt.salesui.util.Formatter.POlinkVisibility'}"	/></t:template>  -->
 <!--<t:template> <cc:IconText src1="./images/document.jpg" src2="./images/leftarrow.gif" text="{Description} - {Docnum} "	/></t:template> --> 
  </t:Column>
