@@ -2584,6 +2584,9 @@ gdt.salesui.util.Controller
 				actionSheet.openBy(event.getSource());
 			}	
 		},
+		handleCopySODialog=function(event){
+			
+		},
 		
 		handleCopySOLineItemsDialog = function(event) {
 
@@ -2615,9 +2618,16 @@ gdt.salesui.util.Controller
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},		
-		handleCopyPopupToggleSelection=function(){
-			
-		},		
+		handleCopyPopupToggleSelection=function(event){
+			salesDocumentLines = view.getModel('currentCopySalesDocumentLines');
+			lines = salesDocumentLines.getData();	
+			lines.forEach(function (line){			
+				   if(event.mParameters.pressed){line.Selected = true;}
+				   else{line.Selected = false}		
+				  } );
+			salesDocumentLines.setData(lines);			
+		},
+		
 		handleConfirmCopySOLines = function(event) {
 
 				var today    = new Date(Date.now()),
@@ -2683,7 +2693,8 @@ gdt.salesui.util.Controller
 				line.UpdatedBy     = userid;
 				if(line.SmartNetEndDate) line.SmartNetEndDate = new Date(line.SmartNetEndDate);
 				if(line.SmartNetBeginDate) line.SmartNetBeginDate = new Date(line.SmartNetBeginDate);
-	           // _determineItemCategoryForDropShip(line);
+				line.ItemCategory = line.ItemCategory.replace('Y','Z');
+//				_determineItemCategoryForDropShip(line,false);
 				lines.push(line);
 			});
 

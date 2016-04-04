@@ -34,9 +34,7 @@ sap.ui.define([
 
 				    	})
 				    		
-				    );			    
-			    
-			    
+				    );			    			    			    
 		},
 
 		setText: function (iValue) {

@@ -10,7 +10,7 @@
    	id='detailLineItemSelectDialog'
    	noDataText ="No Data"
     title="Please select Line Items to be Copied"
-    search="handleSearchPartID"
+    liveChange="handleSearchPartID"
     confirm="handleCopyClose"
     close="handleCopyClose"
     cancel="handleCopyClose"
