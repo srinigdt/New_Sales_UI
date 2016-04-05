@@ -123,8 +123,9 @@
 			    <t:Column  width="55px">
 			    	<Text text="Stage" tooltip="Staging required in warehouse process" />
  			    	<t:template><CheckBox select="handleStagingSelect" tooltip="SAP ItemCategory: {path: 'currentSalesDocumentLines>ItemCategory'}" app:rowid="{currentSalesDocumentLines>SalesDocumentLineID}" selected="{path: 'currentSalesDocumentLines>ItemCategory', formatter: 'gdt.salesui.util.Formatter.itemCategoryToStaging'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; ((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') &amp;&amp; ((${currentSalesDocumentLines>EDelivery}  !== 'EDELIVERY')) &amp;&amp; (${currentSalesDocumentLines>MaterialGroup} === 'Z2')) }" /></t:template>
-			    </t:Column>
-			    <t:Column width="55px" visible="{currentState>/isSalesOrder}">
+			    </t:Column> 
+			    <!--  visible="{currentState>/isSalesOrder}" -->
+			    <t:Column width="55px">
 			    	<Text text="D/S" tooltip="Drop Ship from vendor to customer" />
  			    	<t:template><CheckBox select="handleDropShipSelect" tooltip="SAP ItemCategory: {path: 'currentSalesDocumentLines>ItemCategory'}" app:rowid="{currentSalesDocumentLines>SalesDocumentLineID}" selected="{path: 'currentSalesDocumentLines>ItemCategory', formatter: 'gdt.salesui.util.Formatter.itemCategoryToDropShip'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; ((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') &amp;&amp; ((${currentSalesDocumentLines>EDelivery}  !== 'EDELIVERY')) &amp;&amp; (${currentSalesDocumentLines>MaterialGroup}  === 'Z2')) }" /></t:template>
 			    </t:Column>
