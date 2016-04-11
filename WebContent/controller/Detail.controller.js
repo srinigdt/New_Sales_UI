@@ -43,12 +43,16 @@ gdt.salesui.util.Controller
                     	
                     	view = this.getView();
                     	view.setModel(core.getModel('currentCopySalesDocumentLines'), "currentCopySalesDocumentLines" )
-						busyDlg = view.byId('busyDlg');
+						view.setModel(core.getModel('lineItemVariant'),"lineItemVariant");
+                    	view.setModel(core.getModel('layoutFields'),"layoutFields");
+                    	view.setModel(core.getModel('variantFields'),"variantFields");
+                    	busyDlg = view.byId('busyDlg');
 						componentId = sap.ui.core.Component.getOwnerIdFor(view),
 	                    eventBus = sap.ui.component(componentId).getEventBus(), 
                     	router = this.getRouter();
                     	page = view.byId('detailPage');
                     	table = view.byId('lineItemsTable');
+                    	_manage_variant(view,this);
                     	oldTableOnAfterRendering = table.onAfterRendering;
                     	 
                     	table.onAfterRendering = function() {
@@ -173,9 +177,151 @@ gdt.salesui.util.Controller
 		                                    }
 	                                    }, this);
 	                    
-                        
+ 
                     },
-  
+                    _manage_variant = function(view,that){
+                        variantToolbar = sap.ui.getCore().byId("__toolbar3");
+                         defaultVariantContents = variantToolbar.removeAllContent( );
+                       	
+                         oVCreate = new sap.m.Button({
+              				 id:"cv",           				 
+              				 text:"Create Variant",
+              				 press:function(){handleCreateVariant(view,that)}
+              			     });
+                       	
+                         oVManage = new sap.m.Button({
+              				 id:"mv",           				 
+              				 text:"Manage Variant" ,
+              				 press:function(){handleManageVariant(view,that) }
+              			     })	;
+                        
+                        variantToolbar.addContent(defaultVariantContents[0]);	
+                        variantToolbar.addContent(oVCreate);	
+                        variantToolbar.addContent(oVManage);
+   
+                        // setting standard variant Columns
+                        var table = view.byId("lineItemsTable");
+                        var model = core.getModel("variantColumns");
+                        var data = model.getData( );
+                        var columns = table.getColumns( );
+                        var newRow = {
+                        		"standard" : columns
+                        };
+                        data.push(newRow);
+                        model.setData(data);
+                        
+                       }, 
+                       
+                    handleCreateVariant = function(view,that){
+                   if(!that._oVariantCreateDialog){
+                	   that._oVariantCreateDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemsCreateVariantDialog", that);
+                    	view.addDependent(this._oVariantCreateDialog);	
+                       }		 
+                   that._oVariantCreateDialog.open( );                    	   
+                    	   
+                       },
+                    handleManageVariant = function(event){
+                    	   sap.m.MessageToast.show("Managed Variant");   
+                       },
+                       
+                   handleCancelVariant = function(event) {
+                    	   this._oVariantCreateDialog.close( );      
+                       } , 
+                       
+                   handleConfirmCreateVariant = function(event) {
+                    	   var sortedData = _.sortBy(this.getView().getModel("variantFields").getData( ), function(data){ return data.updown; });
+                    	   // getting variant Columns
+                           var table = view.byId("lineItemsTable");
+                           var data= core.getModel("variantColumns").getData( );
+                           var standardVariantColumns =  _.pluck(data,"standard")[0]; 
+                           var column ;
+                           var removedColumns = table.removeAllColumns( );
+                    	   _.each(sortedData,function(data){
+                    		   column = _.find(standardVariantColumns, function(variantColumn){ return (variantColumn.sId.indexOf(data.fieldKey) > 0); });
+                    	  if(column) table.addColumn(column);
+                    	   });
+                    	   this._oVariantCreateDialog.close( );      
+                       } ,
+                       
+                  handleFieldSort = function(event) {
+                   var aSorters = [ ];
+                   oLayoutFieldTable = event.getSource( ).getParent( ).getParent( );
+                   var oBinding = oLayoutFieldTable.getBinding("items");
+                   aSorters.push( new sap.ui.model.Sorter("order") );
+                   oBinding.sort(aSorters);
+                       },   
+                 handleAddFieldtoVariant = function(event){
+                    	   var model= this.getView().getModel("layoutFields");
+                    	   var oLayoutData = model.getData( );
+                    	   var path = event.getSource().getParent().getBindingContextPath();
+                    	   var element = model.getProperty(path);
+                           var filterData = _.filter(oLayoutData, function(row){ return row.fieldKey != element.fieldKey });
+                           model.setData(filterData);
+                           var oVariantModel= this.getView().getModel("variantFields");
+                    	   var oVariantData =  oVariantModel.getData( );
+                    	   element.updown = oVariantData.length + 1;
+                    	   oVariantData.push(element) ;
+                    	   oVariantModel.setData( oVariantData );
+                       } ,
+                       handleRemoveFieldFromVariant = function(event) {
+                    	   var model= this.getView().getModel("variantFields");
+                    	   var oLayoutData = model.getData( );
+                    	   var path = event.getSource().getParent().getBindingContextPath();
+                    	   var element = model.getProperty(path);
+                           var filterData = _.filter(oLayoutData, function(row){ return row.fieldKey != element.fieldKey });
+                           sortedData = _.sortBy(filterData, function(data){ return data.updown; });
+                           _.each( sortedData,function(data,n){data.updown = n + 1;});
+                           model.setData( sortedData);
+                           var oVariantModel= this.getView().getModel("layoutFields");
+                    	   var oVariantData =  oVariantModel.getData( );
+                    	   element.updown = 0;
+                    	   oVariantData.push(element) ;
+                    	   oVariantModel.setData( oVariantData );                   	   
+                       } , 
+                       handleMoveUpFieldInVariant=function(event){
+                    	   var model= this.getView().getModel("variantFields");
+                    	   var oVariantData = model.getData( );
+                    	   var path = event.getSource().getParent().getBindingContextPath();
+                    	   var currentElement = model.getProperty(path);
+                    	   var currIndex = currentElement.updown;
+                    	   if(currIndex != 1){                   		   
+                    		   var preIndex   = currIndex - 1;
+                    		   var predataElement = _.filter(oVariantData, function(element){ return ( element.updown == preIndex ) } );
+                    	       var filterData = _.filter(oVariantData, function(element){ return ( element.updown != currentElement.updown && element.updown != preIndex ); });
+                    	       currentElement.updown = currIndex - 1;
+                    	       var preElement = predataElement[0];
+                    	       preElement.updown = currIndex ;
+                    	       filterData.push(currentElement);
+                    	       filterData.push(preElement);
+                    	       model.setData(filterData);
+                    	       model.refresh("variantFields");
+                    	   }
+                           
+                       },
+                       handleMoveDownFieldInVariant=function(event){
+                    	   var model= this.getView().getModel("variantFields");
+                    	   var oVariantData = model.getData( );
+                    	   var path = event.getSource().getParent().getBindingContextPath();
+                    	   var currentElement = model.getProperty(path);
+                    	   var currIndex = currentElement.updown;
+                    	   if(currIndex != oVariantData.length){                   		   
+                    		   var postIndex   = currIndex + 1;
+                    		   var postdataElement = _.filter(oVariantData, function(element){ return ( element.updown == postIndex ) } );
+                    	       var filterData = _.filter(oVariantData, function(element){ return ( element.updown != currentElement.updown && element.updown != postIndex ); });
+                    	       currentElement.updown = currIndex + 1;
+                    	       var postElement = postdataElement[0];
+                    	       postElement.updown = currIndex ;
+                    	       filterData.push(currentElement);
+                    	       filterData.push(postElement);
+                    	       model.setData(filterData);
+                    	       model.refresh("variantFields");
+                    	   }                    	   
+                       }, 
+                       
+                       
+                       
+                       
+                       
                     onBeforeRendering = function(event) {
                     	var qPnl = view.byId('detailQuotePageHeader'),
                 			sPnl = view.byId('detailSalesOrderPageHeader');
@@ -874,21 +1020,40 @@ gdt.salesui.util.Controller
                  			material = view.getModel('importErrors').getData(),
                  			i = 0,
                  			l = 0,
+                 			part = 0,
                  			sapclient = core.getModel('systemInfo').getProperty('/ClientID'),
                  			body = 'The following material was requested but not found in the SAP catalog for Client ' + sapclient + '.  Please add this material:\n\n';
                  		
                  		l = (!!material) ? material.length : 0;
-                 		
+                 		dialog.close();	
                  		for (i=0; i<l; i++) {
+                 			if(body.length < 1024){
                  			body += (!!material[i].ManufacturerID && parseInt(material[i].ManufacturerID) != 0) ? "Manufacturer: [" + material[i].ManufacturerID + "] " : "";
-							body += (!!material[i].CustomerPartID) ? "Manufacturer's Part Number: ["+material[i].CustomerPartID+"] " : "";
+							body += (!!material[i].CustomerPartID) ? "Manufacturer's Part Numbe: ["+material[i].CustomerPartID+"] " : "";
 							body += (!!material[i].Description) ? "Description: ["+material[i].Description+"] " : "";
 							body += (!!material[i].ListPrice && parseFloat(material[i].ListPrice) != 0) ? "List Price: ["+material[i].ListPrice+"]\n" : "\n";
-                 		}
-                 		
-                 		dialog.close();	
+                 			}else{
+                 				part = part + 1;
+          
+                 			sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material Part# " + part,body);
+                 		    body = 'The following material was requested but not found in the SAP catalog for Client ' + sapclient + '.  Please add this material:\n\n';
+                 			}
 
-                 		sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);                 		
+                 			}
+                 		
+                 	
+             			if(part == 0){
+                 			sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);
+                 			}else
+                 				{
+                 				part = part + 1;
+                 			//	sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material Part# " + part,body);
+                 				}
+                 		// sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);                 		
+                    },
+                    
+                    _sendmail = function(mail_id,subj,body){
+                    	
                     },
                     
                     handleDetailLineNotes = function (event) {
@@ -4264,7 +4429,17 @@ gdt.salesui.util.Controller
 			handleSearchPartID:handleSearchPartID,
 			handleConfirmCopySOLines:handleConfirmCopySOLines,
 			handleCopyClose:handleCopyClose,
-			handleCopyPopupToggleSelection:handleCopyPopupToggleSelection
+			handleCopyPopupToggleSelection:handleCopyPopupToggleSelection,
+			handleCreateVariant:handleCreateVariant,
+			handleManageVariant:handleManageVariant,
+			handleCancelVariant:handleCancelVariant,
+			handleConfirmCreateVariant:handleConfirmCreateVariant,
+			handleFieldSort:handleFieldSort,
+			handleAddFieldtoVariant: handleAddFieldtoVariant,
+			handleRemoveFieldFromVariant:handleRemoveFieldFromVariant,
+			handleMoveUpFieldInVariant:handleMoveUpFieldInVariant,
+			handleMoveDownFieldInVariant:handleMoveDownFieldInVariant
+
 		};
 
 

@@ -177,3 +177,13 @@ vertical-align: middle !important;
 .sapUiTable>.sapUiTableTbr.sapUiTableMTbr {
     height:2rem !important;
 }
+
+.gdt_discount input{
+font-weight: bold;	
+color: blue !important;
+}
+
+.cust_discount input{
+font-weight: bold;
+color: #0000ff !important;	
+}

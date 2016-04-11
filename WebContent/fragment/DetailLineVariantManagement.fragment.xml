@@ -1,0 +1,18 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ActionSheet id='variant' title="{i18n>Variant}" afterOpen="handleVariantDefault"
+		placement="Bottom">
+<!--         <content>
+        </content> -->
+<!-- 		<buttons>
+			<Button id='copySOLineItems' press='handleCopySOLineItemsDialog'
+				text="{i18n>CopySoLineItems}" icon="sap-icon://sales-order-item" />
+			<Button id='copySO' press='handleCopySODialog' text="{i18n>CopySoDocument}"
+				icon="sap-icon://sales-order" />
+		</buttons> -->
+<!-- 		<footer>
+			<Toolbar class="sapUiSizeCompact">
+			</Toolbar>
+		</footer> -->
+	</ActionSheet>
+</core:FragmentDefinition>
