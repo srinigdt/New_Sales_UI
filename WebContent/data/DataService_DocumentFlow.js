@@ -1,4 +1,4 @@
-$.sap.declare("gdt.salesui.data.DataService_DocumentFlow");
+ $.sap.declare("gdt.salesui.data.DataService_DocumentFlow");
 $.sap.require("gdt.salesui.util.SAPGatewayHelper");
 $.sap.require("sap.ui.core.Core");
 $.sap.require("gdt.salesui.lib.underscore-min");

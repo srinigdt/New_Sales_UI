@@ -76,7 +76,18 @@
 									type="XML" />
 							</content>
 						</IconTabFilter>
-						
+						<IconTabFilter  
+						    icon="sap-icon://shipping-status"
+						    iconColor=" " 
+						    count="{path:'soAvailableQty>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
+						    key="soAvailableQty"
+						    visible="{= ${currentState>/isSalesOrder} }"
+							text="{i18n>ICONTABFILTER_SOAVAILABLEQTY}" >
+							<content visible='false'>
+								<core:Fragment fragmentName="gdt.salesui.fragment.DetailSoAvailableQty"
+									type="XML" />
+							</content>
+						</IconTabFilter>						
 
 					</items>
 				</IconTabBar>

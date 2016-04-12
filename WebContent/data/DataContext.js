@@ -332,7 +332,8 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 		customersPO = new entitySet('CustomerPOID', null, null, dataservice.customers.getPO,null, null, null, null, null),
 //The below line is added to fetch document flow lines: SXVASAMSETTI
 		documentFlow = new entitySet('DocumentID', 'DocumentID', null, dataservice.documentflow.get,null, dataservice.documentflow.getByForeignKey, null, null, null),		
-		
+//The below line is added to fetch Sales Order Available Quantities		
+		SoAvailableQty = new entitySet('DocumentID', 'DocumentID', null, dataservice.SoAvailableQty.get,null, dataservice.SoAvailableQty.getByForeignKey, null, null, null),
 		
 		datacontext = {
 	    customers: customers,
@@ -350,7 +351,8 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 	    salesdocumentattachments: salesdocumentattachments,
 		materials: materials,
 		rejectionreasons: rejectionreasons,
-		documentFlow:documentFlow   //added by SXVASAMSETTI
+		documentFlow:documentFlow,   //added by SXVASAMSETTI
+		SoAvailableQty:SoAvailableQty
 	};
 	
 	return datacontext;

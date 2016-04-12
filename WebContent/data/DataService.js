@@ -14,10 +14,12 @@ $.sap.require("gdt.salesui.data.DataService_SalesDocumentAttachments");
 $.sap.require("gdt.salesui.data.DataService_RejectionReasons");
 $.sap.require("gdt.salesui.data.DataService_UserPrefs");
 $.sap.require("gdt.salesui.data.DataService_DocumentFlow");
+$.sap.require("gdt.salesui.data.DataService_SalesOrderAvailableQuantity");
 
 gdt.salesui.data.DataService = (function(customers, customerbalances, customershiptos, customerbilltos, customerpayers,
 									customerendcustomers, customersalesadmins, customeracctmgrs, materials, salesdocuments,
-										 salesdocumentlines, salesdocumentattachments, rejectionreasons, userprefs,documentflow) {
+										 salesdocumentlines, salesdocumentattachments, rejectionreasons, userprefs,documentflow,
+										 SoAvailableQty) {
 	var dataservice = {
 	    customers: customers,
 	    customerbalances: customerbalances,
@@ -33,7 +35,8 @@ gdt.salesui.data.DataService = (function(customers, customerbalances, customersh
 		salesdocumentattachments: salesdocumentattachments,
 		rejectionreasons: rejectionreasons,
 		userprefs: userprefs,
-		documentflow:documentflow
+		documentflow:documentflow,
+		SoAvailableQty:SoAvailableQty
 	};
 	
 	return dataservice;
@@ -51,4 +54,5 @@ gdt.salesui.data.DataService = (function(customers, customerbalances, customersh
 		gdt.salesui.data.DataService_SalesDocumentAttachments,
 		gdt.salesui.data.DataService_RejectionReasons,
 		gdt.salesui.data.DataService_UserPrefs,
-		gdt.salesui.data.DataService_DocumentFlow);
+		gdt.salesui.data.DataService_DocumentFlow,
+		gdt.salesui.data.DataService_SalesOrderAvailableQuantity);

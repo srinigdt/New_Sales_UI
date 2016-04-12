@@ -146,6 +146,8 @@ sap.ui.core.UIComponent
 
 	                    documentFlow = new sap.ui.model.json.JSONModel([]),
 	                    
+	                    soAvailableQty = new sap.ui.model.json.JSONModel([]),
+	                    
 	                    variantColumns = new sap.ui.model.json.JSONModel([]);
 	                    
 	                    lineItemVariant = new sap.ui.model.json.JSONModel([
@@ -675,6 +677,7 @@ sap.ui.core.UIComponent
 	                    core.setModel(customerSelectItems, "customerSelectItems");
 	                    core.setModel(blankDetailLine, "blankDetailLine");
 	                    core.setModel(documentFlow, "documentFlow");
+	                    core.setModel(soAvailableQty, "soAvailableQty");	                    
 	                    core.setModel(lineItemVariant,"lineItemVariant"); 
 	                    core.setModel(layoutFields,"layoutFields");
 	                    core.setModel(variantFields,"variantFields");

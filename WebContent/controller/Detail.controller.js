@@ -42,7 +42,8 @@ gdt.salesui.util.Controller
                     		currentState = core.getModel('currentState');
                     	
                     	view = this.getView();
-                    	view.setModel(core.getModel('currentCopySalesDocumentLines'), "currentCopySalesDocumentLines" )
+                    	view.setModel(core.getModel('currentCopySalesDocumentLines'), "currentCopySalesDocumentLines" );
+                    	view.setModel(core.getModel('soAvailableQty'), "soAvailableQty" );
 						view.setModel(core.getModel('lineItemVariant'),"lineItemVariant");
                     	view.setModel(core.getModel('layoutFields'),"layoutFields");
                     	view.setModel(core.getModel('variantFields'),"variantFields");
@@ -119,6 +120,10 @@ gdt.salesui.util.Controller
 												if (currentTab == 'docflow') {
 													busyDlg.setText('Fetching related documents to document(' + salesDocumentID + ') from SAP.');
 												}
+												
+												if (currentTab == 'soAvailableQty') {
+													busyDlg.setText('Fetching Sales Order Available Qty details for the document(' + salesDocumentID + ') from SAP.');
+												}
 //end of Changed												
 												busyDlg.open();
 
@@ -152,6 +157,11 @@ gdt.salesui.util.Controller
 					                                    		});				                                  
 					                                 
 					                                    }
+					                                    else if(currentTab == 'soAvailableQty' && parseInt(salesDocumentID) != 0 ){
+				            	                		    _getSalesOrderAvailableQtyFromSAP(salesDocumentID,true).always(function(){
+				            	                		    	busyDlg.close();
+				            	                		    });
+				            	                	    }
 					                                  //End of Change:SXVASAMSETTI
 					                                    else {
 															busyDlg.close();
@@ -390,7 +400,38 @@ gdt.salesui.util.Controller
                     	return deferred;
                     },                   
                   //End of Change    
-                    
+                  
+                  // Begin of Change :SXVASAMSETTI : 04/12/2016
+                    _getSalesOrderAvailableQtyFromSAP = function(documentID,refresh){
+                    	var deferred =  $.Deferred(function(defer) {
+                        	busyDlg.setText('Fetching Sales Order Available Qty details for the document(' + documentID + ') from SAP.');
+                        	busyDlg.open();		
+                    	datacontext.SoAvailableQty.get(documentID,refresh).done( function(data){
+                        busyDlg.open();	
+                        view.getModel('soAvailableQty').setData(data);
+                      		defer.resolve( );
+                    	}).fail(function(msg){
+                    		defer.reject(msg);
+                    	})
+                    	}).done(function(){
+                    	_resizeSoAvailQtyTable( );	 
+                    	}).fail( );
+                    	
+                    	return deferred;	
+                    },
+                    _resizeSoAvailQtyTable=function(event){
+                    	var height = $(document).height(),
+                    	tbl = view.byId('soAvailableQty'),
+                    	offset = 375,
+                    	rows = parseInt((height - offset) / 32);
+                    	if (tbl) {
+                    		if (rows > 5) {
+	                    		tbl.setVisibleRowCount(rows);
+	                    	} else {
+	                    		tbl.setVisibleRowCount(5);
+	                    	}
+                    	}	
+                    },
                     _handleDetailListChange = function(event) {
                     	var source = event.getSource(),
                     		linesModel = core.getModel('currentSalesDocumentLines');
