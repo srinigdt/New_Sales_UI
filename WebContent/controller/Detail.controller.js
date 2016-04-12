@@ -207,7 +207,8 @@ gdt.salesui.util.Controller
                         
                         variantToolbar.addContent(defaultVariantContents[0]);	
                         variantToolbar.addContent(oVCreate);	
-                        variantToolbar.addContent(oVManage);
+                       // variantToolbar.addContent(oVManage);
+                        variantToolbar.addContent(defaultVariantContents[1]);
    
                         // setting standard variant Columns
                         var table = view.byId("lineItemsTable");
@@ -2943,7 +2944,9 @@ gdt.salesui.util.Controller
 		var source = event.getSource( );
 		source.setShowColumnVisibilityMenu(true);
 		source.setEnableColumnFreeze(true);
-		if(event.mParameters.column.sId.indexOf('selectionID') >= 0){
+		if(event.mParameters.column.sId.indexOf('SELECTIONID') >= 0 ||
+		   event.mParameters.column.sId.indexOf('DROPSHIP') >= 0 ||
+		   event.mParameters.column.sId.indexOf('STAGE') >= 0 ){
 			source.setShowColumnVisibilityMenu(false);
 			source.setEnableColumnFreeze(false);		
 		}
@@ -3248,7 +3251,28 @@ gdt.salesui.util.Controller
 			}
           //  _calculateTotals();
 		},
-
+		
+// Begin of Change: SXVASAMSETTI : 04/12/16		
+		handleDropShipSelectAll = function (event) {
+			view.byId('STAGE_CHECK').setSelected(false);
+			var tableModel = view.getModel('currentSalesDocumentLines') ;
+			var tabledata  = tableModel.getData( );
+           _.each(tabledata,function(row){
+			row.ItemCategory = (event.getParameter('selected')) ? _determineItemCategoryForDropShip(row) : _determineItemCategoryForBroughtIn(row);
+           });
+           tableModel.setData(tabledata);
+		},
+		handleStagingSelectAll = function(event){
+			view.byId('DROPSHIP_CHECK').setSelected(false);
+			var tableModel = view.getModel('currentSalesDocumentLines') ;			
+			var tabledata  = tableModel.getData( );
+           _.each(tabledata,function(row){
+        	   row.ItemCategory = (event.getParameter('selected')) ? _determineItemCategoryForStaging(row) : _determineItemCategoryForBroughtIn(row);
+           });
+           tableModel.setData(tabledata);			
+		},
+// End of Change: SXVASAMSETTI:		
+		
 		handleDropShipSelect = function (event) {
 			var source = event.getSource(),
 				binding = source.getBinding('selected'),
@@ -4479,7 +4503,9 @@ gdt.salesui.util.Controller
 			handleAddFieldtoVariant: handleAddFieldtoVariant,
 			handleRemoveFieldFromVariant:handleRemoveFieldFromVariant,
 			handleMoveUpFieldInVariant:handleMoveUpFieldInVariant,
-			handleMoveDownFieldInVariant:handleMoveDownFieldInVariant
+			handleMoveDownFieldInVariant:handleMoveDownFieldInVariant,
+			handleDropShipSelectAll:handleDropShipSelectAll,
+			handleStagingSelectAll:handleStagingSelectAll
 
 		};
 

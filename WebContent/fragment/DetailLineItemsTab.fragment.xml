@@ -130,12 +130,14 @@
  			    	<t:template><Input valueStateText="Gross Profit % must be between 0.00 and 100." showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>GrossProfitPercentage', type : 'sap.ui.model.type.Float', formatOptions: {decimalSeparator:'.', groupingSeparator:',', minIntegerDigits: 1, maxIntegerDigits: 3, minFractionDigits: 2, maxFractionDigits: 3}, constraints: {minimum: 0, maximum: 100} }" editable="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}) ) }"  /></t:template>
 			    </t:Column>
 			    <t:Column  id="STAGE" width="55px">
-			    	<Text text="Stage" tooltip="Staging required in warehouse process" />
+			        <CheckBox id="STAGE_CHECK" text="Stage" tooltip="Staging required in warehouse process" selected="false" select="handleStagingSelectAll" />
+			    	<!-- <Text text="Stage" tooltip="Staging required in warehouse process" /> -->
  			    	<t:template><CheckBox select="handleStagingSelect" tooltip="SAP ItemCategory: {path: 'currentSalesDocumentLines>ItemCategory'}" app:rowid="{currentSalesDocumentLines>SalesDocumentLineID}" selected="{path: 'currentSalesDocumentLines>ItemCategory', formatter: 'gdt.salesui.util.Formatter.itemCategoryToStaging'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; ((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') &amp;&amp; ((${currentSalesDocumentLines>EDelivery}  !== 'EDELIVERY')) &amp;&amp; (${currentSalesDocumentLines>MaterialGroup} === 'Z2')) }" /></t:template>
 			    </t:Column> 
 			    <!--  visible="{currentState>/isSalesOrder}" -->
 			    <t:Column id="DROPSHIP" width="55px">
-			    	<Text text="D/S" tooltip="Drop Ship from vendor to customer" />
+			        <CheckBox id="DROPSHIP_CHECK" text="D/S" tooltip="Drop Ship from vendor to customer" selected="false" select="handleDropShipSelectAll" />
+			    	<!-- <Text text="D/S" tooltip="Drop Ship from vendor to customer" /> -->
  			    	<t:template><CheckBox select="handleDropShipSelect" tooltip="SAP ItemCategory: {path: 'currentSalesDocumentLines>ItemCategory'}" app:rowid="{currentSalesDocumentLines>SalesDocumentLineID}" selected="{path: 'currentSalesDocumentLines>ItemCategory', formatter: 'gdt.salesui.util.Formatter.itemCategoryToDropShip'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; ((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') &amp;&amp; ((${currentSalesDocumentLines>EDelivery}  !== 'EDELIVERY')) &amp;&amp; (${currentSalesDocumentLines>MaterialGroup}  === 'Z2')) }" /></t:template>
 			    </t:Column>
 			    <t:Column id="SHIPTO" width="260px">
