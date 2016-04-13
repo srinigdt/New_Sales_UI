@@ -3204,7 +3204,39 @@ gdt.salesui.util.Controller
 		 ////	window.open(model.sServiceUrl + sRead );
          //
 				},
+       
+// Added by SXVASAMSETTI				
+				handleExportSoAvailableQty=function(){
+				var	Export = new sap.ui.core.util.Export({
+						exportType: new sap.ui.core.util.ExportTypeCSV({charset : "utf-16",}),
+						models: view.getModel('soAvailableQty'),
+						rows : { path : '/'},
+						columns : [
+							{name: 'Material', template : { content : {path: 'Matnr'}}},
+							{name: 'Manufacturer Part No.', template : { content : {path: 'Mfrpn'}}},
+							{name: 'Line ID', template : { content : {path: 'Ccwline'}}},
+							{name: 'Sales Doc.', template : { content : {path: 'Vbeln'}}},
+							{name: 'Item', template : { content : {path: 'Posnr'}}},
+							{name: 'HgLvIt', template : { content : {path: 'Uepos'}}},
+							{name: 'Order Qty', template : { content : {path: 'Kwmeng'}}},
+							{name: 'Recd Qty', template : { content : {path: 'Recd'}}},
+							{name: 'Shpd Qty', template : { content : {path: 'Posted'}}},
+							{name: 'Total Stock', template : { content : {path: 'Lbkum'}}},
+							{name: 'OpenSR Qty', template : { content : {path: 'Opensr'}}},
+							{name: 'Dlv. Qty', template : { content : {path: 'Lfimg'}}},
+							{name: 'Open Qty', template : { content : {path: 'Openq'}}},
+							{name: 'Unit', template : { content : {path: 'Uom'}}},
+							{name: 'Plant', template : { content : {path: 'Werks'}}},
+							{name: 'ItCa.', template : { content : {path: 'Pstyv'}}},
+							{name: 'Rj.', template : { content : {path: 'Abgru'}}},
+							{name: 'Error', template : { content : {path: 'Errorcd'}}}
 
+						]});					
+					Export.saveFile(core.getModel('currentSalesDocument').getProperty('/SalesDocumentID')+'_SalesOrderAvailableQuantity').always(function() {
+						this.destroy();
+					});		
+				},		
+				
 		 // PDF Print
 		handlePrintRequest = function(event) {
 			var salesDocument = view.getModel('currentSalesDocument'),

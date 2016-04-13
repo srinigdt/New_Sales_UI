@@ -5,7 +5,10 @@
 	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 	<Panel>
 		<headerToolbar>
-			<Toolbar height="2rem" />
+			<Toolbar height="2rem">
+			<ToolbarSpacer/>
+					<Button icon="sap-icon://excel-attachment" text="Export" type="Accept" press="handleExportSoAvailableQty" />
+				</Toolbar>
 		</headerToolbar>
 		<t:Table class="sapUiSizeCompact" id='soAvailableQty' width="auto"
 		rows="{soAvailableQty>/}" 
