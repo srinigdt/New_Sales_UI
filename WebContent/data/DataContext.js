@@ -4,7 +4,7 @@ $.sap.require("sap.ui.core.Core");
 $.sap.require("gdt.salesui.lib.underscore-min");
 
 gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
-	    var entitySet = function(idname, foreignKey, nullKey, getFunction, loadFunction, getByForeignKeyFunction, updateFunction, createFunction, removeFunction, neverLocal) {
+	    var entitySet = function(idname, foreignKey, nullKey, getFunction, loadFunction, getByForeignKeyFunction, updateFunction, createFunction, removeFunction, neverLocal,sendFunction) {
 	        var _items = {},
 				_failedGets = {},
 	        	_requests = [],
@@ -298,6 +298,26 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 	                }).promise();
 	            };
 	            
+	            send = function(content){
+	            	return $.Deferred(function(def) {
+	                    if (!sendFunction) {
+	                        console.error('send function not defined');
+	                        def.reject('send function not defined');
+	                        return;
+	                    }
+	
+	                    sendFunction(content).done(function(data) {
+	                            def.resolve(data);
+	                        }).fail(function(response) {
+	                            console.log(response);
+	                            def.reject(response);
+	                        });
+	                }).promise();	            	
+	            	
+	            	
+	            };
+	            
+	            
 	        return {
 	            create: create,
 				isKnownBad: isKnownBad,
@@ -308,32 +328,35 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 	            getByForeignKey: getByForeignKey,
 	            load: load,
 	            remove: remove,
-	            update: update
+	            update: update,
+	            send:send
 	        };
 	    },        
 	    //----------------------------------
 	    // Repositories
 	    //----------------------------------
-		userprefs = new entitySet('UserID', null, null,null, dataservice.userprefs.load, null, null, null, null),
-		customers = new entitySet('CustomerID', null, null, dataservice.customers.get, dataservice.customers.load, null, null, null, null),
-	    customerbalances = new entitySet('Customer', null, null, dataservice.customerbalances.get, null, null, null, null, null),
-	    customershiptos = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customershiptos.getByForeignKey, null, null, null),
-	    customerbilltos = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customerbilltos.getByForeignKey, null, null, null),
-	    customerpayers = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customerpayers.getByForeignKey, null, null, null),
-	    customerendcustomers = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customerendcustomers.getByForeignKey, null, null, null),
-	    customersalesadmins = new entitySet('PartnerName', 'CustomerID', null, null, null, dataservice.customersalesadmins.getByForeignKey, null, null, null),
-	    customeracctmgrs = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customeracctmgrs.getByForeignKey, null, null, null),
-	    salesdocuments = new entitySet('SalesDocumentID', 'CustomerID', '0000000000', dataservice.salesdocuments.get, null, dataservice.salesdocuments.getByForeignKey, null, dataservice.salesdocuments.create, dataservice.salesdocuments.remove, true),
-	    salesdocumentlines = new entitySet(['SalesDocumentID','SalesDocumentLineID'], 'SalesDocumentID', null, null, null, dataservice.salesdocumentlines.getByForeignKey, null, null, null, true),
-	    salesdocumentattachments = new entitySet('InstId_b', 'SalesDocumentID', null, null, null, dataservice.salesdocumentattachments.getByForeignKey, null, null, null, true),
-		materials = new entitySet(['CustomerID', 'ManufacturerID', 'MaterialID', 'MfrPartID'], null, null, dataservice.materials.get, dataservice.materials.load, null, null, null, null),
-		rejectionreasons = new entitySet('ReasonCode', null, null, null, dataservice.rejectionreasons.load, null, null, null, null),	
+		userprefs = new entitySet('UserID', null, null,null, dataservice.userprefs.load, null, null, null, null,null),
+		customers = new entitySet('CustomerID', null, null, dataservice.customers.get, dataservice.customers.load, null, null, null, null,null),
+	    customerbalances = new entitySet('Customer', null, null, dataservice.customerbalances.get, null, null, null, null, null,null),
+	    customershiptos = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customershiptos.getByForeignKey, null, null, null,null),
+	    customerbilltos = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customerbilltos.getByForeignKey, null, null, null,null),
+	    customerpayers = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customerpayers.getByForeignKey, null, null, null,null),
+	    customerendcustomers = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customerendcustomers.getByForeignKey, null, null, null,null),
+	    customersalesadmins = new entitySet('PartnerName', 'CustomerID', null, null, null, dataservice.customersalesadmins.getByForeignKey, null, null, null,null),
+	    customeracctmgrs = new entitySet('PartnerID', 'CustomerID', null, null, null, dataservice.customeracctmgrs.getByForeignKey, null, null, null,null),
+	    salesdocuments = new entitySet('SalesDocumentID', 'CustomerID', '0000000000', dataservice.salesdocuments.get, null, dataservice.salesdocuments.getByForeignKey, null, dataservice.salesdocuments.create, dataservice.salesdocuments.remove, true,null),
+	    salesdocumentlines = new entitySet(['SalesDocumentID','SalesDocumentLineID'], 'SalesDocumentID', null, null, null, dataservice.salesdocumentlines.getByForeignKey, null, null, null, true,null),
+	    salesdocumentattachments = new entitySet('InstId_b', 'SalesDocumentID', null, null, null, dataservice.salesdocumentattachments.getByForeignKey, null, null, null, true,null),
+		materials = new entitySet(['CustomerID', 'ManufacturerID', 'MaterialID', 'MfrPartID'], null, null, dataservice.materials.get, dataservice.materials.load, null, null, null, null,null),
+		rejectionreasons = new entitySet('ReasonCode', null, null, null, dataservice.rejectionreasons.load, null, null, null, null,null),	
 //The below is added to fetch Customers PO Existance :SXVASAMSETTI	
-		customersPO = new entitySet('CustomerPOID', null, null, dataservice.customers.getPO,null, null, null, null, null),
+		customersPO = new entitySet('CustomerPOID', null, null, dataservice.customers.getPO,null, null, null, null, null,null),
 //The below line is added to fetch document flow lines: SXVASAMSETTI
-		documentFlow = new entitySet('DocumentID', 'DocumentID', null, dataservice.documentflow.get,null, dataservice.documentflow.getByForeignKey, null, null, null),		
+		documentFlow = new entitySet('DocumentID', 'DocumentID', null, dataservice.documentflow.get,null, dataservice.documentflow.getByForeignKey, null, null, null,null),		
 //The below line is added to fetch Sales Order Available Quantities		
-		SoAvailableQty = new entitySet('DocumentID', 'DocumentID', null, dataservice.SoAvailableQty.get,null, dataservice.SoAvailableQty.getByForeignKey, null, null, null),
+		SoAvailableQty = new entitySet('DocumentID', 'DocumentID', null, dataservice.SoAvailableQty.get,null, dataservice.SoAvailableQty.getByForeignKey, null, null, null,null),
+//The below line is added to Send Mail notification about MasterData Creation
+		EmailNotification = new entitySet('MailContent', null, null,null,null, null, null, null, null,null,dataservice.EmailNotification.send),
 		
 		datacontext = {
 	    customers: customers,
@@ -352,7 +375,8 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 		materials: materials,
 		rejectionreasons: rejectionreasons,
 		documentFlow:documentFlow,   //added by SXVASAMSETTI
-		SoAvailableQty:SoAvailableQty
+		SoAvailableQty:SoAvailableQty,
+		EmailNotification:EmailNotification
 	};
 	
 	return datacontext;

@@ -32,8 +32,7 @@
 			</t:Column>
 			<t:Column id="SoAvailQty_Item" width="30px">
 				<Text text="{i18n>ITEM}" wrapping="false" class='ColumnLabel' tooltip="{i18n>ITEM}" />
-				<!-- <t:template><Input value="{soAvailableQty>Posnr}" wrapping="false" editable="false"/></t:template> -->
-			<t:template><Input valueStateText="Line number must not be empty. Maximum 6 characters." showValueStateMessage="false" value="{path: 'soAvailableQty>Posnr', type : 'sap.ui.model.type.Integer', constraints: {minLength: 1, maxLength: 6} }" editable="false"  /></t:template>
+			<t:template><Input valueStateText="Line number must not be empty. Maximum 6 characters." showValueStateMessage="false" value="{path: 'soAvailableQty>Posnr', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 6} }" editable="false"  /></t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_HLI" width="30px">
 				<Text text="{i18n>HLI}" wrapping="false" class='ColumnLabel' tooltip="{i18n>HLI_F}" />

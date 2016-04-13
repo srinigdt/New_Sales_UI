@@ -433,6 +433,24 @@ gdt.salesui.util.Controller
 	                    	}
                     	}	
                     },
+                    
+                   _sendMailFromSAP=function(MailBodyContent,refresh){
+                    	var deferred =  $.Deferred(function(defer) {
+                    	datacontext.EmailNotification.send(MailBodyContent,refresh).done( function(data){
+                      		defer.resolve( );
+                    	}).fail(function(msg){
+                    		defer.reject(msg);
+                    	})
+                    	}).done(function(){
+                    		sap.m.MessageToast.show('Mail has been sent successfully');
+                    	}).fail( );
+                    	
+                    	return deferred;	
+                    }, 
+                    
+                    
+                    
+                    
                     _handleDetailListChange = function(event) {
                     	var source = event.getSource(),
                     		linesModel = core.getModel('currentSalesDocumentLines');
@@ -1056,47 +1074,46 @@ gdt.salesui.util.Controller
 						var dialog = view.byId('detailLineItemsAddressErrorsDialog');
 						dialog.close();
 					},
-                    
-                    handleEmailMasterData = function(event) {
+					
+					 handleEmailMasterData = function(event) {
                  		var dialog = view.byId('detailLineItemsImportErrorsDialog'),
                  			material = view.getModel('importErrors').getData(),
                  			i = 0,
                  			l = 0,
-                 			part = 0,
                  			sapclient = core.getModel('systemInfo').getProperty('/ClientID'),
-                 			body = 'The following material was requested but not found in the SAP catalog for Client ' + sapclient + '.  Please add this material:\n\n';
+                 			body = 'The following material was requested but not found in the SAP catalog for Client ' + sapclient + '.  Please add these material(s):\n\n';
                  		
                  		l = (!!material) ? material.length : 0;
-                 		dialog.close();	
+                 		
                  		for (i=0; i<l; i++) {
-                 			if(body.length < 1024){
                  			body += (!!material[i].ManufacturerID && parseInt(material[i].ManufacturerID) != 0) ? "Manufacturer: [" + material[i].ManufacturerID + "] " : "";
-							body += (!!material[i].CustomerPartID) ? "Manufacturer's Part Numbe: ["+material[i].CustomerPartID+"] " : "";
+							body += (!!material[i].CustomerPartID) ? "Manufacturer's Part Number: ["+material[i].CustomerPartID+"] " : "";
 							body += (!!material[i].Description) ? "Description: ["+material[i].Description+"] " : "";
 							body += (!!material[i].ListPrice && parseFloat(material[i].ListPrice) != 0) ? "List Price: ["+material[i].ListPrice+"]\n" : "\n";
-                 			}else{
-                 				part = part + 1;
-          
-                 			sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material Part# " + part,body);
-                 		    body = 'The following material was requested but not found in the SAP catalog for Client ' + sapclient + '.  Please add this material:\n\n';
-                 			}
-
-                 			}
+                 		}
                  		
-                 	
-             			if(part == 0){
-                 			sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);
-                 			}else
-                 				{
-                 				part = part + 1;
-                 			//	sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material Part# " + part,body);
-                 				}
-                 		// sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);                 		
-                    },
-                    
-                    _sendmail = function(mail_id,subj,body){
-                    	
-                    },
+                 		dialog.close();	
+
+                 		sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);                 		
+//Begin of Change:SXVASAMSETTI : 04/13/16  
+                 		_sendMailFromSAP(body,true);
+/*                 		var model = core.getModel();
+        	    		model.callFunction("/SendMail",'POST', {ActionType:'M',MailContent:body}, {
+    		            	success: function(data, response) {
+    		            		if (response.statusCode >= 200 && response.statusCode <= 299) {
+    		            		//	defer.resolve(_fixDataDown(data));
+    		            		} else {
+    		            			sap.m.MessageToast.show(helper.ParseError(data,"SalesUI Could not create/update the Sales Document in SAP."));
+    		            		}
+    		            	},
+    						error: function(data) {
+    							sap.m.MessageToast.show(helper.ParseError(data,"SalesUI Could not create/update the Sales Document in SAP."));
+    						},
+    						async: true
+    		            });*/
+//End of Change:SXVASAMSETTI					
+					},              
+
                     
                     handleDetailLineNotes = function (event) {
                  		var dialog = view.byId('detailLineNotesDialog'),

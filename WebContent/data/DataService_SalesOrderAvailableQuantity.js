@@ -9,8 +9,7 @@ gdt.salesui.data.DataService_SalesOrderAvailableQuantity = (function($, core, _,
 				var model = core.getModel();
 	        	model.read("/DocumentSet(DocumentID='" + DocumentId + "')?$expand=SOAvailableQuantity", {
 		            	success: function(data, response) {
-	                       // core.getModel('documentFlow').setData(data);
-							defer.resolve(data.SOAvailableQuantity.results);
+							defer.resolve(_fixUpData(data.SOAvailableQuantity.results));
 		            	},
 						error: function(response) {
 							defer.reject(helper.ParseError(response, "SalesUI Could not fetch Sales Order Available Quantity."));
@@ -18,14 +17,19 @@ gdt.salesui.data.DataService_SalesOrderAvailableQuantity = (function($, core, _,
 		            });
 			}).promise();		
 		},
-
+        _fixUpData=function(rows){
+		_.each(rows,function(row){	
+			row.Posnr = row.Posnr.replace(/^0+/, '');
+			row.Uepos = row.Uepos.replace(/^0+/, '');
+			} );
+		return rows;
+		},
 		getByForeignKey = function(DocumentId) {
 			return $.Deferred(function(defer) {
 				var model = core.getModel();
 	        	model.read("/DocumentSet(DocumentID='" + DocumentId + "')?$expand=DocumentFlow", {
 		            	success: function(data, response) {
-	                        //core.getModel('documentFlow').setData(data);
-							defer.resolve(data.SOAvailableQuantity.results);
+							defer.resolve(_fixUpData(data.SOAvailableQuantity.results));
 		            	},
 						error: function(response) {
 							defer.reject(helper.ParseError(response, "SalesUI Could not fetch Sales Order Available Quantity."));
