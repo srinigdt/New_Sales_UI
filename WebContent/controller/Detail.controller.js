@@ -189,6 +189,11 @@ gdt.salesui.util.Controller
 	                    
  
                     },
+                    
+//*****************************************************************************************************                    
+//---------------------------------L A Y O U T -- V A R I A N T----------------------------------------
+//                                    Begin of Code Change
+//*****************************************************************************************************                    
                     _manage_variant = function(view,that){
                         variantToolbar = sap.ui.getCore().byId("__toolbar3");
                          defaultVariantContents = variantToolbar.removeAllContent( );
@@ -220,40 +225,176 @@ gdt.salesui.util.Controller
                         };
                         data.push(newRow);
                         model.setData(data);
-                        
+                        _loadAndSetVariants( );
                        }, 
                        
                     handleCreateVariant = function(view,that){
                    if(!that._oVariantCreateDialog){
                 	   that._oVariantCreateDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemsCreateVariantDialog", that);
                     	view.addDependent(this._oVariantCreateDialog);	
-                       }		 
-                   that._oVariantCreateDialog.open( );                    	   
+                                                  }		 
+                       that._oVariantCreateDialog.open( );                    	   
                     	   
                        },
                     handleManageVariant = function(event){
-                    	   sap.m.MessageToast.show("Managed Variant");   
+                    	   var params  = event.getParameters( );
+                    	   var renamed = params.renamed;
+                    	   var deleted = params.deleted;
+                    	   var def     = params.def;
+                    	// Deleting Variants 
+                    	   if(deleted.length > 0){
+                    		   for(i=0;i<deleted.length;i++)
+                    		   datacontext.variant.remove(deleted[i]) ;  
+                    	   }
+                    	//updating Variants
+                    	   if(renamed.length > 0){
+                    		   var data;
+                    		   var lines = view.getModel('lineItemVariant').getData();
+                    		   for(i=0;i<renamed.length;i++){
+                    		   var renamedElement = _.find(lines , function(line){ return line.key == renamed[i].key; });
+                    	  data={
+                       	        "DefaultX":false,          			          			   
+                      			"VariantId":renamedElement.key,
+                       			"Vbtyp":"S"  ,
+                       			"VariantText":renamed[i].name,
+                       			"Columns": renamedElement.columns
+                       			};
+                    	 datacontext.variant.update(data);
+                    		 }
+                    	   }
+                    	   
+                    	   if(def){
+                    		   var defData = _.find(view.getModel('lineItemVariant').getData() , function(line){ return line.key == def; });
+                    		   data={
+                              	        "DefaultX":true,          			          			   
+                             			"VariantId":defData.key,
+                              			"Vbtyp":"S"  ,
+                              			"VariantText":defData.text,
+                              			"Columns": defData.columns
+                              			};
+                    		   datacontext.variant.update(data);
+                    	   }
+                    	   
+                    	   _loadAndSetVariants( );
                        },
-                       
+                    handleSelectVariant = function(event){
+                    	   _setDefaultVariantLayout(null,event.getParameter("key"));	   
+                       }   
                    handleCancelVariant = function(event) {
                     	   this._oVariantCreateDialog.close( );      
                        } , 
                        
+  
                    handleConfirmCreateVariant = function(event) {
-                    	   var sortedData = _.sortBy(this.getView().getModel("variantFields").getData( ), function(data){ return data.updown; });
-                    	   // getting variant Columns
-                           var table = view.byId("lineItemsTable");
-                           var data= core.getModel("variantColumns").getData( );
-                           var standardVariantColumns =  _.pluck(data,"standard")[0]; 
-                           var column ;
-                           var removedColumns = table.removeAllColumns( );
-                    	   _.each(sortedData,function(data){
-                    		   column = _.find(standardVariantColumns, function(variantColumn){ return (variantColumn.sId.indexOf(data.fieldKey) > 0); });
-                    	  if(column) table.addColumn(column);
-                    	   });
-                    	   this._oVariantCreateDialog.close( );      
+                    	   if(view.getModel("variantFields").getData( ).length == 0 )  return sap.m.MessageToast.show("Please select fields for Variant or Cancel to continue");
+                       if(!this._oVariantNameSaveDialog){
+                    	   this._oVariantNameSaveDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemVariantNamePopUpDialog", this);
+                        	view.addDependent(this._oVariantNameSaveDialog);	
+                           }		 
+                       this._oVariantNameSaveDialog.open( );                   
                        } ,
                        
+                   handleVariantNameSave=function(event){                    
+                       _saveAndSetVariant();                        
+                               } ,           
+                   handleVariantNameCancel=function(event){                    
+                   view.getController( )._oVariantNameSaveDialog.close( );	   
+                               } ,              
+                  _setDefaultVariantLayout = function(columns,key){
+                         if(key){
+                        	 var variantColumns = _.find(view.getModel('lineItemVariant').getData() , function(line){ return line.key == key; }); 
+                         } 
+                         var column;
+                         var table = view.byId("lineItemsTable");
+                         var data = core.getModel("variantColumns").getData( );
+                         var standardVariantColumns =  _.pluck(data,"standard")[0]; 	                         	  
+                         var removedColumns = table.removeAllColumns( );
+                         if(variantColumns){
+                         for(i=0;i<variantColumns.layoutColumnIds.length;i++){
+                        	 column = _.find(standardVariantColumns, function(variantColumn){ return (variantColumn.sId.indexOf(variantColumns.layoutColumnIds[i]) > 0); }); 
+                        	 if(column) table.addColumn(column); 
+                              }
+                         }else{
+                         _.each(standardVariantColumns,function(column){table.addColumn(column)});	 
+                         }
+                         
+                      	  view.byId("variantManagement").setDefaultVariantKey(key);
+                       	  view.byId("variantManagement").setInitialSelectionKey(key);
+                               },
+                               
+                         _saveAndSetVariant=function(){                    	                     	  
+                           var column,variantColumnsIds;
+                           var variantName = core.byId("idVariantName").getValue( );
+                           if(variantName == " "){ core.byId("idVariantName").setValueState("Error"); return sap.m.MessageToast.show("Please enter Variant Name"); }
+                           var variantDefault = core.byId("idVariantDefault").getSelected( );
+                         
+                        	  var sortedData = _.sortBy(view.getModel("variantFields").getData( ), function(data){ return data.updown; });
+                       	   // getting variant Columns
+                              var table = view.byId("lineItemsTable");
+                              var data = core.getModel("variantColumns").getData( );
+                              var standardVariantColumns =  _.pluck(data,"standard")[0]; 	                         	  
+                           if(variantDefault){  var removedColumns = table.removeAllColumns( ); }
+                    	   _.each(sortedData,function(data){
+                    		   if(variantColumnsIds == undefined) 
+                    			   variantColumnsIds = data.fieldKey; else  variantColumnsIds =  variantColumnsIds + '/' +  data.fieldKey ;
+                    	   if(variantDefault){   column = _.find(standardVariantColumns, function(variantColumn){ return (variantColumn.sId.indexOf(data.fieldKey) > 0); });
+                    	       if(column) table.addColumn(column); }
+                    	   });
+                          
+                    	   
+                    	   view.getController( )._oVariantNameSaveDialog.close( );
+                    	   view.getController( )._oVariantCreateDialog.close( );
+                    	 var data={
+                    	        "DefaultX":variantDefault,          			          			   
+                   			    "VariantId":"CREATE",
+                    			"Vbtyp":"S"  ,
+                    			"VariantText":variantName,
+                    			"Columns": variantColumnsIds
+                    			 };
+                    	    //data.DefaultX = data.DefaultX.toString();
+                    	   _saveVariant(data).always(function(data){
+                    		busyDlg.close();
+                    		});		
+                       },
+                       
+                  _saveVariant = function(data){
+                    	   var deferred =  $.Deferred(function(defer) {
+                           	busyDlg.setText('Saving Variant into SAP.');
+                           	busyDlg.open();		
+                       	datacontext.variant.create(data).done( function(data){
+                            defer.resolve(data );
+                       	}).fail(function(msg){
+                       		defer.reject(msg);
+                       	})
+                       	}).done(function(){
+                       		sap.m.MessageToast.show("Variant is saved");
+                       	 _loadAndSetVariants( );
+                       	}).fail( );
+                       	
+                       	return deferred;
+                  }  , 
+                  
+                  _loadAndSetVariants = function(setInfo){
+                	  var deferred =  $.Deferred(function(defer) {
+                		  if(setInfo){
+                         	busyDlg.setText('Reloading Variant from SAP');
+                         	busyDlg.open();
+                		  }
+                     	datacontext.variant.load( ).done( function(data){
+                       	  defaultVariant =_.find(view.getModel('lineItemVariant').getData() , function(line){ return line.defaultX == true; })
+                   		if(defaultVariant) var key = defaultVariant.key;
+                       	  _setDefaultVariantLayout(null,key);
+                          defer.resolve(data);
+                     	}).fail(function(msg){
+                     		defer.reject(msg);
+                     	})
+                     	}).done(function(){
+                     		//sap.m.MessageToast.show("Variants loaded");
+                     	}).fail( );
+                     	
+                     	return deferred;	  
+                  },
+                  
                   handleFieldSort = function(event) {
                    var aSorters = [ ];
                    oLayoutFieldTable = event.getSource( ).getParent( ).getParent( );
@@ -328,7 +469,10 @@ gdt.salesui.util.Controller
                     	       model.refresh("variantFields");
                     	   }                    	   
                        }, 
-                       
+//*****************************************************************************************************                    
+//---------------------------------L A Y O U T -- V A R I A N T----------------------------------------
+//                                     End of code Change
+//*****************************************************************************************************                             
                        
                        
                        
@@ -3212,12 +3356,12 @@ gdt.salesui.util.Controller
 						models: view.getModel('soAvailableQty'),
 						rows : { path : '/'},
 						columns : [
-							{name: 'Material', template : { content : {path: 'Matnr'}}},
-							{name: 'Manufacturer Part No.', template : { content : {path: 'Mfrpn'}}},
-							{name: 'Line ID', template : { content : {path: 'Ccwline'}}},
 							{name: 'Sales Doc.', template : { content : {path: 'Vbeln'}}},
 							{name: 'Item', template : { content : {path: 'Posnr'}}},
 							{name: 'HgLvIt', template : { content : {path: 'Uepos'}}},
+							{name: 'Line ID', template : { content : {path: 'Ccwline'}}},
+							{name: 'Material', template : { content : {path: 'Matnr'}}},
+							{name: 'Manufacturer Part No.', template : { content : {path: 'Mfrpn'}}},
 							{name: 'Order Qty', template : { content : {path: 'Kwmeng'}}},
 							{name: 'Recd Qty', template : { content : {path: 'Recd'}}},
 							{name: 'Shpd Qty', template : { content : {path: 'Posted'}}},
@@ -3228,8 +3372,8 @@ gdt.salesui.util.Controller
 							{name: 'Unit', template : { content : {path: 'Uom'}}},
 							{name: 'Plant', template : { content : {path: 'Werks'}}},
 							{name: 'ItCa.', template : { content : {path: 'Pstyv'}}},
-							{name: 'Rj.', template : { content : {path: 'Abgru'}}},
-							{name: 'Error', template : { content : {path: 'Errorcd'}}}
+							{name: 'Rejected?', template : { content : {path: 'Abgru',formatter:formatter.isRejected}}},
+
 
 						]});					
 					Export.saveFile(core.getModel('currentSalesDocument').getProperty('/SalesDocumentID')+'_SalesOrderAvailableQuantity').always(function() {
@@ -3710,6 +3854,7 @@ gdt.salesui.util.Controller
 							if(sap.ui.getCore( ).getModel('currentState').getProperty('/isSalesOrder') && sap.ui.getCore( ).getModel('currentState').getProperty('/isAttachmentsNeedSave') ){
 								_refreshAttachments( );
 								sap.ui.getCore( ).getModel('currentState').setProperty('/isAttachmentsNeedSave',false)	;							
+								if(core.getModel('currentState').getProperty('/isSalesOrder') && !view.byId("idSoAvailableQty").getVisible( )) view.byId("idSoAvailableQty").setVisible(true);
 							}
 						}).fail(function(msg) {
 							sap.m.MessageBox.show((msg) ? msg : "SalesUI Could not save this record to SAP.", {
@@ -4546,6 +4691,7 @@ gdt.salesui.util.Controller
 			handleCopyPopupToggleSelection:handleCopyPopupToggleSelection,
 			handleCreateVariant:handleCreateVariant,
 			handleManageVariant:handleManageVariant,
+			handleSelectVariant:handleSelectVariant,
 			handleCancelVariant:handleCancelVariant,
 			handleConfirmCreateVariant:handleConfirmCreateVariant,
 			handleFieldSort:handleFieldSort,
@@ -4554,8 +4700,9 @@ gdt.salesui.util.Controller
 			handleMoveUpFieldInVariant:handleMoveUpFieldInVariant,
 			handleMoveDownFieldInVariant:handleMoveDownFieldInVariant,
 			handleDropShipSelectAll:handleDropShipSelectAll,
-			handleStagingSelectAll:handleStagingSelectAll
-
+			handleStagingSelectAll:handleStagingSelectAll,
+			handleVariantNameSave:handleVariantNameSave,
+			handleVariantNameCancel:handleVariantNameCancel,
 		};
 
 

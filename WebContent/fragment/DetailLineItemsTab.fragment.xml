@@ -18,7 +18,7 @@
 
 				<t:toolbar>
 				<Toolbar>	
-			<v:VariantManagement id="VM" variantItems="{lineItemVariant>/}" select="onSelect" save="onSave" enabled="true" manage="onManage" showExecuteOnSelection="false" showShare="false">
+			<v:VariantManagement id="variantManagement" variantItems="{lineItemVariant>/}" select="handleSelectVariant" enabled="true" manage="handleManageVariant" save="handleSaveVariant" showExecuteOnSelection="false" showShare="false">
 			<v:variantItems>
 				<v:VariantItem text="{lineItemVariant>text}" key="{lineItemVariant>key}" global="{global}" readOnly="{lineItemVariant>readOnly}" lifecyclePackage="{lineItemVariant>lifecyclePackage}" accessOptions="{lineItemVariant>accessOptions}"/>				
 			</v:variantItems>
@@ -61,7 +61,8 @@
 			    	<Text text="Qty" />
  			    	<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>QTY', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}) ) }" /></t:template>
 			    </t:Column>
-			    <t:Column id="ORDERED" width="56px" visible="{currentState>/isSubmittedSalesOrder}">
+			   <!-- 	The BELOW LINES ARE COMMENTED AS THESE FIELDS ARE AVAILABLE IN NEW FEATURED Called 'AVAILABLE QUANTITY -->	 
+			   <!--  <t:Column id="ORDERED" width="56px" visible="{currentState>/isSubmittedSalesOrder}">
 			    	<Text text="Ordered"/>
  			    	<t:template><Input showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>QtyOrdered', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false"/></t:template>
 			    </t:Column>
@@ -72,7 +73,7 @@
 			    <t:Column id="SHIPPED" width="56px" visible="{currentState>/isSubmittedSalesOrder}">
 			    	<Text text="Shipped"/>
  			    	<t:template><Input showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>QtyShipped', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false"/></t:template>
-			    </t:Column>
+			    </t:Column> -->
 			    <t:Column id="BILLED" width="56px" visible="{currentState>/isSubmittedSalesOrder}">
 			    	<Text text="Billed" />
  			    	<t:template><Input showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>QtyBilled', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false"/></t:template>
@@ -129,14 +130,14 @@
 			    	<Text text="GP %" />
  			    	<t:template><Input valueStateText="Gross Profit % must be between 0.00 and 100." showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>GrossProfitPercentage', type : 'sap.ui.model.type.Float', formatOptions: {decimalSeparator:'.', groupingSeparator:',', minIntegerDigits: 1, maxIntegerDigits: 3, minFractionDigits: 2, maxFractionDigits: 3}, constraints: {minimum: 0, maximum: 100} }" editable="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}) ) }"  /></t:template>
 			    </t:Column>
-			    <t:Column  id="STAGE" width="55px">
-			        <CheckBox id="STAGE_CHECK" text="Stage" tooltip="Staging required in warehouse process" selected="false" select="handleStagingSelectAll" />
+			    <t:Column  id="STAGE" width="60px">
+			        <CheckBox id="STAGE_CHECK" text="Stage" enabled="{= (${currentState>/isEditMode})}" tooltip="Staging required in warehouse process" selected="false" select="handleStagingSelectAll" />
 			    	<!-- <Text text="Stage" tooltip="Staging required in warehouse process" /> -->
  			    	<t:template><CheckBox select="handleStagingSelect" tooltip="SAP ItemCategory: {path: 'currentSalesDocumentLines>ItemCategory'}" app:rowid="{currentSalesDocumentLines>SalesDocumentLineID}" selected="{path: 'currentSalesDocumentLines>ItemCategory', formatter: 'gdt.salesui.util.Formatter.itemCategoryToStaging'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; ((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') &amp;&amp; ((${currentSalesDocumentLines>EDelivery}  !== 'EDELIVERY')) &amp;&amp; (${currentSalesDocumentLines>MaterialGroup} === 'Z2')) }" /></t:template>
 			    </t:Column> 
 			    <!--  visible="{currentState>/isSalesOrder}" -->
 			    <t:Column id="DROPSHIP" width="55px">
-			        <CheckBox id="DROPSHIP_CHECK" text="D/S" tooltip="Drop Ship from vendor to customer" selected="false" select="handleDropShipSelectAll" />
+			        <CheckBox id="DROPSHIP_CHECK" text="D/S" enabled="{= (${currentState>/isEditMode})}" tooltip="Drop Ship from vendor to customer" selected="false" select="handleDropShipSelectAll" />
 			    	<!-- <Text text="D/S" tooltip="Drop Ship from vendor to customer" /> -->
  			    	<t:template><CheckBox select="handleDropShipSelect" tooltip="SAP ItemCategory: {path: 'currentSalesDocumentLines>ItemCategory'}" app:rowid="{currentSalesDocumentLines>SalesDocumentLineID}" selected="{path: 'currentSalesDocumentLines>ItemCategory', formatter: 'gdt.salesui.util.Formatter.itemCategoryToDropShip'}" enabled="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; ((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') &amp;&amp; ((${currentSalesDocumentLines>EDelivery}  !== 'EDELIVERY')) &amp;&amp; (${currentSalesDocumentLines>MaterialGroup}  === 'Z2')) }" /></t:template>
 			    </t:Column>

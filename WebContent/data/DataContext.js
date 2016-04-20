@@ -355,8 +355,10 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 		documentFlow = new entitySet('DocumentID', 'DocumentID', null, dataservice.documentflow.get,null, dataservice.documentflow.getByForeignKey, null, null, null,null),		
 //The below line is added to fetch Sales Order Available Quantities		
 		SoAvailableQty = new entitySet('DocumentID', 'DocumentID', null, dataservice.SoAvailableQty.get,null, dataservice.SoAvailableQty.getByForeignKey, null, null, null,null),
-//The below line is added to Send Mail notification about MasterData Creation
+//The below line is added to Send Mail notification about MasterData Creation:SXVASAMSETTI
 		EmailNotification = new entitySet('MailContent', null, null,null,null, null, null, null, null,null,dataservice.EmailNotification.send),
+//The below line is added to Create Line Item Table Layout Variant :SXVASAMSETTI
+		variant = new entitySet('VariantID','Vbtyp', null, dataservice.variant.get, dataservice.variant.load, null, dataservice.variant.update, dataservice.variant.create, dataservice.variant.remove, true,null),
 		
 		datacontext = {
 	    customers: customers,
@@ -376,7 +378,8 @@ gdt.salesui.data.DataContext = (function($, core, _, dataservice) {
 		rejectionreasons: rejectionreasons,
 		documentFlow:documentFlow,   //added by SXVASAMSETTI
 		SoAvailableQty:SoAvailableQty,
-		EmailNotification:EmailNotification
+		EmailNotification:EmailNotification,
+		variant:variant
 	};
 	
 	return datacontext;

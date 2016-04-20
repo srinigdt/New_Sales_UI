@@ -6,90 +6,177 @@
 	<Panel>
 		<headerToolbar>
 			<Toolbar height="2rem">
-			<ToolbarSpacer/>
-					<Button icon="sap-icon://excel-attachment" text="Export" type="Accept" press="handleExportSoAvailableQty" />
-				</Toolbar>
+				<ToolbarSpacer />
+				<Button icon="sap-icon://excel-attachment" text="Export"
+					press="handleExportSoAvailableQty" />
+			</Toolbar>
 		</headerToolbar>
 		<t:Table class="sapUiSizeCompact" id='soAvailableQty' width="auto"
-		rows="{soAvailableQty>/}" 
-			visibleRowCount='5'	 showColumnVisibilityMenu='false' selectionMode='None'
-			    enableColumnReordering='true' 
-				enableColumnFreeze='false' 
-				enableCellFilter='true'>
+			rows="{soAvailableQty>/}" visibleRowCount='5'
+			showColumnVisibilityMenu='false' selectionMode='None'
+			enableColumnReordering='true' enableColumnFreeze='false'
+			enableCellFilter='true'>
 
-			<t:Column id="SoAvailQty_Material" width="40px">
-				<Text text="{i18n>MATERIAL}" wrapping="false" class='ColumnLabel' tooltip="{i18n>MATERIAL}" />
-				<t:template><Input value="{soAvailableQty>Matnr}" wrapping="false" editable="false"/></t:template>
-			</t:Column>
-			<t:Column id="SoAvailQty_Mpn" width="70px">
-				<Text text="{i18n>MPN}" wrapping="false" class='ColumnLabel' tooltip="{i18n>MPN_F}" />
-				<t:template><Input value="{soAvailableQty>Mfrpn}" wrapping="false" editable="false"/></t:template>
-			</t:Column>
-			<t:Column id="SoAvailQty_LineID" width="20px">
-				<Text text="{i18n>LINEID}" wrapping="false" class='ColumnLabel' tooltip="{i18n>LINEID}" />
-				<t:template><Input value="{soAvailableQty>Ccwline}" wrapping="false" editable="false"/></t:template>				
-			</t:Column>
 			<t:Column id="SoAvailQty_SalesDoc" width="35px">
-				<Text text="{i18n>SALES_DOC}" wrapping="false" class='ColumnLabel' tooltip="{i18n>SALES_DOC_F}" />
-				<t:template><Input value="{soAvailableQty>Vbeln}" wrapping="false" editable="false"/></t:template>
+				<Text text="{i18n>SALES_DOC}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>SALES_DOC_F}" />
+				<t:template>
+					<Input value="{soAvailableQty>Vbeln}" wrapping="false"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_Item" width="30px">
-				<Text text="{i18n>ITEM}" wrapping="false" class='ColumnLabel' tooltip="{i18n>ITEM}" />
-			<t:template><Input valueStateText="Line number must not be empty. Maximum 6 characters." showValueStateMessage="false" value="{path: 'soAvailableQty>Posnr', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 6} }" editable="false"  /></t:template>
+				<Text text="{i18n>ITEM}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>ITEM}" />
+				<t:template>
+					<Input valueStateText="Line number must not be empty. Maximum 6 characters."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Posnr', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 6} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_HLI" width="30px">
-				<Text text="{i18n>HLI}" wrapping="false" class='ColumnLabel' tooltip="{i18n>HLI_F}" />
-				<t:template><Input value="{soAvailableQty>Uepos}" wrapping="false" editable="false"/></t:template>
+				<Text text="{i18n>HLI}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>HLI_F}" />
+				<t:template>
+					<Input value="{soAvailableQty>Uepos}" wrapping="false"
+						editable="false" />
+				</t:template>
+			</t:Column>
+			<t:Column id="SoAvailQty_LineID" width="20px">
+				<Text text="{i18n>LINEID}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>LINEID}" />
+				<t:template>
+					<Input value="{soAvailableQty>Ccwline}" wrapping="false"
+						editable="false" />
+				</t:template>
+			</t:Column>
+			<t:Column id="SoAvailQty_Material" width="40px">
+				<Text text="{i18n>MATERIAL}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>MATERIAL}" />
+				<t:template>
+					<Input value="{soAvailableQty>Matnr}" wrapping="false"
+						editable="false" />
+				</t:template>
+			</t:Column>
+			<t:Column id="SoAvailQty_Mpn" width="70px">
+				<Text text="{i18n>MPN}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>MPN_F}" />
+				<t:template>
+					<Input value="{soAvailableQty>Mfrpn}" wrapping="false"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_OQTY" width="30px">
-				<Text text="{i18n>ORDER_QTY}" wrapping="false" class='ColumnLabel' tooltip="{i18n>ORDER_QTY_F}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Kwmeng', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<Text text="{i18n>ORDER_QTY}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>ORDER_QTY_F}" />
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Kwmeng', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_RQTY" width="30px">
-				<Text text="{i18n>RECORD_QTY}" wrapping="false" class='ColumnLabel' tooltip="{i18n>RECORD_QTY_F}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Recd', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<Text text="{i18n>RECORD_QTY}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>RECORD_QTY_F}" />
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Recd', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_SQTY" width="30px">
-				<Text text="{i18n>SHIP_QTY}" wrapping="false" class='ColumnLabel' tooltip="{i18n>SHIP_QTY_F}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Posted', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<Text text="{i18n>SHIP_QTY}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>SHIP_QTY_F}" />
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Posted', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_TStock" width="30px">
-				<Text text="{i18n>TOTAL_STOCK}" wrapping="false" class='ColumnLabel' tooltip="{i18n>TOTAL_STOCK}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Lbkum', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<Text text="{i18n>TOTAL_STOCK}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>TOTAL_STOCK}" />
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Lbkum', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_OSRQTY" width="30px">
-				<Text text="{i18n>OPEN_SR_QTY}" wrapping="false" class='ColumnLabel' tooltip="{i18n>OPEN_SR_QTY_F}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Opensr', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<Text text="{i18n>OPEN_SR_QTY}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>OPEN_SR_QTY_F}" />
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Opensr', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_DQTY" width="30px">
 				<Text text="{i18n>DELIVERY_QTY}" wrapping="false" class='ColumnLabel'
 					tooltip="{i18n>DELIVERY_QTY_F}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Lfimg', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Lfimg', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_OpQTY" width="30px">
-				<Text text="{i18n>OPEN_QTY}" wrapping="false" class='ColumnLabel' tooltip="{i18n>OPEN_QTY}" />
-				<t:template><Input valueStateText="Qty must be between 1 and 9,999,999,999." showValueStateMessage="false" value="{path: 'soAvailableQty>Openq', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" /></t:template>
+				<Text text="{i18n>OPEN_QTY}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>OPEN_QTY_F}" />
+				<t:template>
+					<Input valueStateText="Qty must be between 1 and 9,999,999,999."
+						showValueStateMessage="false"
+						value="{path: 'soAvailableQty>Openq', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }"						
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_UNIT" width="15px">
-				<Text text="{i18n>UNIT}" wrapping="false" class='ColumnLabel' tooltip="{i18n>UNIT}" />
-				<t:template><Input value="{soAvailableQty>Uom}" wrapping="false" editable="false"/></t:template>
+				<Text text="{i18n>UNIT}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>UNIT}" />
+				<t:template>
+					<Input value="{soAvailableQty>Uom}" wrapping="false"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_Plant" width="20px">
-				<Text text="{i18n>PLANT}" wrapping="false" class='ColumnLabel' tooltip="{i18n>PLANT}" />
-				<t:template><Input value="{soAvailableQty>Werks}" wrapping="false" editable="false" /></t:template>
+				<Text text="{i18n>PLANT}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>PLANT}" />
+				<t:template>
+					<Input value="{soAvailableQty>Werks}" wrapping="false"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_ItemCat" width="20px">
-				<Text text="{i18n>ITEM_CAT}" wrapping="false" class='ColumnLabel' tooltip="{i18n>ITEM_CAT_F}" />
-				<t:template><Input value="{soAvailableQty>Pstyv}" wrapping="false" editable="false"/></t:template>
+				<Text text="{i18n>ITEM_CAT}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>ITEM_CAT_F}" />
+				<t:template>
+					<Input value="{soAvailableQty>Pstyv}" wrapping="false"
+						editable="false" />
+				</t:template>
 			</t:Column>
 			<t:Column id="SoAvailQty_RJ" width="30px">
-				<Text text="{i18n>RJ}" wrapping="false" class='ColumnLabel' tooltip="{i18n>RJ_F}" />
-				<t:template><Input value="{soAvailableQty>Abgru}" wrapping="false" editable="false" /></t:template>
+				<Text text="{i18n>RJ}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>RJ_F}" />
+				<t:template>
+					<Input value="{path:'soAvailableQty>Abgru',formatter:'gdt.salesui.util.Formatter.isRejected'}" wrapping="false"					
+						editable="false" />
+				</t:template>
 			</t:Column>
-			<t:Column id="SoAvailQty_Error" width="30px">
-				<Text text="{i18n>ERROR}" wrapping="false" class='ColumnLabel' tooltip="{i18n>ERROR}" />
-				<t:template><Input value="{soAvailableQty>Errorcd}" wrapping="false" editable="false" /></t:template>
-			</t:Column>
+<!-- 			<t:Column id="SoAvailQty_Error" width="30px">
+				<Text text="{i18n>ERROR}" wrapping="false" class='ColumnLabel'
+					tooltip="{i18n>ERROR}" />
+				<t:template>
+					<Input value="{soAvailableQty>Errorcd}" wrapping="false"
+						editable="false" />
+				</t:template>
+			</t:Column> -->
 		</t:Table>
 
 	</Panel>

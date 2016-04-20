@@ -94,10 +94,10 @@
    </l:HorizontalLayout>
 	 </content>
     <beginButton>
-      <Button  text="Create" press="handleConfirmCreateVariant"/>
+      <Button  text="Save as Variant" icon="sap-icon://save" press="handleConfirmCreateVariant"/>
     </beginButton>
     <endButton>
-      <Button text="Cancel" press="handleCancelVariant" />
+      <Button text="Cancel" icon="sap-icon://sys-cancel" press="handleCancelVariant" />
     </endButton>   
   </Dialog>
 </core:FragmentDefinition>	

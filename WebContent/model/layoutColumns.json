@@ -1,0 +1,404 @@
+                          [
+	                        {	                        
+	                        "fieldText":"Selected",	                       
+	                        "fieldName":"Selection",
+	                        "fieldKey":"SELECTIONID",
+	                        "visibility":true,
+	                        "updown": 0,
+	                        "order":1
+	                        },
+	                        {
+	                        "fieldText":"Status",
+		                    "fieldName":"Status",
+		                    "fieldKey":"STATUS", 
+		                    "visibility":true,
+		                    "updown": 0,
+		                    "order":2
+		                    },
+	                        {
+			                "fieldText":"Notes",
+				            "fieldName":"HasNotesFlag",
+				            "fieldKey":"NOTES", 
+				            "visibility":true,
+				            "updown": 0,
+				            "order":3
+				            },
+	                        {
+				            "fieldText":"Line",
+					        "fieldName":"StructuredLineID",
+					        "fieldKey":"LINE", 
+					        "visibility":true,
+					        "updown": 0,
+					        "order":4
+					        },
+	                        {
+					        "fieldText":"Ref Ln",
+						    "fieldName":"CustomerPOLineID",
+						    "fieldKey":"REFLN", 
+						    "visibility":true,
+						    "updown": 0,
+						    "order":5
+						    },
+	                        {
+						    "fieldText":"PO Ln",
+							"fieldName":"CustomerPOLineID",
+							"fieldKey":"POLN", 
+							"visibility":true,
+							"updown": 0,
+							"order":6
+							},						    
+							{
+							"fieldText":"Qty",
+							"fieldName":"QTY",
+							"fieldKey":"QTY", 
+							"visibility":true,
+							"updown": 0,
+							"order":7
+							},
+							{
+							"fieldText":"Ordered",
+							"fieldName":"QtyOrdered",
+							"fieldKey":"ORDERED", 
+							"visibility":true,
+							"updown": 0,
+							"order":8
+							},							
+							{
+							"fieldText":"Received",
+							"fieldName":"QtyReceived",
+							"fieldKey":"RECEIVED", 
+							"visibility":true,
+							"updown": 0,
+							"order":9
+							 },	
+							{
+							"fieldText":"Shipped",
+							"fieldName":"QtyShipped",
+							"fieldKey":"SHIPPED", 
+							"visibility":true,
+							"updown": 0,
+							"order":10
+							},							 
+							{
+							"fieldText":"Billed",
+							"fieldName":"QtyBilled",
+							"fieldKey":"BILLED", 
+							"visibility":true,
+							"updown": 0,
+							"order":11
+							},								 
+							{
+							"fieldText":"Manufacturer",
+							"fieldName":"ManufacturerID",
+							"fieldKey":"MFR", 
+							"visibility":true,
+							"updown": 0,
+							"order":12
+							},
+							{
+							"fieldText":"Part # Requested",
+							"fieldName":"CustomerPartID",
+							"fieldKey":"PARTNO", 
+							"visibility":true,
+							"updown": 0,
+							"order":13
+							},							
+							
+							{
+							"fieldText":"Description",
+							"fieldName":"Description",
+							"fieldKey":"DESCRIPTION", 
+							"visibility":true,
+							"updown": 0,
+							"order":14
+							},							
+							{
+							"fieldText":"Vendor",
+							"fieldName":"VendorID",
+							"fieldKey":"VENDOR", 
+							"visibility":true,
+							"updown": 0,
+							"order":15
+							},							
+							{
+							"fieldText":"List Price",
+							"fieldName":"ListPrice",
+							"fieldKey":"LISTPRICE", 
+							"visibility":true,
+							"updown": 0,
+							"order":16
+							},							
+							{
+							"fieldText":"GDT Disc. %",
+							"fieldName":"GDTDiscountPercent",
+							"fieldKey":"GDTDISCOUNTPERCENT", 
+							"visibility":true,
+							"updown": 0,
+							"order":17
+							},							
+							{
+							"fieldText":"Unit Cost",
+							"fieldName":"UnitCost",
+							"fieldKey":"UNITCOST", 
+							"visibility":true,
+							"updown": 0,
+							"order":18
+							},							
+							{
+							"fieldText":"Ext. Cost",
+							"fieldName":"ExtendedCost",
+							"fieldKey":"EXTENDEDCOST", 
+							"visibility":true,
+							"updown": 0,
+							"order":19
+							},
+							{
+							"fieldText":"Cust. Disc. %",
+							"fieldName":"CustomerDiscountPercent",
+							"fieldKey":"CUSTOMERDISCOUNT", 
+							"visibility":true,
+							"updown": 0,
+							"order":20
+							},							
+							{
+							"fieldText":"Unit Price",
+							"fieldName":"UnitPrice",
+							"fieldKey":"UNITPRICE", 
+							"visibility":true,
+							"updown": 0,
+							"order":21
+							},								
+							{
+							"fieldText":"Ext. Price",
+							"fieldName":"ExtendedPrice",
+							"fieldKey":"EXTPRICE", 
+							"visibility":true,
+							"updown": 0,
+							"order":22
+							},								
+							{
+							"fieldText":"GP",
+							"fieldName":"GrossProfit",
+							"fieldKey":"GP", 
+							"visibility":true,
+							"updown": 0,
+							"order":23
+							},							
+							{
+							"fieldText":"GP %",
+							"fieldName":"GrossProfitPercentage",
+							"fieldKey":"GP_PERCENT", 
+							"visibility":true,
+							"updown": 0,
+							"order":24
+							},
+							{
+							"fieldText":"Stage",
+							"fieldName":"ItemCategory",
+							"fieldKey":"STAGE", 
+							"visibility":true,
+							"updown": 0,
+							"order":25
+							},
+							{
+							"fieldText":"D/S",
+							"fieldName":"ItemCategory",
+							"fieldKey":"DROPSHIP", 
+							"visibility":true,
+							"updown": 0,
+							"order":26
+							},	
+							{
+							"fieldText":"Ship To",
+							"fieldName":"ShipToID",
+							"fieldKey":"SHIPTO", 
+							"visibility":true,
+							"updown": 0,
+							"order":27
+							},							
+							{
+							"fieldText":"Via",
+							"fieldName":"",
+							"fieldKey":"VIA", 
+							"visibility":true,
+							"updown": 0,
+							"order":28
+							},							
+							{
+							"fieldText":"Ship ATTN",
+							"fieldName":"ShipToAttn",
+							"fieldKey":"SHIPTOATTN", 
+							"visibility":true,
+							"updown": 0,
+							"order":29
+							},								
+							{
+							"fieldText":"Deal ID",
+							"fieldName":"DealID",
+							"fieldKey":"DEALID", 
+							"visibility":true,
+							"updown": 0,
+							"order":30
+							},							
+							{
+							"fieldText":"Cust. PO",
+							"fieldName":"CustomerPOID",
+							"fieldKey":"CUSTPO", 
+							"visibility":true,
+							"updown": 0,
+							"order":31
+							},							
+							{
+							"fieldText":"Del. Date",
+							"fieldName":"DeliveryDate",
+							"fieldKey":"DELIVERYDATE", 
+							"visibility":true,
+							"updown": 0,
+							"order":32
+							},							
+							{
+							"fieldText":"CCW Quote #",
+							"fieldName":"ExternalQuoteID",
+							"fieldKey":"CCWQUOTE", 
+							"visibility":true,
+							"updown": 0,
+							"order":33
+							},							
+							{
+							"fieldText":"Line Type",
+							"fieldName":"SmartNetLineType",
+							"fieldKey":"LINETYPE",
+							"visibility":true,
+							"updown": 0,
+							"order":34
+							},
+							{
+							"fieldText":"SmartNet Part Covered",
+							"fieldName":"SmartNetCoveredMaterial",
+							"fieldKey":"SMARTNETPART",
+							"visibility":true,
+							"updown": 0,
+							"order":35
+							},							
+							{
+							"fieldText":"SmartNet S/N",
+						    "fieldName":"SmartNetCoveredSerialNumber",
+						    "fieldKey":"SMARTNETSERIAL",
+							"visibility":true,
+							"updown": 0,
+							"order":36
+							},							
+							{
+							"fieldText":"SmartNet Old S/N",
+							"fieldName":"SmartNetReplacedSerialNumber",
+							"fieldKey":"SMARTNETOLDSERIAL",
+							"visibility":true,
+							"updown": 0,
+							"order":37
+							},
+							{
+							"fieldText":"SMART Account",
+							"fieldName":"SMARTAcctNo",
+							"fieldKey":"SMARTAC",
+							"visibility":true,
+							"updown": 0,
+						    "order":38
+							},								
+							{
+							"fieldText":"SMARTNET Contract #",
+							"fieldName":"SmartNetContractNumber",
+							"fieldKey":"SMARTNETCN",
+							"visibility":true,
+							"updown": 0,
+							"order":39
+							},
+							{
+							"fieldText":"Service Level",
+					        "fieldName":"SmartNetServiceLevel",
+							"fieldKey":"SERVICELEVEL",
+							"visibility":true,
+							"updown": 0,
+							"order":40
+							},
+							{
+							"fieldText":"Service Level Description",
+						    "fieldName":"SmartNetServiceLevelDescription",
+							"fieldKey":"SERVICELEVELDESCRIPT",
+							"visibility":true,
+							"updown": 0,
+							"order":41
+							},							
+							{
+							"fieldText":"Begin Date",
+						    "fieldName":"SmartNetBeginDate",
+							"fieldKey":"BEGINDATE",
+							"visibility":true,
+							"updown": 0,
+							"order":42
+							},							
+							{
+							"fieldText":"End Date",
+							"fieldName":"SmartNetEndDate",
+							"fieldKey":"ENDDATE",
+							"visibility":true,
+							"updown": 0,
+							"order":43
+							},							
+							{
+							"fieldText":"Duration",
+							"fieldName":"SmartNetDuration",
+							"fieldKey":"DURATION",
+							"visibility":true,
+							"updown": 0,
+							"order":44
+							},								
+							{
+							"fieldText":"WBS Element",
+							"fieldName":"WBSElement",
+							"fieldKey":"WBSELEMENT",
+							"visibility":true,
+							"updown": 0,
+							"order":45
+							},								
+							{
+							"fieldText":"Cust Vend Contract #",
+							"fieldName":"CustomerContractWithVendor",
+							"fieldKey":"CUSTVENDCONTRACT",
+							"visibility":true,
+							"updown": 0,
+							"order":46
+							},
+							{
+							"fieldText":"Created By",
+							"fieldName":"CreatedBy",
+							"fieldKey":"CREATEDBY",
+							"visibility":true,
+							"updown": 0,
+							"order":47
+							},							
+							{
+							"fieldText":"Created On",
+							"fieldName":"CreatedOn",
+							"fieldKey":"CREATEDON",
+							"visibility":true,
+							"updown": 0,
+							"order":48
+							},							
+							{
+							"fieldText":"Updated By",
+							"fieldName":"UpdatedBy",
+							"fieldKey":"UPDATEDBY",
+							"visibility":true,
+							"updown": 0,
+							"order":49
+							},							
+							{
+							"fieldText":"Updated On",
+							"fieldName":"UpdatedOn",
+							"fieldKey":"UPDATEDON",
+							"visibility":true,
+							"updown": 0,
+							"order":50
+								}								
+							]
+	                 

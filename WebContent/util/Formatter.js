@@ -28,6 +28,18 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 				}
 	},
 	
+	SoAvailableQtyVisibility=function(value){
+		if( value == true && parseInt(core.getModel('currentSalesDocument').getProperty('/SalesDocumentID') ) != 0 )
+			return true;
+		    return false;
+			
+	},
+	
+	isRejected=function(value){
+	if(value != '') return 'Yes' ;
+	return value;	
+	},
+	
 	pdfButtonVisibility = function(value) {
 	
 		if (value =='V' || value =='M'){
@@ -383,7 +395,9 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 			docFlowVisibility:docFlowVisibility,
 			pdfButtonVisibility:pdfButtonVisibility,
 			lineCount:lineCount,
-			islineSelected:islineSelected
+			islineSelected:islineSelected,
+			isRejected:isRejected,
+			SoAvailableQtyVisibility:SoAvailableQtyVisibility
 		};
 
 

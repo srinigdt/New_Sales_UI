@@ -1,132 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<core:View controllerName="gdt.salesui.controller.Detail" xmlns="sap.m"
-	xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form"
-	xmlns:commons="sap.ui.commons" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc"
-	xmlns:it="gdt.salesui.control"
-	xmlns:t="sap.ui.table" xmlns:html="http://www.w3.org/1999/xhtml">
+<core:View controllerName="gdt.salesui.controller.Detail"
+	xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form" xmlns:commons="sap.ui.commons" xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:it="gdt.salesui.control" xmlns:t="sap.ui.table"
+	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page id='detailPage'
 		title="{path: 'currentCustomer>/CustomerName'} ({path: 'currentCustomer>/CustomerID', formatter:'gdt.salesui.util.Formatter.stripZeros'}) - {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}: {path: 'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.stripZeros'} (Last Updated {path:'currentSalesDocument&gt;/LastChangedOn', formatter:'gdt.salesui.util.Formatter.date'})"
-		class="sapUiFioriObjectPage" showNavButton="{device&gt;/isPhone}" 
-		navButtonPress="handleNavButtonPress" >
-        <headerContent>
-            <Button icon='sap-icon://refresh'
-                    tooltip='Force reload of document from SAP'
-                    press='handleRefresh'
-                    enabled='{currentState>/isNotEditMode}'>
-            </Button>
-        </headerContent>
+		class="sapUiFioriObjectPage" showNavButton="{device&gt;/isPhone}"
+		navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Button icon='sap-icon://refresh' tooltip='Force reload of document from SAP'
+				press='handleRefresh' enabled='{currentState>/isNotEditMode}'>
+			</Button>
+		</headerContent>
 		<content>
 			<Panel id='detailPagePnl' class='detailPagePnl'>
 				<IconTabBar id="iconTabBar" select="handleDetailSelect"
 					expanded="{device>/isNoPhone}">
 					<items>
-						<IconTabFilter 
-						    icon="sap-icon://header"
-						    iconColor="Positive" 
-						    key="header"
-							text="{i18n>ICONTABFILTER_HEADER}" >
+						<IconTabFilter icon="sap-icon://header" iconColor="Positive"
+							key="header" text="{i18n>ICONTABFILTER_HEADER}">
 							<content>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailHeader"
 									type="XML" />
 							</content>
-
 						</IconTabFilter>
-						<IconTabFilter 
-						    icon="sap-icon://list"
-						    iconColor="Neutral" 
-						    key="lineItems"
-						    count="{path:'currentSalesDocumentLines>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
-							text="{i18n>ICONTABFILTER_LINEITEMS}" >
+						<IconTabFilter icon="sap-icon://list" iconColor="Neutral"
+							key="lineItems"
+							count="{path:'currentSalesDocumentLines>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
+							text="{i18n>ICONTABFILTER_LINEITEMS}">
 							<content>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailLineItemsTab"
 									type="XML" />
 							</content>
-
 						</IconTabFilter>
-						<IconTabSeparator id='is' icon="sap-icon://open-command-field" visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}" />
-					    <IconTabFilter 
-						    icon="sap-icon://documents" 
-						    iconColor=" "
-						     count="{path:'documentFlow>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"  
-						    key="docflow"
-							text="{i18n>ICONTABFILTER_DOCFLOW}" visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}">
+						<IconTabSeparator id='is'
+							icon="sap-icon://open-command-field"
+							visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}" />
+						<IconTabFilter icon="sap-icon://documents"
+							iconColor=" "
+							count="{path:'documentFlow>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
+							key="docflow" text="{i18n>ICONTABFILTER_DOCFLOW}"
+							visible="{path:'currentSalesDocument&gt;/SalesDocumentID', formatter:'gdt.salesui.util.Formatter.docFlowVisibility'}">
 							<content>
-								<core:Fragment fragmentName="gdt.salesui.fragment.DetailDocFlowTab"  type="XML" />
+								<core:Fragment fragmentName="gdt.salesui.fragment.DetailDocFlowTab"
+									type="XML" />
 							</content>
 						</IconTabFilter>
-						<IconTabSeparator icon=""/>
-						<IconTabFilter 
-						    icon="sap-icon://notes"
-						    iconColor="Critical" 
-						    key="notes"
-							text="{i18n>ICONTABFILTER_NOTES}">
+						<IconTabSeparator icon="" />
+						<IconTabFilter icon="sap-icon://notes" iconColor="Critical"
+							key="notes" text="{i18n>ICONTABFILTER_NOTES}">
 							<content>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailNotes"
 									type="XML" />
 							</content>
 						</IconTabFilter>
-						<IconTabFilter  
-						    icon="sap-icon://attachment"
-						    iconColor="Negative" 
-						    count="{path:'currentAttachments>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
-						    key="attachments"
-							text="{i18n>ICONTABFILTER_ATTACHMENTS}" >
+						<IconTabFilter icon="sap-icon://shipping-status"
+							key="soAvailableQty" id="idSoAvailableQty"
+							visible="{path:'currentState>/isSalesOrder', formatter:'gdt.salesui.util.Formatter.SoAvailableQtyVisibility'}"
+							text="{i18n>ICONTABFILTER_SOAVAILABLEQTY}">
+							<content visible='false'>
+								<core:Fragment fragmentName="gdt.salesui.fragment.DetailSoAvailableQty"
+									type="XML" />
+							</content>
+						</IconTabFilter>
+						<IconTabFilter icon="sap-icon://attachment"
+							iconColor="Negative"
+							count="{path:'currentAttachments>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
+							key="attachments" text="{i18n>ICONTABFILTER_ATTACHMENTS}">
 							<content visible='false'>
 								<core:Fragment fragmentName="gdt.salesui.fragment.DetailAttachments"
 									type="XML" />
 							</content>
 						</IconTabFilter>
-						<IconTabFilter  
-						    icon="sap-icon://shipping-status"
-						    iconColor=" " 
-						    count="{path:'soAvailableQty>/', formatter:'gdt.salesui.util.Formatter.lineCount'}"
-						    key="soAvailableQty"
-						    visible="{= ${currentState>/isSalesOrder} }"
-							text="{i18n>ICONTABFILTER_SOAVAILABLEQTY}" >
-							<content visible='false'>
-								<core:Fragment fragmentName="gdt.salesui.fragment.DetailSoAvailableQty"
-									type="XML" />
-							</content>
-						</IconTabFilter>						
+
 
 					</items>
 				</IconTabBar>
 			</Panel>
-		<Panel  class="sapUiSizeCompact" id="detailDialogs" visible="false">		
-	        <core:Fragment fragmentName="gdt.salesui.fragment.DetailCopyActionSheet" type="XML" /> 
-			<core:Fragment fragmentName="gdt.salesui.fragment.DetailOutputActionSheet" type="XML" />
-			<core:Fragment fragmentName="gdt.salesui.fragment.DetailDeleteActionSheet" type="XML" />
-			<core:Fragment fragmentName="gdt.salesui.fragment.DetailNewViaAddressDialog" type="XML" />
-			<core:Fragment fragmentName="gdt.salesui.fragment.DetailCreateSalesOrderDialog" type="XML"/>
-			<core:Fragment fragmentName="gdt.salesui.fragment.BusyDialog" type="XML"/>
-			<core:Fragment fragmentName="gdt.salesui.fragment.DetailLineItemDeleteDialogConfirm" type="XML"/>
-		</Panel>
-		
+			<Panel class="sapUiSizeCompact" id="detailDialogs" visible="false">
+				<core:Fragment fragmentName="gdt.salesui.fragment.DetailCopyActionSheet"
+					type="XML" />
+				<core:Fragment fragmentName="gdt.salesui.fragment.DetailOutputActionSheet"
+					type="XML" />
+				<core:Fragment fragmentName="gdt.salesui.fragment.DetailDeleteActionSheet"
+					type="XML" />
+				<core:Fragment fragmentName="gdt.salesui.fragment.DetailNewViaAddressDialog"
+					type="XML" />
+				<core:Fragment fragmentName="gdt.salesui.fragment.DetailCreateSalesOrderDialog"
+					type="XML" />
+				<core:Fragment fragmentName="gdt.salesui.fragment.BusyDialog"
+					type="XML" />
+				<core:Fragment
+					fragmentName="gdt.salesui.fragment.DetailLineItemDeleteDialogConfirm"
+					type="XML" />
+			</Panel>
+
 		</content>
 		<footer>
 			<Toolbar class="sapUiSizeCompact">
-				<Button icon="sap-icon://add-activity-2" text="Copy Quote" enabled="{currentState>/isNotEditMode}"  visible="{currentState>/isQuote}" press="handleCopyQuote" />
-               <!--  <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopySOLines" /> --> 
-				 <Button icon="sap-icon://add-activity-2" class="buttoncopy" text="Copy" enabled="{currentState>/isEditMode}"  visible="{currentState>/isSalesOrder}" press="handleCopy" />
-				
+				<Button icon="sap-icon://add-activity-2" text="Copy Quote"
+					enabled="{currentState>/isNotEditMode}" visible="{currentState>/isQuote}"
+					press="handleCopyQuote" />
+				<!-- <Button icon="sap-icon://add-activity-2" text="Copy SO Line Items" 
+					enabled="{currentState>/isEditMode}" visible="{currentState>/isSalesOrder}" 
+					press="handleCopySOLines" /> -->
+				<Button icon="sap-icon://add-activity-2" class="buttoncopy"
+					text="Copy" enabled="{currentState>/isEditMode}" visible="{currentState>/isSalesOrder}"
+					press="handleCopy" />
+
 				<ToolbarSpacer />
 
-				<Button icon="sap-icon://excel-attachment" text="Export {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{currentState>/isNotEditMode}" press="handleExportToExcelRequest" />
-				<Button icon="sap-icon://print" text="Print {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{currentState>/isNotEditMode}" press="handleOutputRequest" />
-				<Button icon="sap-icon://sys-cancel" type="Reject" text="{i18n>CancelButtonText}" visible="{currentState>/isEditMode}" press="handleEditCancelButtonPress" />
-				<Button icon="sap-icon://system-exit" type="Reject" text="{i18n>ExitButtonText}" visible="{currentState>/isNotEditMode}" press="handleExitButtonPress" />
-				<Button icon="sap-icon://delete" class="buttondelete" text="{i18n>Delete}" visible="{= (!!${currentState>/isEditMode} &amp;&amp; ( !!${currentState>/isPendingSalesOrder} || !!${currentState>/isQuote} )  )}" enabled="{currentState>/isEditMode}"  press="handleDeleteRequest" />
-				<!-- <Button icon="sap-icon://delete" type="Emphasized" text="Delete {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" visible="{= (!!${currentState>/isEditMode} &amp;&amp; !!${currentState>/canDelete}) }" enabled="{currentState>/canDelete}"  press="handleDeleteButtonPress" /> -->
-				<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveButtonText}" visible="{currentState>/isEditMode}" press="handleSaveButtonPress" />
-				<!--<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveAndExitButtonText}" visible="{currentState>/isEditMode}" press="handleSaveAndExitButtonPress" />-->
-				<Button icon="sap-icon://edit" type="Emphasized" text="{i18n>EditButtonText}" visible="{currentState>/canEdit}" press="handleEditCancelButtonPress" />
-				<Button type="Accept" icon="sap-icon://create-session" text="Create Sales Order" press="handleCreateSalesOrder" visible="{= ${currentState>/isQuote} }"/> <!-- enabled="{path : 'currentState>/isNotEditMode'}" ... &amp;&amp; ${currentState>/isNotEditMode} -->
-				<Button type="Accept" icon="sap-icon://create-session" text="Submit Sales Order" press="handleSubmitSalesOrder"  visible="{= ${currentState>/isPendingSalesOrder} }"/> <!-- enabled="{path : 'currentState>/isNotEditMode'}" ... &amp;&amp; ${currentState>/isNotEditMode} -->
+				<Button icon="sap-icon://excel-attachment"
+					text="Export {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}"
+					visible="{currentState>/isNotEditMode}" press="handleExportToExcelRequest" />
+				<Button icon="sap-icon://print"
+					text="Print {path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}"
+					visible="{currentState>/isNotEditMode}" press="handleOutputRequest" />
+				<Button icon="sap-icon://sys-cancel" type="Reject"
+					text="{i18n>CancelButtonText}" visible="{currentState>/isEditMode}"
+					press="handleEditCancelButtonPress" />
+				<Button icon="sap-icon://system-exit" type="Reject"
+					text="{i18n>ExitButtonText}" visible="{currentState>/isNotEditMode}"
+					press="handleExitButtonPress" />
+				<Button icon="sap-icon://delete" class="buttondelete" text="{i18n>Delete}"
+					visible="{= (!!${currentState>/isEditMode} &amp;&amp; ( !!${currentState>/isPendingSalesOrder} || !!${currentState>/isQuote} )  )}"
+					enabled="{currentState>/isEditMode}" press="handleDeleteRequest" />
+				<!-- <Button icon="sap-icon://delete" type="Emphasized" text="Delete 
+					{path:'currentSalesDocument&gt;/DocumentCategory', formatter:'gdt.salesui.util.Formatter.documentCategory'}" 
+					visible="{= (!!${currentState>/isEditMode} &amp;&amp; !!${currentState>/canDelete}) 
+					}" enabled="{currentState>/canDelete}" press="handleDeleteButtonPress" /> -->
+				<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveButtonText}"
+					visible="{currentState>/isEditMode}" press="handleSaveButtonPress" />
+				<!--<Button icon="sap-icon://save" type="Emphasized" text="{i18n>SaveAndExitButtonText}" 
+					visible="{currentState>/isEditMode}" press="handleSaveAndExitButtonPress" 
+					/> -->
+				<Button icon="sap-icon://edit" type="Emphasized" text="{i18n>EditButtonText}"
+					visible="{currentState>/canEdit}" press="handleEditCancelButtonPress" />
+				<Button type="Accept" icon="sap-icon://create-session" text="Create Sales Order"
+					press="handleCreateSalesOrder" visible="{= ${currentState>/isQuote} }" /> <!-- enabled="{path : 'currentState>/isNotEditMode'}" ... &amp;&amp; ${currentState>/isNotEditMode} -->
+				<Button type="Accept" icon="sap-icon://create-session" text="Submit Sales Order"
+					press="handleSubmitSalesOrder" visible="{= ${currentState>/isPendingSalesOrder} }" /> <!-- enabled="{path : 'currentState>/isNotEditMode'}" ... &amp;&amp; ${currentState>/isNotEditMode} -->
 			</Toolbar>
 		</footer>
 		<Panel visible="false">
-			<BusyDialog id='busyDlg' title="Please wait..." text="Please wait..." showCancelButton="false"/>
-			<BusyDialog id='CopybusyDlg' title="Please wait..." text="Please wait.LineItems are copying..." showCancelButton="false"/>
+			<BusyDialog id='busyDlg' title="Please wait..." text="Please wait..."
+				showCancelButton="false" />
+			<BusyDialog id='CopybusyDlg' title="Please wait..."
+				text="Please wait.LineItems are copying..." showCancelButton="false" />
 		</Panel>
 	</Page>
 </core:View>
