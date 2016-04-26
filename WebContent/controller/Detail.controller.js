@@ -45,7 +45,7 @@ gdt.salesui.util.Controller
                     	view.setModel(core.getModel('currentCopySalesDocumentLines'), "currentCopySalesDocumentLines" );
                     	view.setModel(core.getModel('soAvailableQty'), "soAvailableQty" );
 						view.setModel(core.getModel('lineItemVariant'),"lineItemVariant");
-                    	view.setModel(core.getModel('layoutFields'),"layoutFields");
+                    	view.setModel(_.clone(core.getModel('layoutFields')),"layoutFields");
                     	view.setModel(core.getModel('variantFields'),"variantFields");
                     	busyDlg = view.byId('busyDlg');
 						componentId = sap.ui.core.Component.getOwnerIdFor(view),
@@ -228,11 +228,15 @@ gdt.salesui.util.Controller
                         _loadAndSetVariants( );
                        }, 
                        
+                       
+                       
                     handleCreateVariant = function(view,that){
                    if(!that._oVariantCreateDialog){
                 	   that._oVariantCreateDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemsCreateVariantDialog", that);
-                    	view.addDependent(this._oVariantCreateDialog);	
-                                                  }		 
+                    	view.addDependent(that._oVariantCreateDialog);	
+                                                  }
+                       view.setModel(_.clone(core.getModel('layoutFields')),"layoutFields"); //cleaing the previous data
+                       view.getModel("variantFields").setData([]); //cleaing the previous data
                        that._oVariantCreateDialog.open( );                    	   
                     	   
                        },
@@ -264,15 +268,27 @@ gdt.salesui.util.Controller
                     	   }
                     	   
                     	   if(def){
+                    		   var data;
                     		   var defData = _.find(view.getModel('lineItemVariant').getData() , function(line){ return line.key == def; });
-                    		   data={
+                    		  if(defData){
+                    		  data={
                               	        "DefaultX":true,          			          			   
                              			"VariantId":defData.key,
-                              			"Vbtyp":"S"  ,
+                              			"Vbtyp":"S" ,
                               			"VariantText":defData.text,
                               			"Columns": defData.columns
                               			};
-                    		   datacontext.variant.update(data);
+                    		  
+                    		  } else{
+                    			  data={
+                               	        "DefaultX":true,
+                                	    "VariantId":'STANDARD',
+                                	    "Vbtyp":"S",
+                                	    "VariantText":'Standard',
+                                	    "Columns": ''
+                                	   };	  
+                    		  }
+                    		  datacontext.variant.update(data);   
                     	   }
                     	   
                     	   _loadAndSetVariants( );
@@ -2930,6 +2946,10 @@ gdt.salesui.util.Controller
 			}
 		},
 		
+//**************************************************************************************************
+//            C O P Y  O F  S A L E S  O R D E R   &   C O P Y  O F SO L I N E  I T E M S
+//                                  -->  Begin of Change  <--		
+//**************************************************************************************************		
 //Begin of Change:SXVASAMSETTI:Copy SO Selection
 // Begin of Change: Copy of Selected SO Items and append to the list :SXVASAMSETTI			
 		handleCopyPopupToggleSelection=function(event){
@@ -2952,10 +2972,68 @@ gdt.salesui.util.Controller
 				actionSheet.openBy(event.getSource());
 			}	
 		},
-		handleCopySODialog=function(event){
-			
-		},
 		
+// Begin of Change: Sales Order Copy		
+		handleCopySODialog=function(event){
+			var today = new Date(Date.now()),
+			today_plus30 = new Date(Date.now()),
+			lines = [],
+			userid = core.getModel('systemInfo').getProperty('/Uname'),
+			header = view.getModel('currentSalesDocument').getData(),
+			salesDocumentLines = view.getModel('currentSalesDocumentLines');
+
+		today_plus30.setDate(today_plus30.getDate() + 30);
+
+		_toggleEdit(false);		
+		header.ReferencedBy = header.SalesDocumentID;
+		header.SalesDocumentID = '0000000000';
+		header.CreatedBy = userid;
+		header.CreatedOn = today;
+		header.Description = '';
+		header.HeaderText = '';
+		header.RequestedBy = '';
+		header.ValidFrom = today;
+		header.ValidTo = today_plus30;
+		header.ShipToID = header.CustomerID;
+		header.Notes = '';
+		header.PurchasingNotes = '';
+		header.WarehouseNotes = '';
+		header.BOLNotes = '';
+		header.BillingNotes = '';
+		header.Attention = '';
+
+		lines = _.filter(salesDocumentLines.getData(), function (line) { return !line.WBSElement; });
+
+		lines.forEach(function (line) {
+			line.SalesDocumentID = '0000000000';
+			line.ShipToID = header.CustomerID;
+			line.VendorDeliveryNotes = '';
+			line.BillingNotes = '';
+			line.HasNotesFlag = false;
+			line.DealID = '';
+			line.CreatedBy = userid;
+			line.CreatedOn = today;
+			line.LastUpdatedOn = today;
+			line.UpdatedBy = userid;
+			line.ItemCategory = line.ItemCategory.replace('Y','Z');
+          //  _determineItemCategoryForDropShip(line);
+		});
+
+
+		view.getModel('currentSalesDocument').setData(header);
+		salesDocumentLines.setData(lines);
+		_calculateTotals();
+
+		sap.m.MessageToast.show("Edit new SO and Save or Cancel when done");			
+		},
+//End of Change: Sales Order Copy
+		handleCopyDsToBroughtIn=function(){
+			sap.m.MessageToast.show("This Feature is currently not available");	
+		},
+		handleCopyBroughtInToDs=function(){
+			sap.m.MessageToast.show("This Feature is currently not available");		
+		},
+//Begin of Change: Sales Order Line Items Copy		
 		handleCopySOLineItemsDialog = function(event) {
 
 			var copyLines = (JSON.parse(JSON.stringify(view.getModel('currentSalesDocumentLines').getData()))) ;
@@ -3003,6 +3081,7 @@ gdt.salesui.util.Controller
 				lines = [],
 				itemIDs = [],
 				checkID = '',
+				lineLevels=0,
 				copyLines = [],
 			    selectedLines = [],
 				maxLine;		
@@ -3035,24 +3114,16 @@ gdt.salesui.util.Controller
 				if(checkID != itemIDs[0] ){ 
 					maxLineID++ ; 
 					checkID = itemIDs[0]; 
-					parentLineID = maxSDLineID
-				    line.ParentLineID = '000000';
 					decimalVal = 0;
 				}
-				else{
-			    line.ParentLineID = parentLineID;	
-				};
-	/*			if(itemIDs.length > 3){
-					line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1] + '.' + itemIDs[2] + '.' + itemIDs[3];
+				
+				lineLevels = line.ZZLineID.split('.');
+				for(n = 1;n < lineLevels.length; n++){
+					if(n == 1 ){ line.StructuredLineID =  maxLineID + '.' + lineLevels[n] ; continue; }
+					line.StructuredLineID = line.StructuredLineID + '.' + lineLevels[n]	;
 				}
-				else if (itemIDs.length > 2){
-				line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1] + '.' + itemIDs[2] ;
-				}
-				else{
-				line.StructuredLineID = line.ZZLineID  = maxLineID + '.' + itemIDs[1];
-				};	*/		
-	//*******************
-				line.StructuredLineID = line.ZZLineID = maxLineID + '.' + decimalVal ; decimalVal++;
+				if(n==1) line.StructuredLineID =  maxLineID; 
+				line.ZZLineID = line.StructuredLineID = line.StructuredLineID.toString( );
 				line.DeliveryDate  = new Date( line.DeliveryDate );
 				line.CreatedBy     = userid;
 				line.CreatedOn     = today;
@@ -3064,16 +3135,45 @@ gdt.salesui.util.Controller
 				line.ItemCategory = line.ItemCategory.replace('Y','Z');
 //				_determineItemCategoryForDropShip(line,false);
 				lines.push(line);
+				
 			});
 
 			view.getModel('currentSalesDocumentLines').setData(lines);
+			
+			_reassignParentId();
 			_calculateTotals();
 			//view.byId('detailLineItemSelectDialog').exit();
 			this._oDialog.destroy();
 			sap.m.MessageToast.show("Line Items are copied and appended to the List");
 		},
-	//End of Change: Copy SO: SXVASAMSETTI			
 		
+		_reassignParentId=function(){
+			var lines = view.getModel('currentSalesDocumentLines').getData();
+			_.each(lines,function(line){
+			 var parentPartIdx = (line.StructuredLineID && line.StructuredLineID.lastIndexOf) ? line.StructuredLineID.lastIndexOf(".") : -1,
+			topParentPartIdx = (line.StructuredLineID && line.StructuredLineID.indexOf) ? line.StructuredLineID.indexOf(".") : -1,
+			parentPart = (parentPartIdx > 0) ? line.StructuredLineID.substring(0,parentPartIdx) : "",
+			childPart = (parentPartIdx > 0) ? line.StructuredLineID.substring(parentPartIdx + 1) : line.StructuredLineID;
+
+		if (!(parentPartIdx == -1 || (parentPartIdx == topParentPartIdx && parseInt(childPart) == 0))) {
+			// This line id indicates that there is a parent line
+			_rows = _findRowByStructuredLineID(parentPart);
+			if (!!_rows && _rows.length >= 1) {
+				parentRow = _rows[0];
+				line.ParentLineID = parentRow.SalesDocumentLineID;
+			}
+		} else {
+			line.ParentLineID = '000000';
+		}
+			});
+		view.getModel('currentSalesDocumentLines').setData(lines);
+		},
+		
+	//End of Change: Copy SO: SXVASAMSETTI			
+//**************************************************************************************************
+//      C O P Y  O F  S A L E S  O R D E R   &   C O P Y  O F SO L I N E  I T E M S
+//                            -->  End of Change  <--		
+//**************************************************************************************************		
 		
 
 		

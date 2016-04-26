@@ -20,7 +20,7 @@ sap.ui.core.UIComponent
                         config : {
                             resourceBundle : "i18n/messageBundle.properties",
                             titleResource : "SHELL_TITLE",
-
+                            fullWidth:true,
                             serviceConfig : {
                                 name : "ZCUSTOMERS_SRV",
                                 // serviceUrl:

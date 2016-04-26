@@ -8,6 +8,8 @@
     placement="Top">
     <buttons>
       <Button id='copySOLineItems' press='handleCopySOLineItemsDialog' text="{i18n>CopySoLineItems}" icon="sap-icon://sales-order-item" />
+      <Button id='copySOLineItems_ds_bi' press='handleCopyDsToBroughtIn' text="{i18n>CopyDsToBroughtIn}" icon="sap-icon://sales-order-item" />
+      <Button id='copySOLineItems_bi_ds' press='handleCopyBroughtInToDs' text="{i18n>CopyBroughtInToDs}" icon="sap-icon://sales-order-item" />
       <Button id='copySO'  press='handleCopySODialog'  text="{i18n>CopySoDocument}" icon="sap-icon://sales-order" />
     </buttons>
   </ActionSheet>
