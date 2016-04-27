@@ -12,11 +12,12 @@ $.sap.require("gdt.salesui.util.AddressHelper");
 $.sap.require("gdt.salesui.util.Controller");
 $.sap.require("gdt.salesui.util.Formatter");
 $.sap.require("gdt.salesui.util.Sharepoint");
+$.sap.require("gdt.salesui.util.VariantHandler");
 $.sap.require("gdt.salesui.vm.SalesDocumentDetail");
 
 gdt.salesui.util.Controller
         .extend(
-                "gdt.salesui.controller.Detail", function($, core, _, importer, datacontext, addressHelper, sharepoint, formatter, detailsvm)
+                "gdt.salesui.controller.Detail", function($, core, _, importer, datacontext, addressHelper, sharepoint, formatter, detailsvm,variantHandler)
                 {
                 	var copies = core.getModel('copies'),
 						materialSeries_FinishedGoods = 1,
@@ -53,7 +54,8 @@ gdt.salesui.util.Controller
                     	router = this.getRouter();
                     	page = view.byId('detailPage');
                     	table = view.byId('lineItemsTable');
-                    	_manage_variant(view,this);
+                    //	_manage_variant(view,this);
+                    	variantHandler.initialize_variant(view,this);
                     	oldTableOnAfterRendering = table.onAfterRendering;
                     	 
                     	table.onAfterRendering = function() {
@@ -193,114 +195,14 @@ gdt.salesui.util.Controller
 //*****************************************************************************************************                    
 //---------------------------------L A Y O U T -- V A R I A N T----------------------------------------
 //                                    Begin of Code Change
-//*****************************************************************************************************                    
-                    _manage_variant = function(view,that){
-                        variantToolbar = sap.ui.getCore().byId("__toolbar3");
-                         defaultVariantContents = variantToolbar.removeAllContent( );
-                       	
-                         oVCreate = new sap.m.Button({
-              				 id:"cv",           				 
-              				 text:"Create Variant",
-              				 press:function(){handleCreateVariant(view,that)}
-              			     });
-                       	
-                         oVManage = new sap.m.Button({
-              				 id:"mv",           				 
-              				 text:"Manage Variant" ,
-              				 press:function(){handleManageVariant(view,that) }
-              			     })	;
-                        
-                        variantToolbar.addContent(defaultVariantContents[0]);	
-                        variantToolbar.addContent(oVCreate);	
-                       // variantToolbar.addContent(oVManage);
-                        variantToolbar.addContent(defaultVariantContents[1]);
-   
-                        // setting standard variant Columns
-                        var table = view.byId("lineItemsTable");
-                        var model = core.getModel("variantColumns");
-                        var data = model.getData( );
-                        var columns = table.getColumns( );
-                        var newRow = {
-                        		"standard" : columns
-                        };
-                        data.push(newRow);
-                        model.setData(data);
-                        _loadAndSetVariants( );
-                       }, 
-                       
-                       
-                       
-                    handleCreateVariant = function(view,that){
-                   if(!that._oVariantCreateDialog){
-                	   that._oVariantCreateDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemsCreateVariantDialog", that);
-                    	view.addDependent(that._oVariantCreateDialog);	
-                                                  }
-                       view.setModel(_.clone(core.getModel('layoutFields')),"layoutFields"); //cleaing the previous data
-                       view.getModel("variantFields").setData([]); //cleaing the previous data
-                       that._oVariantCreateDialog.open( );                    	   
-                    	   
-                       },
-                    handleManageVariant = function(event){
-                    	   var params  = event.getParameters( );
-                    	   var renamed = params.renamed;
-                    	   var deleted = params.deleted;
-                    	   var def     = params.def;
-                    	// Deleting Variants 
-                    	   if(deleted.length > 0){
-                    		   for(i=0;i<deleted.length;i++)
-                    		   datacontext.variant.remove(deleted[i]) ;  
-                    	   }
-                    	//updating Variants
-                    	   if(renamed.length > 0){
-                    		   var data;
-                    		   var lines = view.getModel('lineItemVariant').getData();
-                    		   for(i=0;i<renamed.length;i++){
-                    		   var renamedElement = _.find(lines , function(line){ return line.key == renamed[i].key; });
-                    	  data={
-                       	        "DefaultX":false,          			          			   
-                      			"VariantId":renamedElement.key,
-                       			"Vbtyp":"S"  ,
-                       			"VariantText":renamed[i].name,
-                       			"Columns": renamedElement.columns
-                       			};
-                    	 datacontext.variant.update(data);
-                    		 }
-                    	   }
-                    	   
-                    	   if(def){
-                    		   var data;
-                    		   var defData = _.find(view.getModel('lineItemVariant').getData() , function(line){ return line.key == def; });
-                    		  if(defData){
-                    		  data={
-                              	        "DefaultX":true,          			          			   
-                             			"VariantId":defData.key,
-                              			"Vbtyp":"S" ,
-                              			"VariantText":defData.text,
-                              			"Columns": defData.columns
-                              			};
-                    		  
-                    		  } else{
-                    			  data={
-                               	        "DefaultX":true,
-                                	    "VariantId":'STANDARD',
-                                	    "Vbtyp":"S",
-                                	    "VariantText":'Standard',
-                                	    "Columns": ''
-                                	   };	  
-                    		  }
-                    		  datacontext.variant.update(data);   
-                    	   }
-                    	   
-                    	   _loadAndSetVariants( );
-                       },
-                    handleSelectVariant = function(event){
-                    	   _setDefaultVariantLayout(null,event.getParameter("key"));	   
-                       }   
+//*****************************************************************************************************                                       
+                   handleSelectVariant = function(event){
+                    	   variantHandler._setDefaultVariantLayout(null,event.getParameter("key"),view);	   
+                       } ,  
                    handleCancelVariant = function(event) {
                     	   this._oVariantCreateDialog.close( );      
                        } , 
-                       
-  
+                         
                    handleConfirmCreateVariant = function(event) {
                     	   if(view.getModel("variantFields").getData( ).length == 0 )  return sap.m.MessageToast.show("Please select fields for Variant or Cancel to continue");
                        if(!this._oVariantNameSaveDialog){
@@ -311,188 +213,42 @@ gdt.salesui.util.Controller
                        } ,
                        
                    handleVariantNameSave=function(event){                    
-                       _saveAndSetVariant();                        
-                               } ,           
-                   handleVariantNameCancel=function(event){                    
-                   view.getController( )._oVariantNameSaveDialog.close( );	   
-                               } ,              
-                  _setDefaultVariantLayout = function(columns,key){
-                         if(key){
-                        	 var variantColumns = _.find(view.getModel('lineItemVariant').getData() , function(line){ return line.key == key; }); 
-                         } 
-                         var column;
-                         var table = view.byId("lineItemsTable");
-                         var data = core.getModel("variantColumns").getData( );
-                         var standardVariantColumns =  _.pluck(data,"standard")[0]; 	                         	  
-                         var removedColumns = table.removeAllColumns( );
-                         if(variantColumns){
-                         for(i=0;i<variantColumns.layoutColumnIds.length;i++){
-                        	 column = _.find(standardVariantColumns, function(variantColumn){ return (variantColumn.sId.indexOf(variantColumns.layoutColumnIds[i]) > 0); }); 
-                        	 if(column) table.addColumn(column); 
-                              }
-                         }else{
-                         _.each(standardVariantColumns,function(column){table.addColumn(column)});	 
-                         }
-                         
-                      	  view.byId("variantManagement").setDefaultVariantKey(key);
-                       	  view.byId("variantManagement").setInitialSelectionKey(key);
-                               },
+                       variantHandler.handleSaveAndSetVariant(event,view);                        
+                   } , 
                                
-                         _saveAndSetVariant=function(){                    	                     	  
-                           var column,variantColumnsIds;
-                           var variantName = core.byId("idVariantName").getValue( );
-                           if(variantName == " "){ core.byId("idVariantName").setValueState("Error"); return sap.m.MessageToast.show("Please enter Variant Name"); }
-                           var variantDefault = core.byId("idVariantDefault").getSelected( );
-                         
-                        	  var sortedData = _.sortBy(view.getModel("variantFields").getData( ), function(data){ return data.updown; });
-                       	   // getting variant Columns
-                              var table = view.byId("lineItemsTable");
-                              var data = core.getModel("variantColumns").getData( );
-                              var standardVariantColumns =  _.pluck(data,"standard")[0]; 	                         	  
-                           if(variantDefault){  var removedColumns = table.removeAllColumns( ); }
-                    	   _.each(sortedData,function(data){
-                    		   if(variantColumnsIds == undefined) 
-                    			   variantColumnsIds = data.fieldKey; else  variantColumnsIds =  variantColumnsIds + '/' +  data.fieldKey ;
-                    	   if(variantDefault){   column = _.find(standardVariantColumns, function(variantColumn){ return (variantColumn.sId.indexOf(data.fieldKey) > 0); });
-                    	       if(column) table.addColumn(column); }
-                    	   });
-                          
-                    	   
-                    	   view.getController( )._oVariantNameSaveDialog.close( );
-                    	   view.getController( )._oVariantCreateDialog.close( );
-                    	 var data={
-                    	        "DefaultX":variantDefault,          			          			   
-                   			    "VariantId":"CREATE",
-                    			"Vbtyp":"S"  ,
-                    			"VariantText":variantName,
-                    			"Columns": variantColumnsIds
-                    			 };
-                    	    //data.DefaultX = data.DefaultX.toString();
-                    	   _saveVariant(data).always(function(data){
-                    		busyDlg.close();
-                    		});		
-                       },
-                       
-                  _saveVariant = function(data){
-                    	   var deferred =  $.Deferred(function(defer) {
-                           	busyDlg.setText('Saving Variant into SAP.');
-                           	busyDlg.open();		
-                       	datacontext.variant.create(data).done( function(data){
-                            defer.resolve(data );
-                       	}).fail(function(msg){
-                       		defer.reject(msg);
-                       	})
-                       	}).done(function(){
-                       		sap.m.MessageToast.show("Variant is saved");
-                       	 _loadAndSetVariants( );
-                       	}).fail( );
-                       	
-                       	return deferred;
-                  }  , 
-                  
-                  _loadAndSetVariants = function(setInfo){
-                	  var deferred =  $.Deferred(function(defer) {
-                		  if(setInfo){
-                         	busyDlg.setText('Reloading Variant from SAP');
-                         	busyDlg.open();
-                		  }
-                     	datacontext.variant.load( ).done( function(data){
-                       	  defaultVariant =_.find(view.getModel('lineItemVariant').getData() , function(line){ return line.defaultX == true; })
-                   		if(defaultVariant) var key = defaultVariant.key;
-                       	  _setDefaultVariantLayout(null,key);
-                          defer.resolve(data);
-                     	}).fail(function(msg){
-                     		defer.reject(msg);
-                     	})
-                     	}).done(function(){
-                     		//sap.m.MessageToast.show("Variants loaded");
-                     	}).fail( );
-                     	
-                     	return deferred;	  
-                  },
-                  
+                   handleVariantNameCancel=function(event){                    
+                       view.getController( )._oVariantNameSaveDialog.close( );	   
+                   } ,  
+                                
                   handleFieldSort = function(event) {
                    var aSorters = [ ];
                    oLayoutFieldTable = event.getSource( ).getParent( ).getParent( );
                    var oBinding = oLayoutFieldTable.getBinding("items");
                    aSorters.push( new sap.ui.model.Sorter("order") );
                    oBinding.sort(aSorters);
-                       },   
+                       },  
+                 
+                 handleManageVariant = function(event){
+                    	   variantHandler.manageVariant(event,view);	   
+                       },      
                  handleAddFieldtoVariant = function(event){
-                    	   var model= this.getView().getModel("layoutFields");
-                    	   var oLayoutData = model.getData( );
-                    	   var path = event.getSource().getParent().getBindingContextPath();
-                    	   var element = model.getProperty(path);
-                           var filterData = _.filter(oLayoutData, function(row){ return row.fieldKey != element.fieldKey });
-                           model.setData(filterData);
-                           var oVariantModel= this.getView().getModel("variantFields");
-                    	   var oVariantData =  oVariantModel.getData( );
-                    	   element.updown = oVariantData.length + 1;
-                    	   oVariantData.push(element) ;
-                    	   oVariantModel.setData( oVariantData );
+                    	   variantHandler.addFieldtoVariant(event,this);
                        } ,
-                       handleRemoveFieldFromVariant = function(event) {
-                    	   var model= this.getView().getModel("variantFields");
-                    	   var oLayoutData = model.getData( );
-                    	   var path = event.getSource().getParent().getBindingContextPath();
-                    	   var element = model.getProperty(path);
-                           var filterData = _.filter(oLayoutData, function(row){ return row.fieldKey != element.fieldKey });
-                           sortedData = _.sortBy(filterData, function(data){ return data.updown; });
-                           _.each( sortedData,function(data,n){data.updown = n + 1;});
-                           model.setData( sortedData);
-                           var oVariantModel= this.getView().getModel("layoutFields");
-                    	   var oVariantData =  oVariantModel.getData( );
-                    	   element.updown = 0;
-                    	   oVariantData.push(element) ;
-                    	   oVariantModel.setData( oVariantData );                   	   
+                 handleRemoveFieldFromVariant = function(event) {
+                    	   variantHandler.removeFieldFromVariant(event,this);
+               	   
                        } , 
-                       handleMoveUpFieldInVariant=function(event){
-                    	   var model= this.getView().getModel("variantFields");
-                    	   var oVariantData = model.getData( );
-                    	   var path = event.getSource().getParent().getBindingContextPath();
-                    	   var currentElement = model.getProperty(path);
-                    	   var currIndex = currentElement.updown;
-                    	   if(currIndex != 1){                   		   
-                    		   var preIndex   = currIndex - 1;
-                    		   var predataElement = _.filter(oVariantData, function(element){ return ( element.updown == preIndex ) } );
-                    	       var filterData = _.filter(oVariantData, function(element){ return ( element.updown != currentElement.updown && element.updown != preIndex ); });
-                    	       currentElement.updown = currIndex - 1;
-                    	       var preElement = predataElement[0];
-                    	       preElement.updown = currIndex ;
-                    	       filterData.push(currentElement);
-                    	       filterData.push(preElement);
-                    	       model.setData(filterData);
-                    	       model.refresh("variantFields");
-                    	   }
-                           
+                 handleMoveUpFieldInVariant=function(event){
+                    	   variantHandler.moveUpFieldInVariant(event,this);                           
                        },
-                       handleMoveDownFieldInVariant=function(event){
-                    	   var model= this.getView().getModel("variantFields");
-                    	   var oVariantData = model.getData( );
-                    	   var path = event.getSource().getParent().getBindingContextPath();
-                    	   var currentElement = model.getProperty(path);
-                    	   var currIndex = currentElement.updown;
-                    	   if(currIndex != oVariantData.length){                   		   
-                    		   var postIndex   = currIndex + 1;
-                    		   var postdataElement = _.filter(oVariantData, function(element){ return ( element.updown == postIndex ) } );
-                    	       var filterData = _.filter(oVariantData, function(element){ return ( element.updown != currentElement.updown && element.updown != postIndex ); });
-                    	       currentElement.updown = currIndex + 1;
-                    	       var postElement = postdataElement[0];
-                    	       postElement.updown = currIndex ;
-                    	       filterData.push(currentElement);
-                    	       filterData.push(postElement);
-                    	       model.setData(filterData);
-                    	       model.refresh("variantFields");
-                    	   }                    	   
+                 handleMoveDownFieldInVariant=function(event){
+                    	   variantHandler.moveDownFieldInVariant(event,this);  	   
                        }, 
 //*****************************************************************************************************                    
 //---------------------------------L A Y O U T -- V A R I A N T----------------------------------------
 //                                     End of code Change
 //*****************************************************************************************************                             
-                       
-                       
-                       
-                       
+                                                                                            
                     onBeforeRendering = function(event) {
                     	var qPnl = view.byId('detailQuotePageHeader'),
                 			sPnl = view.byId('detailSalesOrderPageHeader');
@@ -500,18 +256,13 @@ gdt.salesui.util.Controller
                     	qPnl.attachEvent('expand', _resizeTable, null);
                     	sPnl.attachEvent('expand', _resizeTable, null);
                     	$(window).resize(_resizeTable);
-                    	_resizeTable();
-                    	
+                    	_resizeTable();                    	
                     },
                     
                     onAfterRendering = function(event) {
                     	var linesModel = core.getModel('currentSalesDocumentLines');
-
-                    	linesModel.bindList('/',null).attachChange(_handleDetailListChange);  
-                    	
-
+                    	linesModel.bindList('/',null).attachChange(_handleDetailListChange);                      	
                     },
-                    
                     
                     onAfterTableOnAfterRendering = function() {
                         _calculateTotals();
@@ -3551,6 +3302,7 @@ gdt.salesui.util.Controller
 			var tableModel = view.getModel('currentSalesDocumentLines') ;
 			var tabledata  = tableModel.getData( );
            _.each(tabledata,function(row){
+        	   if((row.ItemCategory.substring(0,1) == 'Z') || ( !!row.ReasonForRejection && !row.MarkedAsDeleted ) )
 			row.ItemCategory = (event.getParameter('selected')) ? _determineItemCategoryForDropShip(row) : _determineItemCategoryForBroughtIn(row);
            });
            tableModel.setData(tabledata);
@@ -3560,6 +3312,7 @@ gdt.salesui.util.Controller
 			var tableModel = view.getModel('currentSalesDocumentLines') ;			
 			var tabledata  = tableModel.getData( );
            _.each(tabledata,function(row){
+        	   if((row.ItemCategory.substring(0,1) == 'Z') || ( !!row.ReasonForRejection && !row.MarkedAsDeleted ) )
         	   row.ItemCategory = (event.getParameter('selected')) ? _determineItemCategoryForStaging(row) : _determineItemCategoryForBroughtIn(row);
            });
            tableModel.setData(tabledata);			
@@ -4789,7 +4542,7 @@ gdt.salesui.util.Controller
 			handleConfirmCopySOLines:handleConfirmCopySOLines,
 			handleCopyClose:handleCopyClose,
 			handleCopyPopupToggleSelection:handleCopyPopupToggleSelection,
-			handleCreateVariant:handleCreateVariant,
+		//	handleCreateVariant:handleCreateVariant,
 			handleManageVariant:handleManageVariant,
 			handleSelectVariant:handleSelectVariant,
 			handleCancelVariant:handleCancelVariant,
@@ -4807,4 +4560,4 @@ gdt.salesui.util.Controller
 
 
 
-	}($, sap.ui.getCore(), _, gdt.salesui.data.DataImporter, gdt.salesui.data.DataContext, gdt.salesui.util.AddressHelper, gdt.salesui.util.Sharepoint, gdt.salesui.util.Formatter, gdt.salesui.vm.SalesDocumentDetail));
+	}($, sap.ui.getCore(), _, gdt.salesui.data.DataImporter, gdt.salesui.data.DataContext, gdt.salesui.util.AddressHelper, gdt.salesui.util.Sharepoint, gdt.salesui.util.Formatter, gdt.salesui.vm.SalesDocumentDetail,gdt.salesui.util.VariantHandler));
