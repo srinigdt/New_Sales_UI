@@ -18,14 +18,16 @@ gdt.salesui.data.DataService_Variant = (function($, core, _, helper) {
 			}).promise();		
 		},
 		_fixDataDown = function(dataSet) {
-			var columnIds,data;
+			var columnIds,data,GlobalX;
 			var lineItemVariant = [];
-		    _.each(dataSet,function(data){	
+		    _.each(dataSet,function(data){
+		    	GlobalX = false;
+		    	if(data.GlobalX && core.getModel('systemInfo').getProperty('/Uname') != data.Userid) GlobalX=true;
 		    	data={
 		    		text: data.VariantText,
 		    		key : data.VariantId,
-		    		global:false,
-		    		readonly:false,
+		    		global:data.GlobalX,
+		    		readonly:GlobalX,
 		    		lifecyclePackage:"",
 		    		accessoptions:data.VariantId,
 		    		layoutColumnIds:data.Columns.split('/'),

@@ -158,6 +158,7 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 			if (defData) {
 				data = {
 					"DefaultX" : true,
+					"GlobalX":defData.global,
 					"VariantId" : defData.key,
 					"Vbtyp" : "S",
 					"VariantText" : defData.text,
@@ -182,12 +183,12 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 	handleSaveAndSetVariant = function(event, view) {
 		var column, variantColumnsIds;
 		var variantName = core.byId("idVariantName").getValue();
-		if (variantName == " ") {
+		if (variantName == "") {
 			core.byId("idVariantName").setValueState("Error");
 			return sap.m.MessageToast.show("Please enter Variant Name");
 		}
 		var variantDefault = core.byId("idVariantDefault").getSelected();
-
+        var variantGlobal  = core.byId("idVariantGlobal").getSelected();
 		var sortedData = _.sortBy(view.getModel("variantFields").getData(),
 				function(data) {
 					return data.updown;
@@ -219,12 +220,12 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 		var busyDlg = view.byId('busyDlg');
 		var data = {
 			"DefaultX" : variantDefault,
+			"GlobalX":variantGlobal,
 			"VariantId" : "CREATE",
 			"Vbtyp" : "S",
 			"VariantText" : variantName,
 			"Columns" : variantColumnsIds
 		};
-		// data.DefaultX = data.DefaultX.toString();
 		_saveVariant(data, busyDlg, view).always(function(data) {
 			busyDlg.close();
 		});

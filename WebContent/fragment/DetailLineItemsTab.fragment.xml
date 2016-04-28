@@ -20,7 +20,7 @@
 				<Toolbar>	
 			<v:VariantManagement id="variantManagement" variantItems="{lineItemVariant>/}" select="handleSelectVariant" enabled="true" manage="handleManageVariant" save="handleSaveVariant" showExecuteOnSelection="false" showShare="false">
 			<v:variantItems>
-				<v:VariantItem text="{lineItemVariant>text}" key="{lineItemVariant>key}" global="{global}" readOnly="{lineItemVariant>readOnly}" lifecyclePackage="{lineItemVariant>lifecyclePackage}" accessOptions="{lineItemVariant>accessOptions}"/>				
+				<v:VariantItem text="{lineItemVariant>text}" key="{lineItemVariant>key}" global="{lineItemVariant>global}" labelReadOnly="{lineItemVariant>readonly}" readOnly="{lineItemVariant>readonly}" lifecyclePackage="{lineItemVariant>lifecyclePackage}" accessOptions="{lineItemVariant>accessOptions}"/>				
 			</v:variantItems>
 		   </v:VariantManagement>			
 				 <ToolbarSpacer/>

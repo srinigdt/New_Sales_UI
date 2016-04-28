@@ -204,12 +204,15 @@ gdt.salesui.util.Controller
                        } , 
                          
                    handleConfirmCreateVariant = function(event) {
-                    	   if(view.getModel("variantFields").getData( ).length == 0 )  return sap.m.MessageToast.show("Please select fields for Variant or Cancel to continue");
-                       if(!this._oVariantNameSaveDialog){
+                    	   if(view.getModel("variantFields").getData( ).length == 0 )  return sap.m.MessageToast.show("Please select fields for Variant or Cancel to continue");                         
+                    	   if(!this._oVariantNameSaveDialog){
                     	   this._oVariantNameSaveDialog = sap.ui.xmlfragment("gdt.salesui.fragment.DetailLineItemVariantNamePopUpDialog", this);
                         	view.addDependent(this._oVariantNameSaveDialog);	
-                           }		 
-                       this._oVariantNameSaveDialog.open( );                   
+                           }	                    	   
+                    	core.byId("idVariantName").setValue("");   
+                   		core.byId("idVariantDefault").setSelected(false);
+                        core.byId("idVariantGlobal").setSelected(false);
+                    	   this._oVariantNameSaveDialog.open( );                   
                        } ,
                        
                    handleVariantNameSave=function(event){                    
