@@ -2947,11 +2947,9 @@ gdt.salesui.util.Controller
 			salesDocumentLines = view.getModel('currentSalesDocumentLines');
 			lines = salesDocumentLines.getData();	
 			lines.forEach(function (line){
-				if((line.ItemCategory.substring(0,1) == 'Z') || ( !!line.ReasonForRejection && !line.MarkedAsDeleted ) ){
-				   if(event.mParameters.pressed){line.Selected = true;}
-				   else{line.Selected = false}
-				   }
-				  } );
+				if((line.ItemCategory.substring(0,1) == 'Z') || ( !!line.ReasonForRejection && !line.MarkedAsDeleted ) ){ 
+				if(event.getSource().getSelected()){line.Selected = true;}
+				else{line.Selected = false}}} );
 			salesDocumentLines.setData(lines);
 		},
 		

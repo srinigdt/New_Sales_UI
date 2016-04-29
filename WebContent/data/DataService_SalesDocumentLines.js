@@ -2,8 +2,9 @@ $.sap.declare("gdt.salesui.data.DataService_SalesDocumentLines");
 $.sap.require("gdt.salesui.util.SAPGatewayHelper");
 $.sap.require("sap.ui.core.Core");
 $.sap.require("gdt.salesui.lib.underscore-min");
+$.sap.require("gdt.salesui.util.ReOrderSoItems");
 
-gdt.salesui.data.DataService_SalesDocumentLines = (function($, core, _, helper) {
+gdt.salesui.data.DataService_SalesDocumentLines = (function($, core, _, helper,LineOrderer) {
 	var _fixDataDown = function(row) {
 			if (!row) return row;
 			row.MaterialID = row.MaterialID.replace(/^0+/, '');
@@ -23,11 +24,17 @@ gdt.salesui.data.DataService_SalesDocumentLines = (function($, core, _, helper) 
 			row.Selected = true;
 			return row;
 		},
+		
+	   _RearrageData=function(data){
+			return LineOrderer.reOrderData(data);
+		},
+		
 		getByForeignKey = function(salesDocumentId) {
 			return $.Deferred(function(defer) {
 				var model = core.getModel();
             	model.read("/SalesDocumentSet(SalesDocumentID='" + salesDocumentId + "')/LineItems", {
 	            	success: function(data, response) {
+	            		  data.results = _RearrageData(data.results);	            		
 	            		_.each(data.results, function (result) { result = _fixDataDown(result);});
 	                	defer.resolve(data.results);
 	            	},
@@ -42,4 +49,4 @@ gdt.salesui.data.DataService_SalesDocumentLines = (function($, core, _, helper) 
 	    getByForeignKey: getByForeignKey,
 	};
 	
-})($,sap.ui.getCore(),_, gdt.salesui.util.SAPGatewayHelper);
+})($,sap.ui.getCore(),_, gdt.salesui.util.SAPGatewayHelper,gdt.salesui.util.ReOrderSoItems);

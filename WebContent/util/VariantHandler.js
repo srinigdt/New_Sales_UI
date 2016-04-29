@@ -41,6 +41,19 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 		};
 		data.push(newRow);
 		model.setData(data);
+		var runtimeColumns = [],runtimeColumn;
+		_.each(columns,function(column,order){
+			runtimeColumn = {
+					 "fieldText":column.getLabel( ).getText( ),	                       
+                     "fieldName":"",
+                     "fieldKey":column.sId.split('--')[1],
+                     "visibility":true,
+                     "updown": 0,
+                     "order":order					
+			}
+			runtimeColumns.push(runtimeColumn);
+		});
+		core.getModel("layoutFields").setData(runtimeColumns);
 		_loadAndSetVariants(false, view);
 	},
 
@@ -92,7 +105,7 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 				column = _.find(
 								standardVariantColumns,
 								function(variantColumn) {
-									return (variantColumn.sId.indexOf(variantColumns.layoutColumnIds[i]) > 0);
+									return (variantColumn.sId.indexOf(variantColumns.layoutColumnIds[i]) >= 0);
 								});
 				if (column)
 					table.addColumn(column);

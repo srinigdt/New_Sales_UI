@@ -155,8 +155,8 @@ sap.ui.core.UIComponent
 	                    lineItemVariant = new sap.ui.model.json.JSONModel([]),
 	                    
 	                    variantFields = new sap.ui.model.json.JSONModel([]); 
-	                    layoutFields = new sap.ui.model.json.JSONModel(modelLayoutColumnsUrl);
-	                                         
+	                 //   layoutFields = new sap.ui.model.json.JSONModel(modelLayoutColumnsUrl);
+	                    layoutFields = new sap.ui.model.json.JSONModel([]);                     
 	                           
 	                    currentState = new sap.ui.model.json.JSONModel({
 	                        isEditMode : false,
