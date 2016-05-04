@@ -191,7 +191,7 @@ gdt.salesui.util.Controller
 	                    
  
                     },
-                    
+
 //*****************************************************************************************************                    
 //---------------------------------L A Y O U T -- V A R I A N T----------------------------------------
 //                                    Begin of Code Change
@@ -1909,7 +1909,10 @@ gdt.salesui.util.Controller
 			lastRow = $(tbl).find('tr:not(:has(th))').length - 1;
 
 			if (rowidx > lastRow) return null;
-
+            //adding row
+			//$('#'+view.byId('lineItemsTable').getId()+ ' tbody tr').filter(':nth-child('+rowidx+1+')').after("<tr><td>SubTotal</td><td>264</td></tr>");
+			
+			
 			return $(tbl).find('tr:not(:has(th))')[rowidx];
 		},
 
