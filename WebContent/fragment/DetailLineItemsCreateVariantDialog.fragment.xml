@@ -10,6 +10,7 @@
   	id='createSalesOrderDialog'
     title="Customize your layout"
     contentWidth="800px"
+    contentHeight="500px"
     class="sapUiSizeCompact" >
 <content>
 <l:HorizontalLayout class="sapUiSmallMargin" >

@@ -8,7 +8,7 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 
 	var initialize_variant = function(view, that) {
 
-		variantToolbar = sap.ui.getCore().byId("__toolbar3");
+		variantToolbar = sap.ui.getCore().byId(view.sId + '--variantManagementselpage').getFooter( );
 		defaultVariantContents = variantToolbar.removeAllContent();
 
 		oVCreate = new sap.m.Button({
@@ -262,18 +262,19 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 	},
 
     addFieldtoVariant = function(event,viewController){
- 	   var model = viewController.getView().getModel("layoutFields");
- 	   var oLayoutData = model.getData( );
- 	   var path = event.getSource().getParent().getBindingContextPath();
- 	   var element = model.getProperty(path);
-       var filterData = _.filter(oLayoutData, function(row){ return row.fieldKey != element.fieldKey });
-       model.setData(filterData);
-       var oVariantModel= viewController.getView().getModel("variantFields");
- 	   var oVariantData =  oVariantModel.getData( );
- 	   element.updown = oVariantData.length + 1;
- 	   oVariantData.push(element) ;
- 	   oVariantModel.setData( oVariantData );
-    } ,
+		   var model = viewController.getView().getModel("layoutFields");
+	 	   var oLayoutData = model.getData( );
+	 	   var path = event.getSource().getParent().getBindingContextPath();
+	 	   var element = model.getProperty(path);
+	       var filterData = _.filter(oLayoutData, function(row){ return row.fieldKey != element.fieldKey });
+	       model.setData(filterData);
+	       var oVariantModel= viewController.getView().getModel("variantFields");
+	 	   var oVariantData =  oVariantModel.getData( );
+	 	   element.updown = oVariantData.length + 1;
+	 	   oVariantData.push(element) ;
+	 	   oVariantModel.setData( oVariantData );		
+		
+   } ,
     removeFieldFromVariant = function(event,viewController) {
  	   var model= viewController.getView().getModel("variantFields");
  	   var oLayoutData = model.getData( );
