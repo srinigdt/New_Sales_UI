@@ -224,6 +224,16 @@
                     <Text text="Cust Vend Contract #" />
                     <t:template><Input value="{currentSalesDocumentLines>CustomerContractWithVendor}" tooltip="{path: 'currentSalesDocumentLines>CustomerContractWithVendor'}" placeholder="Customer Contract With Vendor Number..." editable="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}) ) }" /></t:template>
                 </t:Column>
+
+				<t:Column id="LEADTIME" width="65px" filterProperty="LeadTime" visible="true">
+					<Text text="Lead Time (Days)"/>
+					<t:template><Input showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>LeadTime', type : 'sap.ui.model.type.String', constraints: {minLength: 0, maxLength: 2} }" editable="{= (!${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection}) ) }" /></t:template>
+				</t:Column>
+ 			    <t:Column id="TAXAMT" width="90px" visible= "{=!(${currentState>/isEditMode})}">
+ 			    	<Text text="Tax Amount" />
+ 			    	<t:template><Input valueStateText="Tax Amount must be between 0 and 9,999,999,999.99." showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>TaxAmount', type : 'sap.ui.model.type.Float', formatOptions: {decimalSeparator:'.', groupingSeparator:',', minIntegerDigits: 1, maxIntegerDigits: 10, minFractionDigits: 2, maxFractionDigits: 2}, constraints: {minimum: -9999999999, maximum: 9999999999} }" editable="false" /></t:template>
+ 			    </t:Column>                                                        
+               
                 <t:Column id="CREATEDBY" width="120px">
 			    	<Text text="Created By" />
  			    	<t:template><Input value="{currentSalesDocumentLines>CreatedBy}" editable="false"/></t:template>

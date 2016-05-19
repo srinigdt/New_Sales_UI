@@ -15,6 +15,9 @@
 			<Label text="External Notes to Customer (Header)" design="Bold" />
 			<TextArea width='100%' value="{path: 'currentSalesDocument>/ExtendedPONum'}" placeholder="{i18n>EXTPONUM_FIELD_PLACEHOLDER}" rows="1" editable="{currentState>/isEditMode}" />
 			<core:HTML content='&lt;BR&gt;'/>
+			<Label text="E-License Email Address" design="Bold" />
+			<TextArea width='100%' value="{path: 'currentSalesDocument>/ElicenseEmail'}" placeholder="{i18n>EXTPONUM_FIELD_ELICENSE_MAIL}" rows="1" editable="{currentState>/isEditMode}" />
+			<core:HTML content='&lt;BR&gt;'/>			
 			<Label text="Carton Notes" design="Bold" />
 			<TextArea width='100%' value="{path: 'currentSalesDocument>/CartonNotes', type : 'sap.ui.model.type.String', constraints: {minLength: 0, maxLength: 80} }" placeholder="{i18n>CARTONNOTES_FIELD_PLACEHOLDER}" maxLength="80" rows="1" editable="{currentState>/isEditMode}" />
 			<core:HTML content='&lt;BR&gt;'/>
