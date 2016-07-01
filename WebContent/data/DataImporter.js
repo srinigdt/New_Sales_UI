@@ -16,8 +16,20 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 //	MG Don't use Deal Expiration as Quote Expiration                {label : 'Deal Expiration:', field : 'ValidTo', converter : function (val) {return new Date(Date.parse(val));}},
 // MG Don't import Qoute Name into Description field			{label : 'Quote Name:', field : 'HeaderText'},
 			{label : 'Quote ID:', field : 'ExternalQuoteID', lineItem : true}],
-		DetailLineTemplateNames = ['SalesUI Export', 'Solomon Export', 'OIP / DealID', 'Estimate (Build and Price)', 'SmartNet'],
+		DetailLineTemplateNames = ['Cisco Credit','SalesUI Export', 'Solomon Export', 'OIP / DealID', 'Estimate (Build and Price)', 'SmartNet'],
 		DetailLineTemplates = [
+                 [
+                     //Cisco Credit Template
+                    {column : '#', field : 'StructuredLineID'},
+                    {column : 'Part Number', field : 'ManufacturerPartID'},
+                    {column : 'Part Description', field : 'Description', converter : function (val) {return val.substring(0, 40);}},		
+                    {column : 'Service Duration',  field : 'SmartNetDuration', optional : true},
+                    {column : 'Buy Method',  field : 'VendorID', lookup : [{from : 'Cisco', to : CiscoVdrID}, {from : 'INGRAM MICRO', to : IngramVdrID}]},	
+                    {column : 'Unit List Price', field : 'ListPrice', converter : function (val) {var amt = val.replace(/$/g, '').replace(/,/g, ''); return (parseFloat(amt) > 0) ? (Math.round(parseFloat(amt) * 100.0) / 100.0).toString() : '0.00';}},
+                    {column : 'Quantity', field : 'QTY', converter : function (val) {var amt = val.replace(/,/g, ''); return parseInt(amt).toString();}},
+                    {column : 'Lead Time (in Days)', field : 'CCWLeadTimeDays', converter : function (val) {var amt = val.replace(/,/g, ''); amt = ((!amt || amt == 'N/A') ? 0 : parseInt(amt.split(' ')[0])); return ((!amt) ? 0 : amt);}},
+                    {column : 'Effective Discount %', field : 'GDTDiscountPercent', converter : function (val) {var amt = val.replace(/%/g, '').replace(/,/g, ''); return (parseFloat(amt) > 0) ? (Math.round(parseFloat(amt) * 1000.0) / 1000.0).toString() : '0.00';}},
+                ],               
 				[ // SalesUI Export
 					{column : 'Line', field : 'StructuredLineID'},
 					{column : 'Ref Ln', field : 'CustomerPOLineID', optional : true},
@@ -153,6 +165,7 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
                     {column : 'SITE COUNTRY', field : 'OTSTCountry'},
                     {column : 'QUOTE', field : 'ExternalQuoteID', optional : true},
                 ]
+
 		],
 
 		ImportFromCCW = function(csv, salesOrderHeader, salesOrderDetails, errors, missingAddresses, _createNewLine, _lookupPartID, _determineItemCategory, append) {
