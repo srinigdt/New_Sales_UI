@@ -12,20 +12,20 @@ gdt.salesui.util.VariantHandler = (function($, core, _, datacontext) {
 		defaultVariantContents = variantToolbar.removeAllContent();
 
 		oVCreate = new sap.m.Button({
-			id : "cv",
+//			id : "cv",
 			text : "Create Variant",
 			press : function() {
 				_handleCreateVariant(view, that)
 			}
 		});
 
-		oVManage = new sap.m.Button({
-			id : "mv",
-			text : "Manage Variant",
-			press : function() {
-				_handleManageVariant(view, that)
-			}
-		});
+//		oVManage = new sap.m.Button({
+//			id : "mv",
+//			text : "Manage Variant",
+//			press : function() {
+//				_handleManageVariant(view, that)
+//			}
+//		});
 
 		variantToolbar.addContent(defaultVariantContents[0]);
 		variantToolbar.addContent(oVCreate);
