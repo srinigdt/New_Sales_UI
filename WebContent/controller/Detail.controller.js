@@ -3396,7 +3396,16 @@ gdt.salesui.util.Controller
 				return (isQuote) ? 'ZGDT' : (isSubmitted) ? 'YGDT' : 'ZGDT';
 			}
 			if (!materialSeries || materialSeries == materialSeries_Hardware) { // Hardware
-				return (isQuote) ? 'ZHDS' : ((isSubmitted) ? 'YB1' : 'ZB1');
+			
+				if(row.MARAMaterialGroup == 'ZVS' || row.MARAMaterialGroup == 'ZSA'  ){
+					return	(isQuote) ? 'ZA1' : ((isSubmitted) ? 'YA1' : 'ZA1');	
+				}
+//				else if(row.MARAMaterialGroup == 'ZSA'){
+//					return	(isQuote) ? 'ZA2' : ((isSubmitted) ? 'YA2' : 'ZA2');
+//				}
+				else{
+				    return (isQuote) ? 'ZHDS' : ((isSubmitted) ? 'YB1' : 'ZB1');
+				}
 			}
 
 			if (materialSeries == materialSeries_FinishedGoods) { // Finished Goods

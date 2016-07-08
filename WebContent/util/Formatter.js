@@ -205,6 +205,10 @@ gdt.salesui.util.Formatter = (function($, core, _) {
     	switch (value) {
     		case 'ZB1':
     		case 'YB1':
+    		case 'ZA1':
+    			retVal = true;
+    			break;
+    		case 'YA1':		
     		case 'ZHDS':
     			retVal = true;
     			break;
