@@ -402,6 +402,13 @@ gdt.salesui.util.Controller
                     		if (_.filter(linesModel.aBindings, function (b) {return b.getPath() == 'GrossProfitPercentage' && (b.getContext()) && (b.getContext().getPath) && (b.getContext().getPath() == path); }).length == 0) {
                     			linesModel.bindProperty('GrossProfitPercentage',context).attachChange(function(event) {detailsvm.HandleDetailGrossProfitPercentageChange(event); _calculateTotals()});
                     		}
+                    		
+                    		if (_.filter(linesModel.aBindings, function (b) {return b.getPath() == 'SmartNetDuration' && (b.getContext()) && (b.getContext().getPath) && (b.getContext().getPath() == path); }).length == 0) {
+                    			linesModel.bindProperty('SmartNetDuration',context).attachChange(function(event) {detailsvm.HandleDetailDurationChange(event); _calculateTotals()});
+                    		}
+                    		
+                    		
+                    		
                     	});
                     },
                     
@@ -1653,6 +1660,8 @@ gdt.salesui.util.Controller
 		},
 
 		_lookupPartID = function(row, manufacturerPartID, override, isCustomerPartID, success, fail, localOnly) {
+
+			
 			var key = {
 						CustomerID : core.getModel('currentCustomer').getProperty('/CustomerID'),
 						ManufacturerID : row.ManufacturerID,
@@ -1662,6 +1671,11 @@ gdt.salesui.util.Controller
 				def = null,
 				localVal = null,
 				successFn = function (data, success, deferred) {
+
+				//SaaS Solution, for duration has value, quantity should be multiplied by duration
+				if( (row.SmartNetDuration) && (!isNaN(row.SmartNetDuration)) && (data.MARA_MaterialGroup == 'ZSA'))  row.QTY = ( row.QTY * row.SmartNetDuration ).toString();
+								
+				
 					var listPrice = parseFloat((override) ? data.ListPrice : row.ListPrice),
 						materialID = (!!data.MaterialID) ? data.MaterialID.replace(/^0+/, '') : null,
 						vdrMatch = null,
@@ -1722,6 +1736,16 @@ gdt.salesui.util.Controller
 							row.ManufacturerPartID = row.CustomerPartID;
 							row.MaterialID = materialID;
 							row.Description = (override) ? data.Description : (row.Description) ? row.Description : data.Description;
+				// For SaaS, different Vendor to be defaulted		
+				  switch(row.MARAMaterialGroup){
+						 case 'ZSA' || 'ZVA':
+							 var defaultvdr = _.findWhere(vdrs, {SortL: 'CIS013'});
+							 if(defaultvdr)row.VendorID = defaultvdr.ManufacturerID;
+						    break;
+						 default:
+							 row.VendorID = data.DefaultVendorID;	 
+							 
+				  }
 							if (!row.VendorID) {
 								row.VendorID = data.DefaultVendorID;
 								if (!row.VendorID) {
@@ -1732,6 +1756,8 @@ gdt.salesui.util.Controller
 									}
 								}
 							}
+							
+							
 						} else {
 							row.MaterialID = materialID;
 							row.ManufacturerPartID = data.MfrPartID;
@@ -1753,7 +1779,7 @@ gdt.salesui.util.Controller
 							row.ItemCategory = _determineItemCategoryForBroughtIn(row);
 						}
 					}
-
+				
 					if (!!success) success(row);
 
 					if (!!deferred) deferred.resolve(row);

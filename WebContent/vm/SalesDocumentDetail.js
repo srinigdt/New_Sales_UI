@@ -71,7 +71,15 @@ gdt.salesui.vm.SalesDocumentDetail = (function($, core, _) {
 
 			console.log('QTY Change');
 
-			qty = _ensureFloat(source.getValue());
+// SaaS Product Duration Present
+
+			if(row.MARAMaterialGroup == 'ZSA' && (!isNaN(row.SmartNetDuration)) && (parseInt(row.SmartNetDuration) != 0)){
+				qty = ( _ensureFloat(row.SmartNetDuration) * _ensureFloat(source.getValue()) );	
+			}
+			else{	
+				qty = _ensureFloat(source.getValue());
+			}
+	
 			extendedCost = _calculateExtendedValue(row, qty, parseFloat(row.UnitCost)); // Re-calculate extended to remove rounding error
 			extendedPrice = _calculateExtendedValue(row, qty, parseFloat(row.UnitPrice));
 			gp = extendedPrice - extendedCost;
@@ -597,7 +605,46 @@ gdt.salesui.vm.SalesDocumentDetail = (function($, core, _) {
 			}
 			
 			return val * 1.0;
-		};
+		},
+		
+		HandleDetailDurationChange = function(event) {
+			var source = event.getSource(),
+				context = source.getContext(),
+				path = context.getPath(),
+				model = source.getModel(),
+				row = model.getProperty(path),
+				extendedPrice,
+				extendedCost,
+				gp,
+				gpp,
+				qty;
+
+			if (!row) return;
+			if(row.MARAMaterialGroup != 'ZSA')return;
+			if(isNaN(source.getValue())) return;
+			if(parseInt(source.getValue()) == 0)  return;
+
+			console.log('Saas Production Duration Change');
+
+			qty = ( _ensureFloat(row.QTY) * _ensureFloat(source.getValue()) );
+			extendedCost = _calculateExtendedValue(row, qty, parseFloat(row.UnitCost)); // Re-calculate extended to remove rounding error
+			extendedPrice = _calculateExtendedValue(row, qty, parseFloat(row.UnitPrice));
+			gp = extendedPrice - extendedCost;
+			gpp = (extendedPrice != 0) ? Math.round(((extendedPrice != 0) ? gp * 100.0 / extendedPrice : 0.0) * 1000.0) / 1000.0 : 0.00;
+
+			row.ExtendedCost = extendedCost.toString();
+			row.ExtendedPrice = extendedPrice.toString();
+			row.GrossProfit = gp.toString();
+			row.GrossProfitPercentage = gpp.toString();
+			row.QTY = qty.toString();
+
+			model.setProperty(context.getPath(),row);
+		};		
+		
+		
+		
+			
+		
 	
 	return {
 		HandleDetailQtyChange: _debounce(HandleDetailQtyChange, _debounceTime),
@@ -610,5 +657,6 @@ gdt.salesui.vm.SalesDocumentDetail = (function($, core, _) {
 		HandleDetailExtendedPriceChange: _debounce(HandleDetailExtendedPriceChange, _debounceTime),
 		HandleDetailGrossProfitChange: _debounce(HandleDetailGrossProfitChange, _debounceTime),
 		HandleDetailGrossProfitPercentageChange: _debounce(HandleDetailGrossProfitPercentageChange, _debounceTime),
+		HandleDetailDurationChange:_debounce(HandleDetailDurationChange, _debounceTime)
 	};
 })($,sap.ui.getCore(),_);

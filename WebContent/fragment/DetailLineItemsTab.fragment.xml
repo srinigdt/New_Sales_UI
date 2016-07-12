@@ -213,7 +213,7 @@
 				</t:Column>
 				<t:Column id="DURATION" width="80px" filterProperty="SmartNetDuration">
 					<Text text="Duration"/>
-					<t:template><Input showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>SmartNetDuration', type : 'sap.ui.model.type.String', constraints: {minLength: 0, maxLength: 2} }" editable="{= ((''+${currentSalesDocumentLines>MARAMaterialGroup}) === 'ZSN') &amp;&amp; !${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection} ) }"/></t:template>
+					<t:template><Input showValueStateMessage="false" value="{path: 'currentSalesDocumentLines>SmartNetDuration', type : 'sap.ui.model.type.String', constraints: {minLength: 0, maxLength: 2} }" editable="{= ((''+${currentSalesDocumentLines>MARAMaterialGroup}) === 'ZSN' || (''+${currentSalesDocumentLines>MARAMaterialGroup}) === 'ZSA') &amp;&amp; !${currentSalesDocumentLines>WBSElement} &amp;&amp; !${currentSalesDocumentLines>MarkedAsDeleted} &amp;&amp; ${currentState>/isEditMode} &amp;&amp; (((''+${currentSalesDocumentLines>ItemCategory}).substring(0,1) !== 'Y') || !!${currentSalesDocumentLines>ReasonForRejection} ) }"/></t:template>
 				</t:Column>
 			    <t:Column id="WBSELEMENT" width="140px">
 			    	<Text text="WBS Element" />
