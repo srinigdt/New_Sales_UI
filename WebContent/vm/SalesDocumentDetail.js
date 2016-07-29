@@ -76,7 +76,8 @@ gdt.salesui.vm.SalesDocumentDetail = (function($, core, _) {
 
 			// SaaS Product Duration Present
 			 copyItem = _.find(copyLines, function(line){ return line.SalesDocumentLineID  == row.SalesDocumentLineID; });
-		    if(row.MARAMaterialGroup == 'ZSA' && (copyItem.QTY != source.getValue()) && (!isNaN(_ensureFloat(row.SmartNetDuration))) && (parseInt(row.SmartNetDuration) != 0)){
+		     if(!copyItem){copyItem={QTY:source.getValue()}}
+			 if(row.MARAMaterialGroup == 'ZSA' && (copyItem.QTY != source.getValue()) && (!isNaN(_ensureFloat(row.SmartNetDuration))) && (parseInt(row.SmartNetDuration) != 0)){
 			 qty = ( _ensureFloat(row.SmartNetDuration) * _ensureFloat(source.getValue()) );	
 			  }
 			 else{	
