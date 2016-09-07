@@ -15,9 +15,8 @@ $.sap.require("gdt.salesui.util.Sharepoint");
 $.sap.require("gdt.salesui.util.VariantHandler");
 $.sap.require("gdt.salesui.vm.SalesDocumentDetail");
 
-gdt.salesui.util.Controller
-        .extend(
-                "gdt.salesui.controller.Detail", function($, core, _, importer, datacontext, addressHelper, sharepoint, formatter, detailsvm,variantHandler)
+gdt.salesui.util.Controller.extend("gdt.salesui.controller.Detail", 
+		function($, core, _, importer, datacontext, addressHelper, sharepoint, formatter, detailsvm,variantHandler)
                 {
                 	var copies = core.getModel('copies'),
 						materialSeries_FinishedGoods = 1,
@@ -999,10 +998,12 @@ gdt.salesui.util.Controller
 					 handleEmailMasterData = function(event) {
                  		var dialog = view.byId('detailLineItemsImportErrorsDialog'),
                  			material = view.getModel('importErrors').getData(),
+                 			extNotes = view.byId("ExtNotes").getValue(),
                  			i = 0,
                  			l = 0,
                  			sapclient = core.getModel('systemInfo').getProperty('/ClientID'),
-                 			body = 'The following material was requested but not found in the SAP catalog for Client ' + sapclient + '.  Please add these material(s):\n\n';
+                 			sapSysid  = core.getModel('systemInfo').getProperty('/Sysid'),
+                 			body = 'The following material was requested but not found in the SAP catalog for Client :' +sapSysid+'-'+sapclient + '.  Please add these material(s):\n\n';
                  		
                  		l = (!!material) ? material.length : 0;
                  		
@@ -1013,29 +1014,40 @@ gdt.salesui.util.Controller
 							body += (!!material[i].ListPrice && parseFloat(material[i].ListPrice) != 0) ? "List Price: ["+material[i].ListPrice+"]\n" : "\n";
                  		}
                  		
+                 		if((extNotes) && extNotes.length != 0){
+                 	 		body += "\n\n\n\n";
+                 	 		body += "Note:\n";
+                 	 		body += extNotes;
+                 	 		}
                  		dialog.close();	
 
                  		sap.m.URLHelper.triggerEmail("masterdata@gdt.com","Missing Material",body);                 		
 //Begin of Change:SXVASAMSETTI : 04/13/16  
-                 		_sendMailFromSAP(body,true);
-/*                 		var model = core.getModel();
-        	    		model.callFunction("/SendMail",'POST', {ActionType:'M',MailContent:body}, {
-    		            	success: function(data, response) {
-    		            		if (response.statusCode >= 200 && response.statusCode <= 299) {
-    		            		//	defer.resolve(_fixDataDown(data));
-    		            		} else {
-    		            			sap.m.MessageToast.show(helper.ParseError(data,"SalesUI Could not create/update the Sales Document in SAP."));
-    		            		}
-    		            	},
-    						error: function(data) {
-    							sap.m.MessageToast.show(helper.ParseError(data,"SalesUI Could not create/update the Sales Document in SAP."));
-    						},
-    						async: true
-    		            });*/
-//End of Change:SXVASAMSETTI					
+                 		_sendMailFromSAP(body,true);                		
 					},              
-
-                    
+					//-->Export Wrong Part IDs                    
+	                   handleExportErrorPartIDs=function(event){
+	                    	var	Export = new sap.ui.core.util.Export({
+	                    		exportType: new sap.ui.core.util.ExportTypeCSV({charset : "utf-16",}),
+	                    		models: view.getModel('importErrors'),
+	                    		rows : { path : '/'},
+	                    		columns : [
+	                    					{name: 'Line #', template : { content : {path: 'StructuredLineID'}}},
+	                    					{name: 'Qty', template : { content : {path: 'QTY'}}},
+	                    			//		{name: 'Manufacturer ID', template : { content : {path: 'ManufacturerID'}}},
+	                    					{name: 'Manufacturer', template : { content : {path: 'ManufacturerID',formatter:formatter.mfrName}}},
+	                    					{name: 'Part # Requested', template : { content : {path: 'CustomerPartID'}}},
+	                    					{name: 'Description', template : { content : {path: 'Description'}}},
+	                    					{name: 'List Price', template : { content : {path: 'ListPrice'}}}
+	                    		]});
+	                    	var dateTime = new Date( ).toLocaleString().split(',').join('_').replace(/\s+/g, '');
+	                    	var fileNameExt = (view.getModel('currentSalesDocument').getProperty('/SalesDocumentID') == '0000000000')? 'New Document': view.getModel('currentSalesDocument').getProperty('/SalesDocumentID');                    	
+	                    	Export.saveFile(fileNameExt+'_PartIDs_ImportError_'+dateTime).always(function() {
+	                    		this.destroy();             
+	                    	});
+					},
+ //End of Change:SXVASAMSETTI   
+	                    	
                     handleDetailLineNotes = function (event) {
                  		var dialog = view.byId('detailLineNotesDialog'),
                  			source = event.getSource(),
@@ -3079,7 +3091,16 @@ gdt.salesui.util.Controller
 			},
 				      
 		// End of change: SXVASAMSETTI, Partial Submission Changes
-		
+	 handleValidateEmail=function(event){
+				   var regx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				    if( !regx.test(event.mParameters.newValue) ){ 
+				    view.byId("ElicenseEmail").setValueState("Error");
+				    view.byId("ElicenseEmail").setValueStateText("Please Enter Valid Email Id");
+				    return;
+				    }
+				    view.byId("ElicenseEmail").setValueState();
+			},
+			
 		handleDetailedSOConfirmationPDFRequest = function(event) {
 			_doOutput('ZBA5','P');
 		},
@@ -4595,6 +4616,7 @@ gdt.salesui.util.Controller
 			handleStagingSelectAll:handleStagingSelectAll,
 			handleVariantNameSave:handleVariantNameSave,
 			handleVariantNameCancel:handleVariantNameCancel,
+			handleValidateEmail:handleValidateEmail
 		};
 
 

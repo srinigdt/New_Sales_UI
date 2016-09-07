@@ -3,37 +3,42 @@
 	<Dialog id='detailLineItemsImportErrorsDialog' title="Import Failed - Unrecognized Parts" state="Error">
 		<FlexBox alignItems="Center" justifyContent="Center">
           <items>
-			<Text width="1000px" textAlign="Center" text="Errors were detected when importing line item data and the import was aborted.  The following parts were not recognized.  Please press 'Email Master Data' to send an email with these parts listed to the Master Data team, or press cancel to return to the Sales UI." />
+			<Text width="800px" textAlign="Center" text="Errors were detected when importing line item data and the import was aborted.  The following parts were not recognized.  Please press 'Email Master Data' to send an email with these parts listed to the Master Data team, or press cancel to return to the Sales UI." />
           </items>
         </FlexBox>
         <Panel />
 		<ScrollContainer id='importErrorsContainer' height="100%" vertical="true" horizontal="true">
 			<Table items="{importErrors>/}" id="errorsTable" fixedLayout="false">
 			    <columns>
-				    <Column><Text text="Line" width="70px" wrapping="false" /></Column>
-				    <Column><Text text="Qty" width="60px" wrapping="false" /></Column>
+				    <Column><Text text="Line" width="50px" wrapping="false" /></Column>
+				    <Column><Text text="Qty" width="30px" wrapping="false" /></Column>
 				    <Column><Text text="Manufacturer" wrapping="false" width="150px" /></Column>
-				    <Column><Text text="Part # Requested" width="340px" wrapping="false" /></Column>
-				    <Column><Text text="Description"  width="340px" wrapping="false" /></Column>
+				    <Column><Text text="Part # Requested" width="200px" wrapping="false" /></Column>
+				    <Column><Text text="Description"  width="250px" wrapping="false" /></Column>
 				    <Column><Text text="List Price" width="110px" wrapping="false" /></Column>
 			    </columns>
 			    <items>
 		      		<ColumnListItem vAlign="Middle" class="oddLine">
 		        		<cells>
-					    	<Input width="70px" value="{path: 'importErrors>StructuredLineID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 12} }" editable="false" />
-					    	<Input width="60px" value="{path: 'importErrors>QTY', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" />
+					    	<Input width="50px" value="{path: 'importErrors>StructuredLineID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 12} }" editable="false" />
+					    	<Input width="30px" value="{path: 'importErrors>QTY', type : 'sap.ui.model.type.Integer', formatOptions: { groupingEnabled: true, groupingSeparator:',' }, constraints: {minimum: 1, maximum: 9999999999} }" editable="false" />
 	      					<Input width="150px" value="{path: 'importErrors>ManufacturerID', formatter: 'gdt.salesui.util.Formatter.mfrName'}" type="Text" editable="false" />
-					    	<Input width="340px" value="{path: 'importErrors>CustomerPartID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 40} }" editable="false" />
-					    	<Input width="340px" value="{importErrors>Description}" editable="false" />
+					    	<Input width="200px" value="{path: 'importErrors>CustomerPartID', type : 'sap.ui.model.type.String', constraints: {minLength: 1, maxLength: 40} }" editable="false" />
+					    	<Input width="250px" value="{importErrors>Description}" editable="false" />
 					    	<Input width="110px" value="{path: 'importErrors>ListPrice', type : 'sap.ui.model.type.Float', formatOptions: {decimalSeparator:'.', groupingSeparator:',', minIntegerDigits: 1, maxIntegerDigits: 10, minFractionDigits: 2, maxFractionDigits: 2}, constraints: {minimum: 0, maximum: 9999999999} }" editable="false" />
 			        	</cells>
 		    		</ColumnListItem>
 		    	</items>
 		  	</Table>
 		</ScrollContainer>
+        <Panel>
+			<Label text="External Notes" design="Bold" />
+			<TextArea id="ExtNotes" width='100%' value="" placeholder="Special instruction Notes" rows="3" editable="{currentState>/isEditMode}" />
+       </Panel>		
 	    <Toolbar>
 			<ToolbarSpacer/>
-			<Button icon="sap-icon://email" text="Email Master Data" press="handleEmailMasterData" />
+			<Button icon="sap-icon://excel-attachment" type="Accept" text="Export" press="handleExportErrorPartIDs" />
+			<Button icon="sap-icon://email" type="Emphasized" text="Email Master Data" press="handleEmailMasterData" />
 			<Button icon="sap-icon://system-exit" type="Reject"  text="Cancel" press="handleCancelImportErrorDialog" />
 	    </Toolbar>
    	</Dialog>
