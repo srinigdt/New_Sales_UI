@@ -26,6 +26,16 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 			}else{
 				return true;
 				}
+	},	
+
+	pdfButtonVisibility = function(value) {
+		
+		if (value =='V' || value =='M'){
+			return false;
+		}else{
+			return true;
+		}
+		
 	},
 	
 	SoAvailableQtyVisibility=function(value){
@@ -40,28 +50,20 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 	return value;	
 	},
 	
-	pdfButtonVisibility = function(value) {
+	PoSupplement=function(value){
+		if(value == 'Z000') return true;
+		return false;
+	},
 	
-		if (value =='V' || value =='M'){
-			return false;
-		}else{
-			return true;
-		}
+	isEditableOnItemCategory=function(value){
+		if(value == 'YTAO' || value == 'ZTAO' || value == 'ZPFS') return false;
+	return true;	
+	},
+	
+	totalitems = function(value) {
+	return 2;	
 		
 	},
-	
-	lineCount = function(value){
-		if ( value.length != 0){
-	return value.length;
-		}
-
-	},
-	
-	islineSelected = function(value){
-		 if(_.findWhere(value, {Selected:true}))
-			 return true; 
-		     return false;
-			},
 	
     statusText = function(value) {
 	    var core = sap.ui.getCore(),
@@ -397,11 +399,12 @@ gdt.salesui.util.Formatter = (function($, core, _) {
 			statusText : statusText,
 			stripZeros : stripZeros,
 			docFlowVisibility:docFlowVisibility,
+			totalitems:totalitems,
 			pdfButtonVisibility:pdfButtonVisibility,
-			lineCount:lineCount,
-			islineSelected:islineSelected,
 			isRejected:isRejected,
-			SoAvailableQtyVisibility:SoAvailableQtyVisibility
+			SoAvailableQtyVisibility:SoAvailableQtyVisibility,
+			PoSupplement:PoSupplement,
+			isEditableOnItemCategory:isEditableOnItemCategory
 		};
 
 

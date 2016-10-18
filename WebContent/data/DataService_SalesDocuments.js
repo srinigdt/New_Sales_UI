@@ -23,7 +23,7 @@ gdt.salesui.data.DataService_SalesDocuments = (function($, core, _, helper) {
             	data.DocumentCategory = 'B';
             }
             
-            if (data.WBSElement == '00000000') {
+            if (data.WBSElement == '000000000000000000000000') {
             	data.WBSElement = '';
             }
             
@@ -40,6 +40,7 @@ gdt.salesui.data.DataService_SalesDocuments = (function($, core, _, helper) {
             } else {
                 data.LastChangedOn = new Date(data.LastChangedOn.getTime() + (data.LastChangedOn.getTimezoneOffset() * 60 * 1000));
             }		                	
+			
 			return data;
 		},
 		fixDataUp = function(data) {
@@ -53,17 +54,15 @@ gdt.salesui.data.DataService_SalesDocuments = (function($, core, _, helper) {
 					line.GDTDiscountPercent      = line.GDTDiscountPercent.toString();
 					line.CustomerDiscountPercent = line.CustomerDiscountPercent.toString();
 					line.GrossProfitPercentage   = line.GrossProfitPercentage.toString();
-					
-					// Due to XML Parse Error at the backend, convert raw numbers to strings: 03/15/16
+
+					//Due to XML Parse Error at the backend, convert raw numbers to strings: 03/15/16 
 					line.ListPrice       = line.ListPrice.toString();
 					line.UnitCost        = line.UnitCost.toString();
 					line.UnitPrice       = line.UnitPrice.toString();
 					line.QTY             = line.QTY.toString();
-					line.QtyBilled       = line.QtyBilled.toString();
+					line.QtyBilled       = line.QtyBilled.toString();					
 					line.ExtendedPrice   = line.ExtendedPrice.toString();
-					line.ExtendedCost    = line.ExtendedCost.toString();					
-
-					
+					line.ExtendedCost    = line.ExtendedCost.toString();
 					
 					if ($.type(line.VendorID) !== "string") {
 						if (!line.VendorID || parseInt(line.VendorID) == 0) {

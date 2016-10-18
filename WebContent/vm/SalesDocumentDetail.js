@@ -76,13 +76,18 @@ gdt.salesui.vm.SalesDocumentDetail = (function($, core, _) {
 
 			// SaaS Product Duration Present
 			 copyItem = _.find(copyLines, function(line){ return line.SalesDocumentLineID  == row.SalesDocumentLineID; });
-		     if(!copyItem){copyItem={QTY:source.getValue()}}
-			 if(row.MARAMaterialGroup == 'ZSA' && (copyItem.QTY != source.getValue()) && (!isNaN(_ensureFloat(row.SmartNetDuration))) && (parseInt(row.SmartNetDuration) != 0)){
-			 qty = ( _ensureFloat(row.SmartNetDuration) * _ensureFloat(source.getValue()) );	
+			 if(row.MARAMaterialGroup == 'ZSA'  && (!isNaN(_ensureFloat(row.SmartNetDuration))) && (parseInt(row.SmartNetDuration) != 0)){
+			if((!!copyItem) && (copyItem.QTY != source.getValue())){
+				qty = ( _ensureFloat(row.SmartNetDuration) * _ensureFloat(source.getValue()) );	
+			}
+			else if(!copyItem){ // New Line Item : No change record exist
+				 qty = ( _ensureFloat(row.SmartNetDuration) * _ensureFloat(source.getValue()) );
+			}	 				 
 			  }
 			 else{	
-			 qty = _ensureFloat(source.getValue());
+				 qty = _ensureFloat(source.getValue());
 			  }
+			 
 			extendedCost = _calculateExtendedValue(row, qty, parseFloat(row.UnitCost)); // Re-calculate extended to remove rounding error
 			extendedPrice = _calculateExtendedValue(row, qty, parseFloat(row.UnitPrice));
 			gp = extendedPrice - extendedCost;
@@ -628,7 +633,7 @@ gdt.salesui.vm.SalesDocumentDetail = (function($, core, _) {
 			 if(isNaN(_ensureFloat(row.SmartNetDuration))) return;
 			 if(parseInt(source.getValue()) == 0)  return;
 			 copyItem = _.find(copyLines, function(line){ return line.SalesDocumentLineID  == row.SalesDocumentLineID; });
-			 if(copyItem.SmartNetDuration == source.getValue()) return;
+			 if(!!copyItem && copyItem.SmartNetDuration == source.getValue()) return;
 			 console.log('Saas Product Duration & Quantity Change');
              
 			 qty = ( _ensureFloat(row.QTY) * _ensureFloat(source.getValue()) );

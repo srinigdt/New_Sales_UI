@@ -48,12 +48,24 @@
 				            span="L2 M2 S2" />
 				        </layoutData>
 					</Input>
-					<DateTimeInput id='fromDate' type="Date" dateValue="{path: 'currentSalesDocument>/ValidFrom'}" displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}">
+<!-- 					<DateTimeInput id='fromDate' type="Date" 
+					    dateValue="{path: 'currentSalesDocument>/ValidFrom'}" 
+					    displayFormat="MM/dd/yy" 
+					    editable="{currentState>/isEditMode}">
 				        <layoutData>
 				          <l:GridData
 				            span="L3 M3 S3"/>
 				        </layoutData>
-					</DateTimeInput>
+					</DateTimeInput> -->
+					<DatePicker id='fromDate' type="Date" width="100px"
+                            dateValue="{path:'currentSalesDocument>/ValidFrom'}"
+                            displayFormat="MM/dd/yy"
+                            editable="{currentState>/isEditMode}"
+                            >
+                        <layoutData>
+                            <l:GridData  span="L3 M3 S3" />
+                        </layoutData>
+                    </DatePicker>
 					<ToolbarSpacer>
 				        <layoutData>
 				          <l:GridData
@@ -66,12 +78,22 @@
 				            span="L2 M2 S2" />
 				        </layoutData>
 					</Input>
-					<DateTimeInput type="Date" dateValue="{path: 'currentSalesDocument>/ValidTo'}" displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}">
+<!-- 					<DateTimeInput type="Date" dateValue="{path: 'currentSalesDocument>/ValidTo'}" 
+					   displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}">
 				        <layoutData>
 				          <l:GridData
 				            span="L3 M3 S3"/>
-				        </layoutData>
-					</DateTimeInput>
+				        </layoutData> 
+					</DateTimeInput> -->
+					<DatePicker  type="Date" width="100px"
+                            dateValue="{path:'currentSalesDocument>/ValidTo'}"
+                            displayFormat="MM/dd/yy"
+                            editable="{currentState>/isEditMode}"
+                            >
+                        <layoutData>
+                            <l:GridData  span="L3 M3 S3" />
+                        </layoutData>
+                    </DatePicker>
                     <ToolbarSpacer>
                         <layoutData>
                             <l:GridData span="L1 M1 S1" />
@@ -83,7 +105,7 @@
 				            span="L2 M2 S2" />
 				        </layoutData>
 					</Input>
-					<Input placeholder="Enter short description here..." maxLength='40' value="{currentSalesDocument>/HeaderText}" editable="{currentState>/isEditMode}">
+					<Input placeholder="Enter short description here..." maxLength='40' width='365px' value="{currentSalesDocument>/HeaderText}" editable="{currentState>/isEditMode}">
 				        <layoutData>
 				          <l:GridData
 				            span="L10 M10 S10" />
@@ -94,7 +116,7 @@
 							<l:GridData span="L2 M2 S2" />
 						</layoutData>
 					</Input>
-					<Input placeholder="Enter contact that requested quote..." maxLength='30' value="{path:'currentSalesDocument>/RequestedBy'}" editable="{currentState>/isEditMode}" >
+					<Input placeholder="Enter contact that requested quote..." maxLength='30' width='365px' value="{path:'currentSalesDocument>/RequestedBy'}" editable="{currentState>/isEditMode}" >
 						<layoutData>
 							<l:GridData span="L10 M10 S10" />
 						</layoutData>
@@ -104,7 +126,7 @@
 							<l:GridData span="L2 M2 S2" />
 						</layoutData>
 					</Input>
-					<Input tooltip="SAP ShipTo ID: {path: 'currentSalesDocument>/ShipToID'}" value="{path: 'currentSalesDocument>/ShipToID', formatter: 'gdt.salesui.util.Formatter.shipTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Ship To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderShipTo">
+					<Input tooltip="SAP ShipTo ID: {path: 'currentSalesDocument>/ShipToID'}" width='450px' value="{path: 'currentSalesDocument>/ShipToID', formatter: 'gdt.salesui.util.Formatter.shipTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Ship To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderShipTo">
 						<layoutData>
 							<l:GridData span="L10 M10 S10" />
 						</layoutData>
@@ -119,16 +141,47 @@
 							<l:GridData span="L10 M10 S10" />
 						</layoutData>
 					</Input>
-					<Input editable="false" value="Shipping Charges">
+					<Input editable="false" value="Shipping Charges ( USD )">
 						<layoutData>
 							<l:GridData span="L2 M2 S2" />
 						</layoutData>
 					</Input>
-					<Input value="{currentSalesDocument>/DeliveryAmt}" editable="{currentState>/isEditMode}">
+					<Input value="{currentSalesDocument>/DeliveryAmt}"  width="80px"  editable="{currentState>/isEditMode}">
 						<layoutData>
 							<l:GridData span="L10 M10 S10" />
 						</layoutData>
 					</Input>
+                   	<Input editable="false" value="Cash Discount ( USD )">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/CashDiscount}"  width="80px"  editable="{currentState>/isEditMode}">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="Trade-In Discount ( USD )">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/TradeInDiscount}" width="80px"  editable="{currentState>/isEditMode}">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="Central Office Equipment">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<CheckBox selected="{path:'currentSalesDocument>/PoSupplement',formatter:'gdt.salesui.util.Formatter.PoSupplement'}" width="80px"  editable="{currentState>/isEditMode}"
+					          select="handleSelectCOE"	>
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</CheckBox>	
 				</l:content>
 			</l:Grid>
 		</content>
@@ -190,7 +243,7 @@
 				            span="L2 M2 S2" />
 				        </layoutData>
 					</Input>
-					<Input placeholder="Enter short description here..." maxLength='40' value="{currentSalesDocument>/HeaderText}" editable="{currentState>/isEditMode}">
+					<Input placeholder="Enter short description here..." maxLength='40' width='345px' value="{currentSalesDocument>/HeaderText}" editable="{currentState>/isEditMode}">
 				        <layoutData>
 				          <l:GridData
 				            span="L10 M10 S10" />
@@ -262,22 +315,66 @@
                             <l:GridData span="L2 M2 S2" />
                         </layoutData>
                     </Input>
-                    <DateTimeInput type="Date"
-                                dateValue="{path:'currentSalesDocument>/RequestedDeliveryDate'}"  displayFormat="MM/dd/yy" editable="{currentState>/isEditMode}"  change='handleChangeHeaderReqDate'>
+<!--                     <DateTimeInput type="Date" width="80px"
+                                  dateValue="{path:'currentSalesDocument>/RequestedDeliveryDate'}"  
+                                  displayFormat="MM/dd/yy" 
+                                  editable="{currentState>/isEditMode}"  
+                                  change='handleChangeHeaderReqDate'>
                         <layoutData>
                             <l:GridData span="L10 M10 S10" />
                         </layoutData>
-                    </DateTimeInput>
-                    <Input editable="false" value="Shipping Charges">
+                    </DateTimeInput> -->
+                    <DatePicker  type="Date" width="100px"
+                            change='handleChangeHeaderReqDate'
+                            dateValue="{path:'currentSalesDocument>/RequestedDeliveryDate'}"
+                            displayFormat="MM/dd/yy"
+                            editable="{currentState>/isEditMode}"
+                            >
+                        <layoutData>
+                            <l:GridData span="L10 M10 S10" />
+                        </layoutData>
+                    </DatePicker>
+                    <Input editable="false" value="Shipping Charges ( USD )">
                         <layoutData>
                             <l:GridData span="L2 M2 S2" />
                         </layoutData>
                     </Input>
-                    <Input value="{currentSalesDocument>/DeliveryAmt}" editable="{currentState>/isEditMode}">
+                    <Input value="{currentSalesDocument>/DeliveryAmt}" width="80px" textAlign='left' editable="{currentState>/isEditMode}">
                         <layoutData>
                             <l:GridData span="L10 M10 S10" />
                         </layoutData>
-                    </Input>
+                    </Input>                                     
+                   	<Input editable="false" value="Cash Discount ( USD )">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/CashDiscount}"  width="80px"  editable="{currentState>/isEditMode}">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="Trade-In Discount ( USD )">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<Input value="{currentSalesDocument>/TradeInDiscount}" width="80px"  editable="{currentState>/isEditMode}">
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</Input>
+					<Input editable="false" value="Central Office Equipment">
+						<layoutData>
+							<l:GridData span="L2 M2 S2" />
+						</layoutData>
+					</Input>
+					<CheckBox selected="{path:'currentSalesDocument>/PoSupplement',formatter:'gdt.salesui.util.Formatter.PoSupplement'}" width="80px"  editable="{currentState>/isEditMode}"
+					          select="handleSelectCOE"	>
+						<layoutData>
+							<l:GridData span="L10 M10 S10" />
+						</layoutData>
+					</CheckBox>	 
 					<Input editable="false" value="End Customer" visible="{currentState>/hasEndCustomers}">
 						<layoutData>
 							<l:GridData span="L2 M2 S2" />
@@ -293,7 +390,7 @@
 							<l:GridData span="L2 M2 S2" />
 						</layoutData>
 					</Input>
-      							<Input tooltip="SAP Payer ID: {path: 'currentSalesDocument>/PayerID'}" value="{path: 'currentSalesDocument>/PayerID', formatter: 'gdt.salesui.util.Formatter.payer'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Payer..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderPayer">
+      							<Input tooltip="SAP Payer ID: {path: 'currentSalesDocument>/PayerID'}" width='450px' value="{path: 'currentSalesDocument>/PayerID', formatter: 'gdt.salesui.util.Formatter.payer'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Payer..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderPayer">
 									<layoutData>
 										<l:GridData span="L10 M10 S10" />
 									</layoutData>
@@ -304,7 +401,7 @@
 										<l:GridData span="L2 M2 S2" />
 									</layoutData>
 					</Input>
-      							<Input tooltip="SAP Bill To ID: {path: 'currentSalesDocument>/BillToID'}" value="{path: 'currentSalesDocument>/BillToID', formatter: 'gdt.salesui.util.Formatter.billTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Bill To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderBillTo">
+      							<Input tooltip="SAP Bill To ID: {path: 'currentSalesDocument>/BillToID'}" width='450px' value="{path: 'currentSalesDocument>/BillToID', formatter: 'gdt.salesui.util.Formatter.billTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Bill To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderBillTo">
 									<layoutData>
 										<l:GridData span="L10 M10 S10" />
 									</layoutData>
@@ -314,7 +411,7 @@
 							<l:GridData span="L2 M2 S2" />
 						</layoutData>
 					</Input>
-      							<Input tooltip="SAP ShipTo ID: {path: 'currentSalesDocument>/ShipToID'}" value="{path: 'currentSalesDocument>/ShipToID', formatter: 'gdt.salesui.util.Formatter.shipTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Ship To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderShipTo">
+      							<Input tooltip="SAP ShipTo ID: {path: 'currentSalesDocument>/ShipToID'}" width='450px' value="{path: 'currentSalesDocument>/ShipToID', formatter: 'gdt.salesui.util.Formatter.shipTo'}" type="Text" showSuggestion="true" filterSuggests="false" startSuggestion="0" suggest="handleSuggestPartner" maxSuggestionWidth="400px" placeholder="Enter Ship To..." enabled="true" editable="{currentState>/isEditMode}" change="handleChangeHeaderShipTo">
 									<layoutData>
 										<l:GridData span="L10 M10 S10" />
 									</layoutData>
@@ -324,7 +421,7 @@
 							<l:GridData span="L2 M2 S2" />
 						</layoutData>
 					</Input>
-   					<Button text="{path: 'currentSalesDocument>/', formatter: 'gdt.salesui.util.Formatter.via'}"  press="handleViaHeaderPress" enabled="{currentState>/isEditMode}" width="100%">
+   					<Button text="{path: 'currentSalesDocument>/', formatter: 'gdt.salesui.util.Formatter.via'}" width='200px'  press="handleViaHeaderPress" enabled="{currentState>/isEditMode}" >
 						<layoutData>
 							<l:GridData span="L10 M10 S10" />
 						</layoutData>
@@ -335,7 +432,7 @@
 								<l:GridData span="L2 M2 S2" />
 							</layoutData>
 						</Input>
-						<Select items="{globalSelectItems>/ShippingConditions}" selectedKey="{currentSalesDocument>/ShippingConditionID}" width="100%" enabled="{currentState>/isEditMode}">
+						<Select items="{globalSelectItems>/ShippingConditions}" width='200px' selectedKey="{currentSalesDocument>/ShippingConditionID}" enabled="{currentState>/isEditMode}">
 							<layoutData>
 								<l:GridData span="L10 M10 S10" />
 							</layoutData>

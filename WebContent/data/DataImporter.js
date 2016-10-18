@@ -18,18 +18,18 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 			{label : 'Quote ID:', field : 'ExternalQuoteID', lineItem : true}],
 		DetailLineTemplateNames = ['Cisco Credit','SalesUI Export', 'Solomon Export', 'OIP / DealID', 'Estimate (Build and Price)', 'SmartNet'],
 		DetailLineTemplates = [
-                 [
-                     //Cisco Credit Template
-                    {column : '#', field : 'StructuredLineID'},
-                    {column : 'Part Number', field : 'ManufacturerPartID'},
-                    {column : 'Part Description', field : 'Description', converter : function (val) {return val.substring(0, 40);}},		
-                    {column : 'Service Duration',  field : 'SmartNetDuration', optional : true},
-                    {column : 'Buy Method',  field : 'VendorID', lookup : [{from : 'Cisco', to : CiscoVdrID}, {from : 'INGRAM MICRO', to : IngramVdrID}]},	
-                    {column : 'Unit List Price', field : 'ListPrice', converter : function (val) {var amt = val.replace(/$/g, '').replace(/,/g, ''); return (parseFloat(amt) > 0) ? (Math.round(parseFloat(amt) * 100.0) / 100.0).toString() : '0.00';}},
-                    {column : 'Quantity', field : 'QTY', converter : function (val) {var amt = val.replace(/,/g, ''); return parseInt(amt).toString();}},
-                    {column : 'Lead Time (in Days)', field : 'CCWLeadTimeDays', converter : function (val) {var amt = val.replace(/,/g, ''); amt = ((!amt || amt == 'N/A') ? 0 : parseInt(amt.split(' ')[0])); return ((!amt) ? 0 : amt);}},
-                    {column : 'Effective Discount %', field : 'GDTDiscountPercent', converter : function (val) {var amt = val.replace(/%/g, '').replace(/,/g, ''); return (parseFloat(amt) > 0) ? (Math.round(parseFloat(amt) * 1000.0) / 1000.0).toString() : '0.00';}},
-                ],               
+		          [
+		           //Cisco Credit Template
+		            {column : '#', field : 'StructuredLineID'},
+		            {column : 'Part Number', field : 'ManufacturerPartID'},
+		            {column : 'Part Description', field : 'Description', converter : function (val) {return val.substring(0, 40);}},		
+		            {column : 'Service Duration',  field : 'SmartNetDuration', optional : true},
+		            {column : 'Buy Method',  field : 'VendorID', lookup : [{from : 'Cisco', to : CiscoVdrID}, {from : 'INGRAM MICRO', to : IngramVdrID}]},	
+		            {column : 'Unit List Price', field : 'ListPrice', converter : function (val) {var amt = val.replace(/$/g, '').replace(/,/g, ''); return (parseFloat(amt) > 0) ? (Math.round(parseFloat(amt) * 100.0) / 100.0).toString() : '0.00';}},
+		            {column : 'Quantity', field : 'QTY', converter : function (val) {var amt = val.replace(/,/g, ''); return parseInt(amt).toString();}},
+		            {column : 'Lead Time (in Days)', field : 'CCWLeadTimeDays', converter : function (val) {var amt = val.replace(/,/g, ''); amt = ((!amt || amt == 'N/A') ? 0 : parseInt(amt.split(' ')[0])); return ((!amt) ? 0 : amt);}},
+		            {column : 'Effective Discount %', field : 'GDTDiscountPercent', converter : function (val) {var amt = val.replace(/%/g, '').replace(/,/g, ''); return (parseFloat(amt) > 0) ? (Math.round(parseFloat(amt) * 1000.0) / 1000.0).toString() : '0.00';}},
+		          ], 		                       
 				[ // SalesUI Export
 					{column : 'Line', field : 'StructuredLineID'},
 					{column : 'Ref Ln', field : 'CustomerPOLineID', optional : true},
@@ -165,7 +165,6 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
                     {column : 'SITE COUNTRY', field : 'OTSTCountry'},
                     {column : 'QUOTE', field : 'ExternalQuoteID', optional : true},
                 ]
-
 		],
 
 		ImportFromCCW = function(csv, salesOrderHeader, salesOrderDetails, errors, missingAddresses, _createNewLine, _lookupPartID, _determineItemCategory, append) {
@@ -189,7 +188,6 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 				l = 0,
 				l2 = 0,
 				l3 = Defaults.length;
-				this.append = append;
 
         	def = $.Deferred(function(defer) {
 				var searchAddress = '',
@@ -328,22 +326,23 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 													//	}
 													//	newline.StructuredLineID = parentNode.toString() + childNode;
 													//}
-											// Begin of Change : Line Numbering and Assigning proper Parent ID : SXVASAMSETTI
+													// Begin of Change : Line Numbering and Assigning proper Parent ID : SXVASAMSETTI
+													
 													if(salesOrderDetailsArray.length == 0)  // Checking whether it is not in append Mode
 													{
 													newline.StructuredLineID = line[j];
 													}
 													else{ //Append Mode
-													if(parseInt((parsed.data[i-1])[j]) == parseInt(line[j])){
-														newline.StructuredLineID = newline.StructuredLineID - 1;
-													lineLevels = line[j].split('.');
-													for(n = 1;n < lineLevels.length; n++){
+													   if(parseInt((parsed.data[i-1])[j]) == parseInt(line[j])){
+														   newline.StructuredLineID = newline.StructuredLineID - 1;
+													       lineLevels = line[j].split('.');
+													  for(n = 1;n < lineLevels.length; n++){
 														newline.StructuredLineID = newline.StructuredLineID + '.' + lineLevels[n]	;
-													}
-													}
+													     }
+													  }
 													newline.StructuredLineID = newline.StructuredLineID.toString( );
 													}
-										  // End of Change:			
+										          // End of Change:	
 													break;
 												case 'SmartNetBeginDate' :
 													try {
@@ -438,6 +437,7 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 									newline.CustomerDiscountPercent = Math.round((newline.CustomerDiscount / newline.ListPrice) * -100000.0) / 1000.0;  // Discounts to 3 DP
 								}
 								newline.Selected = true;
+
 								newRows.push(newline)
 							}
 						}
@@ -537,6 +537,11 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 									errors.push(newline);
 								}
                             });
+
+// Restrict Materials with 4 series to add in UI(4 Series will have itemCategory (ZPFS,ZTAO,YTAO) ,Only launch team/Admin Team will maintain from GUI not from UI
+                            var Seeries4Material = _.find(newRows, function(row){ return ( row.ItemCategory == 'ZPFS' ||  row.ItemCategory == 'YTAO' ||  row.ItemCategory == 'ZTAO' ); });                          
+                           if( Seeries4Material == undefined || ( !!Seeries4Material && Seeries4Material.length == 0) ){
+                            
                             Array.prototype.push.apply(salesOrderDetailsArray, newRows);
                             _setParentChildRelationships(salesOrderDetailsArray);
                             if ((!errors || errors.length == 0) && (!missingAddresses || missingAddresses.length == 0)) {
@@ -545,6 +550,16 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
 								}
                                 salesOrderDetails.setData(salesOrderDetailsArray);
                             }
+                            
+                           }else{
+                        	   errors.length = 0;
+                        	   sap.m.MessageBox.show( "Sales UI does not allow you to add materials starts with 4 Series. \n These material should be added from SAP GUI by admin Team", {
+           						icon: sap.m.MessageBox.Icon.ERROR,
+           						title: "Authorizaton Issue",
+           						actions: sap.m.MessageBox.Action.OK,
+           						onClose: null});  
+                        	   
+                           }
                             defer.resolve();
                         }).fail(function (msg) {
                             defer.reject(msg);
