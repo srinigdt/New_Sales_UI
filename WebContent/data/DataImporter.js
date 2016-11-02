@@ -553,7 +553,7 @@ gdt.salesui.data.DataImporter = (function($, core, _, Papa, datacontext, address
                             
                            }else{
                         	   errors.length = 0;
-                        	   sap.m.MessageBox.show( "Sales UI does not allow you to add materials starts with 4 Series. \n These material should be added from SAP GUI by admin Team", {
+                        	   sap.m.MessageBox.show( "Sales UI does not allow you to add materials starts with 4 Series(Professional Services). \n These materials are maintained from SAP GUI by Projects/Launch team", {
            						icon: sap.m.MessageBox.Icon.ERROR,
            						title: "Authorizaton Issue",
            						actions: sap.m.MessageBox.Action.OK,

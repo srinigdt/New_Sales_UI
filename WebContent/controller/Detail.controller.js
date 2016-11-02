@@ -1839,7 +1839,7 @@ gdt.salesui.util.Controller.extend("gdt.salesui.controller.Detail", function($, 
 							 copyRow.ManufacturerPartID = '';  
 							 copyRow.ManufacturerID = '';  
 							 copyRow.ShipToID = '';
-							 sap.m.MessageBox.show( "Sales UI does not allow you to add materials starts with 4 Series. \n These material should be added from SAP GUI by admin Team", {
+							 sap.m.MessageBox.show( "Sales UI does not allow you to add materials starts with 4 Series(Professional Services). \n These materials are maintained from SAP GUI by Projects/Launch team", {
 	           						icon: sap.m.MessageBox.Icon.ERROR,
 	           						title: "Authorizaton Issue",
 	           						actions: sap.m.MessageBox.Action.OK,
@@ -3889,7 +3889,9 @@ gdt.salesui.util.Controller.extend("gdt.salesui.controller.Detail", function($, 
 						if (line.CustomerMaterialID) line.CustomerMaterialID = _pad(line.CustomerMaterialID, 18);
 					});
 
-					newSalesDocument.LineItems = currentLines.getData();
+					
+// Delete 4 Series Materials(Professional Services) from UI to avoid any changes as these materials only handled from SAP GUI by Launch Team					
+					newSalesDocument.LineItems = _.reject(currentLines.getData(),function(line){ return ( line.ItemCategory == 'ZPFS' || line.ItemCategory == 'YTAO' ||  line.ItemCategory == 'ZTAO') });
 
 					unsubmitted = _.find(newSalesDocument.LineItems, function(row) {
 						return (!!row.ItemCategory && row.ItemCategory.substring(0,1) != 'Y') || (!!row.ReasonForRejection && !row.MarkedAsDeleted);
@@ -4425,7 +4427,7 @@ gdt.salesui.util.Controller.extend("gdt.salesui.controller.Detail", function($, 
 													_calculateTotals();
 						                           }else
 						                        	   {
-						                        	   sap.m.MessageBox.show( "Sales UI does not allow to add materials starts with 4 Series. \n These material should be added from SAP GUI by admin Team", {
+						                        	   sap.m.MessageBox.show( "Sales UI does not allow to add materials starts with 4 Series(Professional Services). \n These materials are maintained from SAP GUI by Projects/Launch team", {
 						              						icon: sap.m.MessageBox.Icon.ERROR,
 						              						title: "Authorizaton Issue",
 						              						actions: sap.m.MessageBox.Action.OK,
